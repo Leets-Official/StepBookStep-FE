@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -34,7 +31,7 @@ export default {
           800: "#2D6415",
           900: "#194805",
         },
-        // 3. Grayscale 
+        // 3. Grayscale
         gray: {
           50: "#F9F9FB",
           100: "#F4F4F6",
@@ -50,11 +47,9 @@ export default {
         // 기본 흰색/검은색 명시
         white: "#FFFFFF",
         black: "#000000",
-
-
       },
     },
   },
 
   plugins: [],
-}
+};
