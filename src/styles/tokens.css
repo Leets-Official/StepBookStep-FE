@@ -54,9 +54,6 @@
     --font-weight-sb: 600;
     --font-weight-bd: 700;
 
-    /* Font Family */
-    --font-family-base: "Pretendard", system-ui, -apple-system,
-    BlinkMacSystemFont, sans-serif;
 
     /* ===== Line Height ===== */
     --line-height-xs: 16px;
