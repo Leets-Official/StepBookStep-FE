@@ -1,0 +1,67 @@
+:root {
+    /* ===== Color ===== */
+    /* Grayscale */
+    --color-white: #FFFFFF;
+    --color-gray-050: #F9F9FB;
+    --color-gray-100: #F4F4F6;
+    --color-gray-200: #E8E9ED;
+    --color-gray-300: #CCCDD7;
+    --color-gray-400: #A4A5B7;
+    --color-gray-500: #7E819A;
+    --color-gray-600: #5A5C72;
+    --color-gray-700: #3D3E4D;
+    --color-gray-800: #262731;
+    --color-gray-900: #19191F;
+    --color-black: #000000;
+
+    /* Primitive/Lime */
+    --color-lime-050: #F8FFEC;
+    --color-lime-100: #ECFFD5;
+    --color-lime-200: #DFFBBE;
+    --color-lime-300: #CDF89B;
+    --color-lime-400: #BBEF80;
+    --color-lime-500: #91D654;
+    --color-lime-600: #67B22A;
+    --color-lime-700: #418917;
+    --color-lime-800: #2D6415;
+    --color-lime-900: #194805;
+
+    /* Primitive/Purple */
+    --color-purple-050: #E3E5FD;
+    --color-purple-100: #D2D5FE;
+    --color-purple-200: #A9AAFB;
+    --color-purple-300: #787AEE;
+    --color-purple-400: #5D58E0;
+    --color-purple-500: #4931D4;
+    --color-purple-600: #2D1FAD;
+    --color-purple-700: #170F8F;
+    --color-purple-800: #0E0C67;
+    --color-purple-900: #04043B;
+
+    /* ===== Font ===== */
+    /* Font Size */
+    --font-xs: 10px;
+    --font-sm: 12px;
+    --font-md: 14px;
+    --font-lg: 16px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 30px;
+
+    /* Font Weight */
+    --font-weight-rg: 400;
+    --font-weight-md: 500;
+    --font-weight-sb: 600;
+    --font-weight-bd: 700;
+
+
+    /* ===== Line Height ===== */
+    --line-height-xs: 16px;
+    --line-height-sm: 20px;
+    --line-height-md: 24px;
+    --line-height-lg: 30px;
+
+    /* ===== Letter Spacing ===== */
+    --letter-spacing-base: 0px;
+
+}

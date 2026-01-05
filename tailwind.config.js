@@ -1,55 +1,84 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  safelist: [
+    {
+      pattern: /^(text|leading|font)-/,
+    },
+  ],
   theme: {
     extend: {
+      /* ===== Colors ===== */
       colors: {
-        //색상 팔레트 구성
-        // 1. Primitive/Purple
         purple: {
-          50: "#E3E5FD",
-          100: "#D2D5FE",
-          200: "#A9AAFB",
-          300: "#787AEE",
-          400: "#5D58E0",
-          500: "#4931D4",
-          600: "#2D1FAD",
-          700: "#170F8F",
-          800: "#0E0C67",
-          900: "#04043B",
+          50: "var(--color-purple-050)",
+          100: "var(--color-purple-100)",
+          200: "var(--color-purple-200)",
+          300: "var(--color-purple-300)",
+          400: "var(--color-purple-400)",
+          500: "var(--color-purple-500)",
+          600: "var(--color-purple-600)",
+          700: "var(--color-purple-700)",
+          800: "var(--color-purple-800)",
+          900: "var(--color-purple-900)",
         },
-        // 2. Primitive/Lime
         lime: {
-          50: "#F8FFEC",
-          100: "#ECFFD5",
-          200: "#DFFBBE",
-          300: "#CDF89B",
-          400: "#BBEF80",
-          500: "#91D654",
-          600: "#67B22A",
-          700: "#418917",
-          800: "#2D6415",
-          900: "#194805",
+          50: "var(--color-lime-050)",
+          100: "var(--color-lime-100)",
+          200: "var(--color-lime-200)",
+          300: "var(--color-lime-300)",
+          400: "var(--color-lime-400)",
+          500: "var(--color-lime-500)",
+          600: "var(--color-lime-600)",
+          700: "var(--color-lime-700)",
+          800: "var(--color-lime-800)",
+          900: "var(--color-lime-900)",
         },
-        // 3. Grayscale
         gray: {
-          50: "#F9F9FB",
-          100: "#F4F4F6",
-          200: "#E8E9ED",
-          300: "#CCCDD7",
-          400: "#A4A5B7",
-          500: "#7E819A",
-          600: "#5A5C72",
-          700: "#3D3E4D",
-          800: "#262731",
-          900: "#19191F",
+          50: "var(--color-gray-050)",
+          100: "var(--color-gray-100)",
+          200: "var(--color-gray-200)",
+          300: "var(--color-gray-300)",
+          400: "var(--color-gray-400)",
+          500: "var(--color-gray-500)",
+          600: "var(--color-gray-600)",
+          700: "var(--color-gray-700)",
+          800: "var(--color-gray-800)",
+          900: "var(--color-gray-900)",
         },
-        // 기본 흰색/검은색 명시
-        white: "#FFFFFF",
-        black: "#000000",
+        white: "var(--color-white)",
+        black: "var(--color-black)",
+      },
+
+      /* ===== Typography ===== */
+      fontFamily: {
+        sans: ["Pretendard", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        xs: "var(--font-xs)",
+        sm: "var(--font-sm)",
+        md: "var(--font-md)",
+        lg: "var(--font-lg)",
+        xl: "var(--font-xl)",
+        "2xl": "var(--font-2xl)",
+        "3xl": "var(--font-3xl)",
+      },
+      fontWeight: {
+        rg: "var(--font-weight-rg)",
+        md: "var(--font-weight-md)",
+        sb: "var(--font-weight-sb)",
+        bd: "var(--font-weight-bd)",
+      },
+      lineHeight: {
+        xs: "var(--line-height-xs)",
+        sm: "var(--line-height-sm)",
+        md: "var(--line-height-md)",
+        lg: "var(--line-height-lg)",
+      },
+      letterSpacing: {
+        base: "var(--letter-spacing-base)",
       },
     },
   },
-
   plugins: [],
 };
