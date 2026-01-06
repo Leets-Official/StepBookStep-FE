@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { SegmentedProgress } from "@/components/SegmentedProgress/SegmentedProgress";
+import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
+import { LinearProgress } from "@/components/Progress/LinearProgress";
 
 export default function PlayGround() {
   const [step3, setStep3] = useState(1);
   const [step2, setStep2] = useState(1);
+
+  // 📘 책 페이지용
+  const TOTAL_PAGES = 120;
+  const [page, setPage] = useState(1);
 
   return (
     <div className="min-h-screen bg-white p-8 space-y-10">
@@ -45,6 +50,27 @@ export default function PlayGround() {
             className="px-3 py-1 rounded bg-indigo-600 text-white"
           >
             다음
+          </button>
+        </div>
+      </section>
+
+      {/* 📘 페이지 Progress (추가된 부분) */}
+      <section className="space-y-4">
+        <LinearProgress total={TOTAL_PAGES} current={page} />
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            className="px-3 py-1 rounded bg-gray-200"
+          >
+            이전 페이지
+          </button>
+
+          <button
+            onClick={() => setPage((p) => Math.min(TOTAL_PAGES, p + 1))}
+            className="px-3 py-1 rounded bg-indigo-600 text-white"
+          >
+            다음 페이지
           </button>
         </div>
       </section>
