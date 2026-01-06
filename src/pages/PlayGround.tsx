@@ -1,34 +1,51 @@
 import { useState } from "react";
-import { Tab } from "@/components/Tab/Tab";
-import { Badge } from "@/components/Badge/Badge";
+import { SegmentedProgress } from "@/components/SegmentedProgress/SegmentedProgress";
 
 export default function PlayGround() {
-  const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+  const [step3, setStep3] = useState(1);
+  const [step2, setStep2] = useState(1);
 
   return (
-    <div className="min-h-screen bg-white p-8 space-y-12">
-      <section>
-        <h2 className="text-lg font-sb text-gray-900 mb-4">Tab</h2>
+    <div className="min-h-screen bg-white p-8 space-y-10">
+      {/* 3단계 Progress */}
+      <section className="space-y-4">
+        <SegmentedProgress total={3} current={step3} />
 
-        <div className="flex gap-8 border-b border-gray-200">
-          <Tab label="Tab" isActive={activeTab === "left"} onClick={() => setActiveTab("left")} />
+        <div className="flex gap-2">
+          <button
+            onClick={() => setStep3((s) => Math.max(1, s - 1))}
+            className="px-3 py-1 rounded bg-gray-200"
+          >
+            이전
+          </button>
 
-          <Tab label="Tab" isActive={activeTab === "right"} onClick={() => setActiveTab("right")} />
-        </div>
-
-        <div className="mt-6 text-md text-gray-700">
-          {activeTab === "left" && <p>왼쪽 탭이 선택됨</p>}
-          {activeTab === "right" && <p>오른쪽 탭이 선택됨</p>}
+          <button
+            onClick={() => setStep3((s) => Math.min(3, s + 1))}
+            className="px-3 py-1 rounded bg-indigo-600 text-white"
+          >
+            다음
+          </button>
         </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-sb text-gray-900 mb-4">Badge</h2>
+      {/* 2단계 Progress */}
+      <section className="space-y-4">
+        <SegmentedProgress total={2} current={step2} />
 
-        <div className="flex gap-4 items-center">
-          <Badge label="태그 키워드" />
-          <Badge label="프론트엔드" />
-          <Badge label="React" />
+        <div className="flex gap-2">
+          <button
+            onClick={() => setStep2((s) => Math.max(1, s - 1))}
+            className="px-3 py-1 rounded bg-gray-200"
+          >
+            이전
+          </button>
+
+          <button
+            onClick={() => setStep2((s) => Math.min(2, s + 1))}
+            className="px-3 py-1 rounded bg-indigo-600 text-white"
+          >
+            다음
+          </button>
         </div>
       </section>
     </div>
