@@ -1,17 +1,15 @@
-import { useState } from "react";
-import { DropDown } from "@/components/DropDown/DropDown";
+import { FullView } from "@/components/FullView/FullView";
 
-export default function PlayGround() {
-  const [value, setValue] = useState<string>();
-
+export default function ExamplePage() {
   return (
-    <div className="p-10">
-      <DropDown
-        options={["Label", "Label", "Label"]}
-        value={value}
-        placeholder="Label"
-        onChange={setValue}
-      />
+    <div className="p-6">
+      <FullView>
+        <p className="text-sm text-gray-800 leading-relaxed">
+          여기에 긴 내용이 들어갑니다. 여기에 긴 내용이 들어갑니다. 여기에 긴 내용이 들어갑니다.
+          여기에 긴 내용이 들어갑니다. 여기에 긴 내용이 들어갑니다. 여기에 긴 내용이 들어갑니다.
+          여기에 긴 내용이 들어갑니다.
+        </p>
+      </FullView>
     </div>
   );
 }
