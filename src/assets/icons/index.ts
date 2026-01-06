@@ -15,7 +15,7 @@ export { default as HomeIcon } from "./home.svg";
 export { default as ImageIcon } from "./image.svg";
 export { default as PenIcon } from "./pen.svg";
 export { default as SearchIcon } from "./search.svg";
-export { default as SettingsIcon } from "./settings.svg";
+export { default as SettingIcon } from "./setting.svg";
 export { default as StarEmptyIcon } from "./star-empty.svg";
 export { default as StarFilledIcon } from "./star-filled.svg";
 export { default as UserIcon } from "./user.svg";

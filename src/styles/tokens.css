@@ -64,4 +64,17 @@
     /* ===== Letter Spacing ===== */
     --letter-spacing-base: 0px;
 
+
+    /* ===== Button Layout Specs ===== */
+    --btn-height-lg: 48px;
+    --btn-px-lg: 24px;
+    --btn-gap-lg: 10px;
+
+    /* ===== Medium/Small ===== */
+    --btn-height-md: 40px;
+    --btn-gap-md: 8px;
+    --btn-px-md: 16px;
+
+    /* ===== Common Specs ===== */
+    --radius-pill: 9999px; /*round full*/
 }

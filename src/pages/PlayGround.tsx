@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Tab } from "@/components/Tab/Tab";
 import { Badge } from "@/components/Badge/Badge";
+import { Button } from "@/components/Button/Button";
+import { Chip } from "@/components/Chip/Chip";
 
 export default function PlayGround() {
   const [activeTab, setActiveTab] = useState<"left" | "right">("left");
@@ -31,6 +33,51 @@ export default function PlayGround() {
           <Badge label="React" />
         </div>
       </section>
+
+      <section>
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Button</h2>   
+        <div className="flex gap-4 items-center">
+          <Button label="Button" variant="primary" />
+          <Button label="Button" variant="secondary" />
+          <Button label="Button" variant="primaryOutline"  />
+          <Button label="Button" variant="secondaryOutline" />
+        </div>
+      </section>
+
+      <section>
+        <div className="flex gap-4 items-center">
+          <Button label="Button" size="medium" variant="primary" />
+          <Button label="Button" size="medium" variant="secondary" />
+          <Button label="Button" size="medium" variant="primaryOutline"  />
+          <Button label="Button" size="medium" variant="secondaryOutline" />
+        </div>
+      </section>
+      
+      <section>
+        <div className="flex gap-4 items-center">
+          <Button label="Button" size="small" variant="primary" />
+          <Button label="Button" size="small" variant="secondary" />
+          <Button label="Button" size="small" variant="primaryOutline"  />
+          <Button label="Button" size="small" variant="secondaryOutline" />
+        </div>
+      </section>
+
+      <section>
+        <div className="flex gap-4 items-center">
+          <Button label="Button" variant="primary" disabled />
+          <Button label="Button" variant="secondary" disabled />
+          <Button label="Button" variant="primaryOutline" disabled />
+          <Button label="Button" variant="secondaryOutline" disabled />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Chip</h2>
+        <div className="flex gap-4">
+          <Chip label="Label" />
+        </div>
+      </section>
+
     </div>
   );
 }
