@@ -11,30 +11,8 @@ import {
   helpText,
 } from "./TextField.styles";
 import { cn } from "@/utils/cn";
+import { SearchIcon } from "@/assets/icons";
 
-// 검색 아이콘 컴포넌트
-const SearchIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg
-    className={className}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g clipPath="url(#clip0_494_380)">
-      <path
-        d="M10 2C14.4183 2 18 5.58172 18 10C18 11.8486 17.3703 13.5487 16.3174 14.9033L21.707 20.293C22.0976 20.6835 22.0976 21.3165 21.707 21.707C21.3165 22.0976 20.6835 22.0976 20.293 21.707L14.9033 16.3174C13.5487 17.3703 11.8486 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10 4C6.68629 4 4 6.68629 4 10C4 13.3137 6.68629 16 10 16C13.3137 16 16 13.3137 16 10C16 6.68629 13.3137 4 10 4Z"
-        fill="currentColor"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_494_380">
-        <rect width="24" height="24" fill="white" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 
 export const TextField: React.FC<TextFieldProps> = ({
   title: titleText,
@@ -112,7 +90,7 @@ export const TextField: React.FC<TextFieldProps> = ({
             disabled={disabled}
             tabIndex={-1}
           >
-            <SearchIcon className="w-6 h-6" />
+            <SearchIcon />
           </button>
         )}
       </div>
