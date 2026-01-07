@@ -8,11 +8,11 @@ import {
   inputVariants,
   withIconPadding,
   iconButton,
-  helpText,
+  helpTextBase,
+  helpTextVariants,
 } from "./TextField.styles";
 import { cn } from "@/utils/cn";
-import { SearchIcon } from "@/assets/icons";
-
+import { AlertCircleIcon, CheckIcon, SearchIcon } from "@/assets/icons";
 
 export const TextField: React.FC<TextFieldProps> = ({
   title: titleText,
@@ -21,6 +21,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   onIconClick,
   className = "",
   disabled = false,
+  state = "default",
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -28,12 +29,26 @@ export const TextField: React.FC<TextFieldProps> = ({
 
   const hasValue = String(inputValue).length > 0;
 
-  // 현재 상태에 따른 스타일 결정
   const getInputVariant = () => {
     if (disabled) return inputVariants.disabled;
+    if (state === "success") return inputVariants.success;
+    if (state === "error") return inputVariants.error;
     if (isFocused) return inputVariants.focus;
     if (hasValue) return inputVariants.filled;
     return inputVariants.default;
+  };
+
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    if (state === "success") {
+      return <CheckIcon className="text-[#0530EE]" />;
+    }
+    if (state === "error") {
+      return <AlertCircleIcon className="text-[#EF1313]" />;
+    }
+    
+    return <SearchIcon />;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,20 +66,17 @@ export const TextField: React.FC<TextFieldProps> = ({
     props.onBlur?.(e);
   };
 
-  //KeyDown 핸들러 - Enter 입력 시 포커스 해제
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      e.currentTarget.blur(); // 포커스를 해제하여 Filled 상태로 전환
+      e.currentTarget.blur();
     }
     props.onKeyDown?.(e);
   };
 
   return (
     <div className={cn(wrapper, className)}>
-      {/* Title 영역 */}
       {titleText && <label className={title}>{titleText}</label>}
 
-      {/* Input 영역 */}
       <div className={inputContainer}>
         <input
           {...props}
@@ -81,7 +93,6 @@ export const TextField: React.FC<TextFieldProps> = ({
           disabled={disabled}
         />
 
-        {/* 검색 아이콘 */}
         {icon && (
           <button
             type="button"
@@ -90,14 +101,15 @@ export const TextField: React.FC<TextFieldProps> = ({
             disabled={disabled}
             tabIndex={-1}
           >
-            <SearchIcon />
+            {renderIcon()}
           </button>
         )}
       </div>
 
-      {/* Help Text 영역 */}
       {helpTextContent && (
-        <span className={helpText}>{helpTextContent}</span>
+        <span className={cn(helpTextBase, helpTextVariants[state])}>
+          {helpTextContent}
+        </span>
       )}
     </div>
   );

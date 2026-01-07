@@ -19,6 +19,10 @@ export const inputVariants = {
   
   // active=true, focus=false
   disabled: "border border-gray-300 bg-gray-50 text-gray-900",
+
+  success: "border border-[#0530EE] bg-white text-gray-900 focus:border-[#0530EE]",
+
+  error: "border border-[#EF1313] bg-white text-gray-900 focus:border-[#EF1313]",
 };
 
 export const withIconPadding = "pr-14";
@@ -26,4 +30,11 @@ export const withIconPadding = "pr-14";
 export const iconButton =
   "absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center cursor-pointer";
 
-export const helpText = "text-xs font-medium leading-4 tracking-normal text-gray-300";
+
+export const helpTextBase = "text-xs font-medium leading-4 tracking-normal";
+
+export const helpTextVariants = {
+  default: "text-gray-300",
+  error: "text-[#EF1313]",
+  success: "text-[#0530EE]",
+};
