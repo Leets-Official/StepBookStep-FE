@@ -17,7 +17,7 @@ export const Checkbox = ({ checked, onToggle }: CheckboxProps) => {
       )}
     >
       {checked && (
-        <CheckIcon className="w-[12px] h-[10px] text-white" />
+        <CheckIcon className="w-[18px] h-[18px] text-white" />
       )}
     </div>
   );
