@@ -1,69 +1,45 @@
 import { useState } from "react";
-import { TextField } from "@/components/TextField/TextField";
+import { Kakao } from "@/components/Kakao/Kakao";
+import { Checkbox } from "@/components/Checkbox/Checkbox";
+import { Toast } from "@/components/Toast/Toast";
 
 export default function PlayGround() {
-  // TextField용 state
-  const [searchValue, setSearchValue] = useState("");
-  const [emailValue, setEmailValue] = useState("");
-  const [passwordValue, setPasswordValue] = useState("");
-  const [filledValue, setFilledValue] = useState("Sample Text");
+  const [isChecked, setIsChecked] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
+  const handleKakaoClick = () => {
+    console.log("카카오 로그인 버튼 클릭!");
+  };
   return (
-    <div className="p-8 space-y-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900">TextField Component Playground</h1>
+    <div className="min-h-screen bg-white p-8 space-y-12">
+      <section className="flex flex-col gap-4">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Kakao</h2> 
+        <div className="bg-white rounded-lg">
+          <Kakao onClick={handleKakaoClick} />
+        </div>
+      </section>
 
-      {/* TextField 섹션 */}
-      <section className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">TextField - 4가지 상태</h2>
-
-        {/* 1. Default State - 빈 입력 필드 */}
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-600">1. Default State (빈 필드)</p>
-          <TextField
-            title="Title"
-            placeholder="Placeholder"
-            helpText="Help Text"
-            icon={true}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onIconClick={() => console.log("Search:", searchValue)}
+      <section className="flex flex-col ">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Checkbox</h2> 
+        <div className="flex items-center bg-white rounded-lg">
+          <Checkbox 
+            checked={isChecked} 
+            onToggle={() => setIsChecked(!isChecked)} 
           />
         </div>
+      </section>
 
-        {/* 2. Focus State - 포커스 시 검정 테두리 */}
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-600">2. Focus State (클릭하면 검정 테두리)</p>
-          <TextField
-            title="Title"
-            placeholder="Placeholder"
-            helpText="Help Text"
-            icon={true}
-          />
-        </div>
+      <section className="flex flex-col">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Toast</h2> 
+        <button 
+          onClick={() => setShowToast(true)}
+          className="px-4 py-2 w-[150px] bg-purple-500 text-white rounded-[999px]">토스트 버튼</button>
 
-        {/* 3. Filled State - 값이 입력된 상태 (회색 배경) */}
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-600">3. Filling State</p>
-          <TextField
-            title="Title"
-            placeholder="Placeholder"
-            helpText="Help Text"
-            icon={true}
-            value={filledValue}
-            onChange={(e) => setFilledValue(e.target.value)}
-          />
-        </div>
-
-        {/* 4. Filled State */}
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-600">4. Filled State</p>
-          <TextField
-            title="Title"
-            placeholder="Placeholder"
-            helpText="Help Text"
-            icon={true}
-          />
-        </div>
+        <Toast 
+          message="성공적으로 변경되었습니다." 
+          isVisible={showToast} 
+          onClose={() => setShowToast(false)} 
+        />
       </section>
     </div>
   );
