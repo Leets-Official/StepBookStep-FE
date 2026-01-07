@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Kakao } from "@/components/Kakao/Kakao";
 import { Checkbox } from "@/components/Checkbox/Checkbox";
