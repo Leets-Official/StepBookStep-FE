@@ -4,9 +4,11 @@ import { Badge } from "@/components/Badge/Badge";
 import { Button } from "@/components/Button/Button";
 import { Chip } from "@/components/Chip/Chip";
 import { Kakao } from "@/components/Kakao/Kakao";
+import { Checkbox } from "@/components/Checkbox/Checkbox";
 
 export default function PlayGround() {
   const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleKakaoClick = () => {
     console.log("카카오 로그인 버튼 클릭!");
@@ -87,6 +89,16 @@ export default function PlayGround() {
         <h2 className="text-lg font-sb text-gray-900 mb-4">Kakao</h2> 
         <div className="bg-white rounded-lg">
           <Kakao onClick={handleKakaoClick} />
+        </div>
+      </section>
+
+      <section className="flex flex-col ">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Checkbox</h2> 
+        <div className="flex items-center bg-white rounded-lg">
+          <Checkbox 
+            checked={isChecked} 
+            onToggle={() => setIsChecked(!isChecked)} 
+          />
         </div>
       </section>
 
