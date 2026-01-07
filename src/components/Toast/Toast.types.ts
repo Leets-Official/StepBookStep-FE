@@ -1,5 +1,6 @@
 export interface ToastProps {
-  label: string;
-  checked: boolean;
-  onToggle: () => void;
+message: string;
+isVisible: boolean;
+onClose: () => void;
+duration?: number;
 }

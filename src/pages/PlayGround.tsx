@@ -6,7 +6,7 @@ import { Toast } from "@/components/Toast/Toast";
 
 export default function PlayGround() {
   const [isChecked, setIsChecked] = useState(false);
-  const [isToastChecked, setIsToastChecked] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleKakaoClick = () => {
     console.log("카카오 로그인 버튼 클릭!");
@@ -30,12 +30,16 @@ export default function PlayGround() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col">
         <h2 className="text-lg font-sb text-gray-900 mb-4">Toast</h2> 
+        <button 
+          onClick={() => setShowToast(true)}
+          className="px-4 py-2 w-[150px] bg-purple-500 text-white rounded-[999px]">토스트 버튼</button>
+
         <Toast 
-          label="토스트 내용을 입력합니다." 
-          checked={isToastChecked} 
-          onToggle={() => setIsToastChecked(!isToastChecked)} 
+          message="성공적으로 변경되었습니다." 
+          isVisible={showToast} 
+          onClose={() => setShowToast(false)} 
         />
       </section>
     </div>
