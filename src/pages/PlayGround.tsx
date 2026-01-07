@@ -3,9 +3,14 @@ import { Tab } from "@/components/Tab/Tab";
 import { Badge } from "@/components/Badge/Badge";
 import { Button } from "@/components/Button/Button";
 import { Chip } from "@/components/Chip/Chip";
+import { Kakao } from "@/components/Kakao/Kakao";
 
 export default function PlayGround() {
   const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+
+  const handleKakaoClick = () => {
+    console.log("카카오 로그인 버튼 클릭!");
+  };
 
   return (
     <div className="min-h-screen bg-white p-8 space-y-12">
@@ -75,6 +80,13 @@ export default function PlayGround() {
         <h2 className="text-lg font-sb text-gray-900 mb-4">Chip</h2>
         <div className="flex gap-4">
           <Chip label="Label" />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-lg font-sb text-gray-900 mb-4">Kakao</h2> 
+        <div className="bg-white rounded-lg">
+          <Kakao onClick={handleKakaoClick} />
         </div>
       </section>
 

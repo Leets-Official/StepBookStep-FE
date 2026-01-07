@@ -10,8 +10,7 @@ export const Kakao = ({ onClick }: KakaoProps) => {
   return (
     <button
       onClick={onClick}
-      style={{ backgroundColor: '#FEE500' }} 
-      className={cn(kakaoBase, kakaoLayout.container)}
+      className={cn(kakaoBase, kakaoLayout.container, "bg-[#FEE500] border-none")}
     >
       <div className="flex items-center justify-center w-[18px] h-[18px]">
         <KakaoIcon />
