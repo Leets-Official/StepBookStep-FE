@@ -20,3 +20,4 @@ export { default as StarEmptyIcon } from "./star-empty.svg?react";
 export { default as StarFilledIcon } from "./star-filled.svg?react";
 export { default as UserIcon } from "./user.svg?react";
 export { default as XIcon } from "./x.svg?react";
+export { default as KakaoIcon } from "./kakao.svg?react";
