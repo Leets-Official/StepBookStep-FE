@@ -1,36 +1,72 @@
 import { useState } from "react";
-import { Tab } from "@/components/Tab/Tab";
-import { Badge } from "@/components/Badge/Badge";
+import { TextField } from "@/components/TextField/TextField";
 
 export default function PlayGround() {
-  const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+  // TextField용 state
+  const [searchValue, setSearchValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+  const [filledValue, setFilledValue] = useState("Sample Text");
 
   return (
-    <div className="min-h-screen bg-white p-8 space-y-12">
-      <section>
-        <h2 className="text-lg font-sb text-gray-900 mb-4">Tab</h2>
+    <div className="p-8 space-y-8 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-900">TextField Component Playground</h1>
 
-        <div className="flex gap-8 border-b border-gray-200">
-          <Tab label="Tab" isActive={activeTab === "left"} onClick={() => setActiveTab("left")} />
+      {/* TextField 섹션 */}
+      <section className="space-y-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">TextField - 4가지 상태</h2>
 
-          <Tab label="Tab" isActive={activeTab === "right"} onClick={() => setActiveTab("right")} />
+        {/* 1. Default State - 빈 입력 필드 */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-600">1. Default State (빈 필드)</p>
+          <TextField
+            title="Title"
+            placeholder="Placeholder"
+            helpText="Help Text"
+            icon={true}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onIconClick={() => console.log("Search:", searchValue)}
+          />
         </div>
 
-        <div className="mt-6 text-md text-gray-700">
-          {activeTab === "left" && <p>왼쪽 탭이 선택됨</p>}
-          {activeTab === "right" && <p>오른쪽 탭이 선택됨</p>}
+        {/* 2. Focus State - 포커스 시 검정 테두리 */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-600">2. Focus State (클릭하면 검정 테두리)</p>
+          <TextField
+            title="Title"
+            placeholder="Placeholder"
+            helpText="Help Text"
+            icon={true}
+          />
+        </div>
+
+        {/* 3. Filled State - 값이 입력된 상태 (회색 배경) */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-600">3. Filling State</p>
+          <TextField
+            title="Title"
+            placeholder="Placeholder"
+            helpText="Help Text"
+            icon={true}
+            value={filledValue}
+            onChange={(e) => setFilledValue(e.target.value)}
+          />
+        </div>
+
+        {/* 4. Filled State */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-600">4. Filled State</p>
+          <TextField
+            title="Title"
+            placeholder="Placeholder"
+            helpText="Help Text"
+            icon={true}
+          />
         </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-sb text-gray-900 mb-4">Badge</h2>
-
-        <div className="flex gap-4 items-center">
-          <Badge label="태그 키워드" />
-          <Badge label="프론트엔드" />
-          <Badge label="React" />
-        </div>
-      </section>
+      
     </div>
   );
 }
