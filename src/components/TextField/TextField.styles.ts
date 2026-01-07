@@ -1,6 +1,6 @@
 export const wrapper = "flex flex-col gap-2 w-[315px]";
 
-export const title = "text-base font-medium text-gray-900";
+export const title = "text-xs font-semibold leading-4 tracking-normal text-gray-900";
 
 export const inputContainer = "relative w-full";
 
