@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export { default as AdjustmentsHorizontalIcon } from "./adjustments-horizontal.svg";
 export { default as AlertCircleIcon } from "./alert-circle.svg";
 export { default as BackspaceIcon } from "./backspace.svg";
@@ -20,3 +21,27 @@ export { default as StarEmptyIcon } from "./star-empty.svg";
 export { default as StarFilledIcon } from "./star-filled.svg";
 export { default as UserIcon } from "./user.svg";
 export { default as XIcon } from "./x.svg";
+=======
+export { default as AdjustmentsHorizontalIcon } from "./adjustments-horizontal.svg?react";
+export { default as AlertCircleIcon } from "./alert-circle.svg?react";
+export { default as BackspaceIcon } from "./backspace.svg?react";
+export { default as BookIcon } from "./book.svg?react";
+export { default as BookmarkEmptyIcon } from "./bookmark-empty.svg?react";
+export { default as BookmarkFilledIcon } from "./bookmark-filled.svg?react";
+export { default as CalendarIcon } from "./calendar.svg?react";
+export { default as CheckIcon } from "./check.svg?react";
+export { default as ChevronDownIcon } from "./chevron-down.svg?react";
+export { default as ChevronLeftIcon } from "./chevron-left.svg?react";
+export { default as ChevronRightIcon } from "./chevron-right.svg?react";
+export { default as ChevronUpIcon } from "./chevron-up.svg?react";
+export { default as ClockIcon } from "./clock.svg?react";
+export { default as HomeIcon } from "./home.svg?react";
+export { default as ImageIcon } from "./image.svg?react";
+export { default as PenIcon } from "./pen.svg?react";
+export { default as SearchIcon } from "./search.svg?react";
+export { default as SettingIcon } from "./setting.svg?react";
+export { default as StarEmptyIcon } from "./star-empty.svg?react";
+export { default as StarFilledIcon } from "./star-filled.svg?react";
+export { default as UserIcon } from "./user.svg?react";
+export { default as XIcon } from "./x.svg?react";
+>>>>>>> 527ef026ef3d8f4e08d8ce354e2c3a8c17e2839c

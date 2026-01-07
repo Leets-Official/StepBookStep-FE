@@ -65,8 +65,6 @@ export default function PlayGround() {
           />
         </div>
       </section>
-
-      
     </div>
   );
 }

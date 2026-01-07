@@ -62,6 +62,7 @@ export default {
         xl: "var(--font-xl)",
         "2xl": "var(--font-2xl)",
         "3xl": "var(--font-3xl)",
+
       },
       fontWeight: {
         rg: "var(--font-weight-rg)",
@@ -77,6 +78,23 @@ export default {
       },
       letterSpacing: {
         base: "var(--letter-spacing-base)",
+      },
+      
+      /*Primitive(Font Size)*/
+      height: {
+        "btn-lg": "var(--btn-height-lg)",
+        "btn-md": "var(--btn-height-md)",
+      },
+      padding: {
+        "btn-lg": "var(--btn-px-lg)",
+        "btn-md": "var(--btn-px-md)",
+      },
+      gap: {
+        "btn-lg": "var(--btn-gap-lg)",
+        "btn-md": "var(--btn-gap-md)",
+      },
+      borderRadius: {
+        pill: "var(--radius-pill)",
       },
     },
   },
