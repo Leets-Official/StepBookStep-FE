@@ -1,25 +1,27 @@
 import { useState } from "react";
 import { TextField } from "@/components/TextField/TextField";
-import type { TextFieldState } from "@/components/TextField/TextField.types"; 
+import type { TextFieldState } from "@/components/TextField/TextField.types"; // 타입 import 추가
 
 export default function PlayGround() {
-
+  // TextField용 state
   const [searchValue, setSearchValue] = useState("");
   const [filledValue, setFilledValue] = useState("Sample Text");
 
+  // Success 및 Error 상태 테스트를 위한 State
   const [successValue, setSuccessValue] = useState("Correct Input");
   const [errorValue, setErrorValue] = useState("Wrong Input");
 
+  // [중요] 7번 인터랙티브 테스트를 위한 State와 로직이 여기 있어야 합니다!
   const [emailValue, setEmailValue] = useState("");
 
-
-//이메일 확인
+  // 이메일 유효성 검사 함수
   const getEmailState = (value: string): TextFieldState => {
-    if (value.length === 0) return "default"; 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    if (value.length === 0) return "default"; // 입력 없으면 기본
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규식
     return emailRegex.test(value) ? "success" : "error";
   };
 
+  // 현재 상태 계산
   const currentEmailState = getEmailState(emailValue);
 
   return (
@@ -109,10 +111,15 @@ export default function PlayGround() {
         {/* 구분선 */}
         <hr className="border-gray-200" />
 
-        {/* 7. 실제 동작 테스트  */}
+        {/* 7. 실제 동작 테스트 (여기가 6번 div 밖으로 나와야 합니다) */}
         <div className="space-y-2">
-          <h2 className="text-lg font-bold text-gray-900">7. Interactive Test </h2>
-      
+          <h2 className="text-lg font-bold text-gray-900">7. Interactive Test (실시간 유효성 검사)</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            아래 입력창에 이메일을 입력해보세요. <br/>
+            - <b>입력 중</b>: 빨간색 (Error) <br/>
+            - <b>이메일 형식이 완성됨</b>: 파란색 (Success)으로 자동 변경됩니다.
+          </p>
+          
           <TextField
             title="이메일 입력"
             placeholder="example@email.com"

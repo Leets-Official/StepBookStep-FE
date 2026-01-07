@@ -1,4 +1,4 @@
-export { default as AdjustmentsHorizontalIcon } from "./adjustments-horizontal.svg";
+export { default as AdjustmentsHorizontalIcon } from "./adjustments-horizontal.svg?react";
 export { default as AlertCircleIcon } from "./alert-circle.svg?react";
 export { default as BackspaceIcon } from "./backspace.svg?react";
 export { default as BookIcon } from "./book.svg?react";
@@ -15,8 +15,9 @@ export { default as HomeIcon } from "./home.svg?react";
 export { default as ImageIcon } from "./image.svg?react";
 export { default as PenIcon } from "./pen.svg?react";
 export { default as SearchIcon } from "./search.svg?react";
-export { default as SettingsIcon } from "./setting.svg?react";
+export { default as SettingIcon } from "./setting.svg?react";
 export { default as StarEmptyIcon } from "./star-empty.svg?react";
 export { default as StarFilledIcon } from "./star-filled.svg?react";
 export { default as UserIcon } from "./user.svg?react";
 export { default as XIcon } from "./x.svg?react";
+export { default as KakaoIcon } from "./kakao.svg?react";
