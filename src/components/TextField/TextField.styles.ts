@@ -26,4 +26,4 @@ export const withIconPadding = "pr-14";
 export const iconButton =
   "absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center cursor-pointer";
 
-export const helpText = "text-sm text-gray-300";
+export const helpText = "text-xs font-medium leading-4 tracking-normal text-gray-300";
