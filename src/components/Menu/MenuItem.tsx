@@ -1,4 +1,4 @@
-import { itemBase, itemActive, itemInactive, itemLabel, itemIcon } from "./Menu.styles";
+import { itemBase, itemActive, itemInactive, itemLabel, itemIcon } from "@/components/Menu/Menu.styles";
 import { ChevronRightIcon } from "@/assets/icons";
 
 interface MenuItemProps {

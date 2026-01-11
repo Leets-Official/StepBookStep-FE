@@ -4,8 +4,8 @@ export const itemBase = "flex items-center justify-between w-full h-[48px] px-4 
 
 export const itemActive = "bg-purple-50 text-black"; 
 
-export const itemInactive = "bg-transparent text-black hover:bg-purple-50/50";
+export const itemInactive = "bg-transparent text-black hover:bg-purple-50";
 
 export const itemLabel = "flex-1 text-left";
 
-export const itemIcon = "w-[24px] h-[24px] text-gray-500 flex-shrink-0";
+export const itemIcon = "w-[24px] h-[24px] text-gray-500";

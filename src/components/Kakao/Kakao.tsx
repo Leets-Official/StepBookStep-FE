@@ -1,6 +1,6 @@
 import { KakaoIcon } from '@/assets/icons';
 import { cn } from "@/utils/cn";
-import { kakaoBase, kakaoLayout } from "./Kakao.styles";
+import { kakaoBase, kakaoLayout } from "@/components/Kakao/Kakao.styles";
 
 interface KakaoProps {
   onClick?: () => void;
