@@ -1,4 +1,4 @@
-export const menuContainer = "flex flex-col w-[335px] bg-white border border-gray-200 p-2 rounded-[2xpx] shadow-sm gap-1";
+export const menuContainer = "flex flex-col w-[335px] bg-white border border-gray-200 p-2 rounded-[2px] shadow-sm gap-1";
 
 export const itemBase = "flex items-center justify-between w-full h-[48px] px-4 text-md font-md cursor-pointer transition-colors rounded-[5px]";
 
@@ -8,4 +8,4 @@ export const itemInactive = "bg-transparent text-black hover:bg-purple-50/50";
 
 export const itemLabel = "flex-1 text-left";
 
-export const itemIcon = "w-8 h-14 text-gray-400";
+export const itemIcon = "w-[24px] h-[24px] text-gray-500 flex-shrink-0";
