@@ -7,7 +7,7 @@ import {
   SearchIcon, 
   ClockIcon, 
   UserIcon 
-} from '../../assets/icons'; 
+} from '@/assets/icons'; 
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'home', label: '홈', icon: HomeIcon },
