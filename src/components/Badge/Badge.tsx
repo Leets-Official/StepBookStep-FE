@@ -1,13 +1,12 @@
-import { contain, text } from "./Badge.styles";
+import { contain, text, lvContain, lvText } from "./Badge.styles";
+import type { BadgeProps } from "./Badge.types";
 
-interface BadgeProps {
-  label?: string;
-}
+export function Badge({ label, variant = "tag" }: BadgeProps) {
+  const isLv = variant === "lv";
 
-export function Badge({ label }: BadgeProps) {
   return (
-    <span className={contain}>
-      <span className={text}>{label}</span>
+    <span className={isLv ? lvContain : contain}>
+      <span className={isLv ? lvText : text}>{label}</span>
     </span>
   );
 }
