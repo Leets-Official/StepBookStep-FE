@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { CheckIcon } from "@/assets/icons"; 
 import { cn } from "@/utils/cn";
-import { toastBase, toastText } from "./Toast.styles";
-import type { ToastProps } from "./Toast.types";
+import { toastBase, toastText } from "@/components/Toast/Toast.styles";
+import type { ToastProps } from "@/components/Toast/Toast.types";
 
 export const Toast = ({ message, isVisible, onClose, duration = 3000 }: ToastProps) => {
   useEffect(() => {

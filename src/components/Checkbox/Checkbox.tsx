@@ -1,6 +1,6 @@
 import { CheckIcon } from '@/assets/icons'; 
 import { cn } from "@/utils/cn";
-import { checkboxBase, checkboxVariants } from "./Checkbox.styles";
+import { checkboxBase, checkboxVariants } from "@/components/Checkbox/Checkbox.styles";
 
 interface CheckboxProps {
   checked: boolean;
