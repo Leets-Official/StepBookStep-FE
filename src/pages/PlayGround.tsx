@@ -1,54 +1,40 @@
-import { useState } from 'react';
-import BottomBar from '../components/BottomBar/BottomBar';
-import type { TabId } from '../components/BottomBar/BottomBar.types';
+import AppBar from "@/components/AppBar/AppBar";
 
 export default function PlayGround() {
-  const [currentPage, setCurrentPage] = useState<TabId>('home');
-
-  const renderPageContent = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <div className="flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold">홈 페이지</h1>
-    
-          </div>
-        );
-      case 'search':
-        return (
-          <div className="flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold">탐색 페이지</h1>
-          </div>
-        );
-      case 'routine':
-        return (
-          <div className="flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold">루틴 페이지</h1>
-          </div>
-        );
-      case 'mypage':
-        return (
-          <div className="flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold">마이페이지</h1>
-          </div>
-        );
-      default:
-        return <div>페이지를 찾을 수 없습니다.</div>;
-    }
-  };
+  // 간단한 이벤트 핸들러 (콘솔로 동작 확인)
+  const handleBack = () => console.log("뒤로가기 클릭");
+  const handleSetting = () => console.log("설정 클릭");
+  const handleBookmark = () => console.log("북마크 클릭");
+  const handlePen = () => console.log("수정(Pen) 클릭");
 
   return (
-    <div className="min-h-screen">
-      <main className="w-full h-screen pb-[60px] p-4">
-          {renderPageContent()}
-      </main>
-      <BottomBar 
-        defaultTab="home"
-        onTabSelect={(tabId) => {
-          console.log(`[PlayGround] 탭 변경됨: ${tabId}`); // 콘솔 확인용
-          setCurrentPage(tabId); // 화면 내용 변경
-        }} 
-      />
+    <div className="min-h-screen p-8 flex flex-col items-center gap-10">
+
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold text-gray-700">1. 로고 있는 버전</h2>
+        
+        {/*임의로 회색 테두리선을 만들어둔 거임*/}
+        <div className="border border-gray-300 bg-white">  
+          <AppBar 
+            mode="logo" 
+            onSettingClick={handleSetting} 
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold text-gray-700">2. 로고 없는 버전</h2>
+
+        <div className="border border-gray-300 bg-white">
+          <AppBar 
+            mode="title" 
+            title="독서 기록" 
+            onBackClick={handleBack}
+            onBookmarkClick={handleBookmark}
+            onPenClick={handlePen}
+          />
+        </div>
+      </div>
     </div>
   );
 }
