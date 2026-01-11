@@ -1,6 +1,6 @@
-import type { FunctionComponent, SVGProps } from 'react';
+import type { FunctionComponent, SVGProps } from "react";
 
-export type TabId = 'home' | 'search' | 'routine' | 'mypage';
+export type TabId = "home" | "search" | "routine" | "mypage";
 
 export interface NavItem {
   id: TabId;

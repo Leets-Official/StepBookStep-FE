@@ -28,7 +28,7 @@ export const styles = {
     transition-colors duration-200 ease-in-out
   `,
 
-  icon: `w-6 h-6 mb-[2px]`, 
+  icon: `w-6 h-6 mb-[2px]`,
 
   label: `
     text-[10px] 
