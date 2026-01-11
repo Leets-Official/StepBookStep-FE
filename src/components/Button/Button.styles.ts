@@ -1,4 +1,4 @@
-import type { Variant, ButtonSize } from "./Button.types";
+import type { Variant, ButtonSize } from "@/components/Button/Button.types";
 
 export const base =
   "inline-flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-100";
