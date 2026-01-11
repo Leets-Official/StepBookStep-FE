@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { chipBase, chipVariants, chipSizes } from "./Chip.styles";
+import { chipBase, chipVariants, chipSizes } from "@/components/Chip/Chip.styles";
 import { XIcon } from '@/assets/icons';
 
 interface ChipProps {
