@@ -1,11 +1,12 @@
 import type { AppBarProps } from "@/components/AppBar/AppBar.types";
 import { appBarStyles } from "@/components/AppBar/AppBar.styles";
-import IconChevronLeft from "@/assets/icons/chevron-left.svg?react";
-import IconBookmarkEmpty from "@/assets/icons/bookmark-empty.svg?react";
-import IconPen from "@/assets/icons/pen.svg?react";
-import IconSetting from "@/assets/icons/setting.svg?react"; 
-import IconLogo from "@/assets/icons/logo.svg";
-
+import { 
+  ChevronLeftIcon as IconChevronLeft, 
+  BookmarkEmptyIcon as IconBookmarkEmpty,
+  PenIcon as IconPen,
+  SettingIcon as IconSetting,
+  LogoIcon as IconLogo
+} from '@/assets/icons';
 const AppBar = ({
   mode,
   title,
@@ -24,11 +25,7 @@ const AppBar = ({
         {mode === "logo" ? (
           /* 로고 있는 버전 */
           <>
-            <img 
-              src={IconLogo} 
-              alt="StepBookStep Main Logo" 
-              className={appBarStyles.logoImage} 
-            />
+            <IconLogo className={appBarStyles.logoImage} />
             
             <button type="button" onClick={onSettingClick}>
               <IconSetting className={appBarStyles.icon} />
