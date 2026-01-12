@@ -1,36 +1,40 @@
-import { Menu } from "@/components/Menu/Menu";
-import { MenuItem } from "@/components/Menu/MenuItem";
-import { useState } from "react";
+import AppBar from "@/components/AppBar/AppBar";
 
 export default function PlayGround() {
-
-  const [activeId, setActiveId] = useState<number | null>(1); // 사진처럼 2번째 아이템 기본 활성
-
-  const handleMenuClick = (index: number) => {
-    setActiveId(prev => (prev === index ? null : index));
-  };
+  // 간단한 이벤트 핸들러 (콘솔로 동작 확인)
+  const handleBack = () => console.log("뒤로가기 클릭");
+  const handleSetting = () => console.log("설정 클릭");
+  const handleBookmark = () => console.log("북마크 클릭");
+  const handlePen = () => console.log("수정(Pen) 클릭");
 
   return (
-    <div className="p-8 space-y-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 font-sans">Menu</h1>
+    <div className="min-h-screen p-8 flex flex-col items-center gap-10">
 
-      <Menu>
-        <MenuItem 
-          label="Label" 
-          interaction={activeId === 0} 
-          onClick={() => handleMenuClick(0)} 
-        />
-        <MenuItem 
-          label="Label" 
-          interaction={activeId === 1} 
-          onClick={() => handleMenuClick(1)} 
-        />
-        <MenuItem 
-          label="Label" 
-          interaction={activeId === 2} 
-          onClick={() => handleMenuClick(2)} 
-        />
-      </Menu>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold text-gray-700">1. 로고 있는 버전</h2>
+        
+        {/*임의로 회색 테두리선을 만들어둔 거임*/}
+        <div className="border border-gray-300 bg-white">  
+          <AppBar 
+            mode="logo" 
+            onSettingClick={handleSetting} 
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold text-gray-700">2. 로고 없는 버전</h2>
+
+        <div className="border border-gray-300 bg-white">
+          <AppBar 
+            mode="title" 
+            title="독서 기록" 
+            onBackClick={handleBack}
+            onBookmarkClick={handleBookmark}
+            onPenClick={handlePen}
+          />
+        </div>
+      </div>
     </div>
   );
 }
