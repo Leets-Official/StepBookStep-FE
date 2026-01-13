@@ -7,6 +7,8 @@ import {
   SettingIcon as IconSetting,
   LogoIcon as IconLogo
 } from '@/assets/icons';
+import TextField from "@/components/TextField/TextField";
+
 const AppBar = ({
   mode,
   title,
@@ -14,7 +16,34 @@ const AppBar = ({
   onSettingClick,
   onBookmarkClick,
   onPenClick,
+  searchText,
+  onSearchTextChange,
+  searchPlaceholder = "Placeholder",
 }: AppBarProps) => {
+
+  // 탐색탭일 때 별도의 레이아웃 반환
+  if (mode === "search") {
+    return (
+      <header className={appBarStyles.searchContainer}>
+        <button 
+          type="button" 
+          onClick={onBackClick} 
+          className={appBarStyles.backButton}
+        >
+          <IconChevronLeft className={appBarStyles.icon} />
+        </button>
+        <TextField 
+          value={searchText}
+          onChange={onSearchTextChange}
+          placeholder={searchPlaceholder}
+          icon={true} 
+          state="default" 
+          className={appBarStyles.searchInputHelper}
+        />
+      </header>
+    );
+  }
+
   return (
     <header className={appBarStyles.container}>
       <div

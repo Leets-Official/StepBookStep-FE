@@ -1,6 +1,8 @@
 export const appBarStyles = {
   container: "w-[375px] h-11 py-2.5 bg-white flex justify-center items-center box-content",
 
+  searchContainer: "w-[375px] h-16 bg-white flex items-center px-[10px] box-border gap-[10px]",
+
   innerWrapper: "w-[335px] h-6 flex items-center",
 
   // 로고 없는 거
@@ -14,4 +16,8 @@ export const appBarStyles = {
   logoImage: "w-32 h-5",
 
   titleText: "text-black font-['Pretendard'] font-semibold text-base leading-5 tracking-normal",
+
+  backButton: "w-[44px] h-[44px] flex justify-center items-center p-2 cursor-pointer",
+
+  searchInputHelper: "w-[285px]",
 };
