@@ -1,40 +1,40 @@
-import AppBar from "@/components/AppBar/AppBar";
+import { BookList } from "@/components/BookList/BookList";
 
 export default function PlayGround() {
-  // 간단한 이벤트 핸들러 (콘솔로 동작 확인)
-  const handleBack = () => console.log("뒤로가기 클릭");
-  const handleSetting = () => console.log("설정 클릭");
-  const handleBookmark = () => console.log("북마크 클릭");
-  const handlePen = () => console.log("수정(Pen) 클릭");
-
   return (
-    <div className="min-h-screen p-8 flex flex-col items-center gap-10">
+    <div className="p-8 max-w-5xl mx-auto space-y-4">
+      <BookList
+        readingState="before"
+        title="책 제목을 입력합니다, 최대 1줄"
+        author="지은이, 옮긴이"
+        publisher="출판사"
+        publicYear="1999"
+        totalPages={130}
+        tags={["태그 키워드", "태그 키워드", "태그 키워드"]}
+      />
 
-      <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-gray-700">1. 로고 있는 버전</h2>
-        
-        {/*임의로 회색 테두리선을 만들어둔 거임*/}
-        <div className="border border-gray-300 bg-white">  
-          <AppBar 
-            mode="logo" 
-            onSettingClick={handleSetting} 
-          />
-        </div>
-      </div>
+      <BookList
+        readingState="reading"
+        title="책 제목을 입력합니다, 최대 1줄"
+        author="지은이, 옮긴이"
+        publisher="출판사"
+        publicYear="1998"
+        totalPages={130}
+        startDate="2000. 08. 04"
+        currentPage={13}
+      />
 
-      <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-gray-700">2. 로고 없는 버전</h2>
-
-        <div className="border border-gray-300 bg-white">
-          <AppBar 
-            mode="title" 
-            title="독서 기록" 
-            onBackClick={handleBack}
-            onBookmarkClick={handleBookmark}
-            onPenClick={handlePen}
-          />
-        </div>
-      </div>
+      <BookList
+        readingState="after"
+        title="책 제목을 입력합니다, 최대 1줄"
+        author="지은이, 옮긴이"
+        publisher="출판사"
+        publicYear="2001"
+        totalPages={130}
+        startDate="2000. 08. 04"
+        endDate="2000. 08. 04"
+        rating={5.0}
+      />
     </div>
   );
 }
