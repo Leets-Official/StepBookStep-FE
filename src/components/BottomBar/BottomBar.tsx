@@ -1,22 +1,16 @@
-import { useState } from 'react';
-import { styles } from './BottomBar.styles';
-import type { BottomBarProps, NavItem, TabId } from './BottomBar.types';
-
-import { 
-  HomeIcon, 
-  SearchIcon, 
-  ClockIcon, 
-  UserIcon 
-} from '@/assets/icons'; 
+import { useState } from "react";
+import { styles } from "./BottomBar.styles";
+import type { BottomBarProps, NavItem, TabId } from "./BottomBar.types";
+import { HomeIcon, SearchIcon, ClockIcon, UserIcon } from "@/assets/icons";
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'home', label: '홈', icon: HomeIcon },
-  { id: 'search', label: '탐색', icon: SearchIcon },
-  { id: 'routine', label: '루틴', icon: ClockIcon }, 
-  { id: 'mypage', label: '마이페이지', icon: UserIcon },
+  { id: "home", label: "홈", icon: HomeIcon },
+  { id: "search", label: "탐색", icon: SearchIcon },
+  { id: "routine", label: "루틴", icon: ClockIcon },
+  { id: "mypage", label: "마이페이지", icon: UserIcon },
 ];
 
-const BottomBar = ({ defaultTab = 'home', onTabSelect }: BottomBarProps) => {
+const BottomBar = ({ defaultTab = "home", onTabSelect }: BottomBarProps) => {
   const [activeTab, setActiveTab] = useState<TabId>(defaultTab);
 
   const handleTabClick = (id: TabId) => {
@@ -30,9 +24,9 @@ const BottomBar = ({ defaultTab = 'home', onTabSelect }: BottomBarProps) => {
     <nav className={styles.container}>
       {NAV_ITEMS.map((item) => {
         const isActive = activeTab === item.id;
-        
+
         // 활성 상태면 purple-500, 아니면 gray-400 (비활성 색상)
-        const activeColor = isActive ? 'text-purple-500' : 'text-gray-500';
+        const activeColor = isActive ? "text-purple-500" : "text-gray-500";
 
         // 아이콘 컴포넌트
         const IconComponent = item.icon;
@@ -44,12 +38,9 @@ const BottomBar = ({ defaultTab = 'home', onTabSelect }: BottomBarProps) => {
             onClick={() => handleTabClick(item.id)}
             className={`${styles.button} ${activeColor}`}
           >
-        
             <IconComponent className={`${styles.icon} fill-current`} />
-            
-            <span className={styles.label}>
-              {item.label}
-            </span>
+
+            <span className={styles.label}>{item.label}</span>
           </button>
         );
       })}
