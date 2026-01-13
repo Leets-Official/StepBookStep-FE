@@ -7,7 +7,7 @@ import {
   SettingIcon as IconSetting,
   LogoIcon as IconLogo
 } from '@/assets/icons';
-import TextField from "../TextField/TextField";
+import TextField from "@/components/TextField/TextField";
 
 const AppBar = ({
   mode,
