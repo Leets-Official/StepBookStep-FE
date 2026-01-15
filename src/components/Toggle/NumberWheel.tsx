@@ -1,95 +1,70 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface NumberWheelProps {
   value: number;
   min: number;
   max: number;
   active: boolean;
-  onChange: React.Dispatch<React.SetStateAction<number>>;
+  onChange: (v: number) => void;
 }
 
-const INTERVAL_MS = 80;
-const DIRECTION_THRESHOLD = 6;
-
 export function NumberWheel({ value, min, max, active, onChange }: NumberWheelProps) {
-  const startY = useRef<number | null>(null);
-  const direction = useRef<"up" | "down" | null>(null);
-  const timer = useRef<number | null>(null);
-
-  const startAuto = () => {
-    if (timer.current !== null) return;
-
-    timer.current = window.setInterval(() => {
-      if (direction.current === "up") {
-        onChange((v) => Math.min(v + 1, max));
-      }
-
-      if (direction.current === "down") {
-        onChange((v) => Math.max(v - 1, min));
-      }
-    }, INTERVAL_MS);
-  };
-
-  const stopAuto = () => {
-    if (timer.current !== null) {
-      clearInterval(timer.current);
-      timer.current = null;
-    }
-    direction.current = null;
-    startY.current = null;
-
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", stopAuto);
-    window.removeEventListener("touchmove", handleTouchMove);
-    window.removeEventListener("touchend", stopAuto);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    handleMove(e.clientY);
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    handleMove(e.touches[0].clientY);
-  };
-
-  const handleStart = (y: number) => {
-    startY.current = y;
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", stopAuto);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", stopAuto);
-  };
-
-  const handleMove = (y: number) => {
-    if (startY.current === null) return;
-
-    const diff = startY.current - y;
-
-    if (diff > DIRECTION_THRESHOLD) {
-      direction.current = "up";
-      startAuto();
-    } else if (diff < -DIRECTION_THRESHOLD) {
-      direction.current = "down";
-      startAuto();
-    }
-  };
+  const [editing, setEditing] = useState(false);
+  const [temp, setTemp] = useState(String(value));
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    return () => stopAuto();
-  }, []);
+    setTemp(String(value));
+  }, [value]);
+
+  useEffect(() => {
+    if (editing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [editing]);
+
+  const commit = () => {
+    let next = Number(temp);
+    if (Number.isNaN(next)) next = value;
+    next = Math.max(min, Math.min(max, next));
+    onChange(next);
+    setEditing(false);
+  };
 
   if (!active) {
     return <span className="text-gray-300 font-semibold">{value}</span>;
   }
 
+  if (editing) {
+    return (
+      <input
+        ref={inputRef}
+        type="number"
+        value={temp}
+        min={min}
+        max={max}
+        onChange={(e) => setTemp(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") commit();
+          if (e.key === "Escape") setEditing(false);
+        }}
+        className="
+          w-10 text-center font-semibold text-gray-900
+          outline-none border-b border-gray-300
+          bg-transparent appearance-none
+          [-moz-appearance:textfield]
+          [&::-webkit-outer-spin-button]:appearance-none
+          [&::-webkit-inner-spin-button]:appearance-none
+        "
+      />
+    );
+  }
+
   return (
-    <div
-      className="select-none cursor-ns-resize font-semibold text-gray-900"
-      onMouseDown={(e) => handleStart(e.clientY)}
-      onTouchStart={(e) => handleStart(e.touches[0].clientY)}
-    >
+    <span className="font-semibold text-gray-900 cursor-text" onClick={() => setEditing(true)}>
       {value}
-    </div>
+    </span>
   );
 }
