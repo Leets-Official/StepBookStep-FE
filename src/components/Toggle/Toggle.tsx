@@ -73,7 +73,6 @@ export default function Toggle({
         </div>
       </div>
 
-      {/* 쪽수 */}
       <div role="button" onClick={() => onChangeType("page")} className={toggleItem}>
         <div className={`${label} ${value === "page" ? "text-black" : inactiveText}`}>
           <BookIcon className="w-4 h-4" />

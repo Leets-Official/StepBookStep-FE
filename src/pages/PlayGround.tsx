@@ -17,7 +17,6 @@ export default function PlayGround() {
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-white">
-      {/* Toggle / Segment 단독 테스트 영역 */}
       <div className="mt-10 w-[320px] space-y-6">
         <Segment value={segment} onChange={setSegment} />
 
@@ -34,7 +33,6 @@ export default function PlayGround() {
         />
       </div>
 
-      {/* GoalModal 테스트 영역 */}
       <div className="flex items-center justify-center mt-20">
         {open && (
           <GoalModal

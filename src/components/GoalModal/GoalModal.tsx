@@ -62,16 +62,13 @@ export default function GoalModal({ maxPages, title, onClose, onSave }: GoalModa
         </button>
       </div>
 
-      {/* 따옴표 포함 문구 */}
       <p className={quote}>&quot;{goalText}&quot;</p>
 
       <div className={wrapper}>
-        {/* 기간 선택 */}
         <div className={section}>
           <Segment value={period} onChange={setPeriod} />
         </div>
 
-        {/* 시간 / 쪽수 설정 */}
         <div className={section}>
           <Toggle
             maxPages={maxPages}
