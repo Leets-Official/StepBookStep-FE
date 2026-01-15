@@ -1,5 +1,4 @@
-export const toggleContainer =
-  "relative flex w-full rounded-xl border border-gray-300 bg-white p-1";
+export const toggleContainer = "relative flex w-85 rounded-xl border border-gray-300 bg-white p-1";
 
 export const activePill =
   "absolute top-1 h-[calc(100%-8px)] rounded-xl border-1 border-lime-500 bg-lime-200 transition-all duration-200";
