@@ -21,4 +21,4 @@ export { default as StarFilledIcon } from "./star-filled.svg?react";
 export { default as UserIcon } from "./user.svg?react";
 export { default as XIcon } from "./x.svg?react";
 export { default as KakaoIcon } from "./kakao.svg?react";
-export { default as LogoIcon } from "./logo.svg?react"; 
+export { default as LogoIcon } from "./logo.svg?react";
