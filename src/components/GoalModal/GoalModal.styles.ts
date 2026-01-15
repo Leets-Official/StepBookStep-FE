@@ -1,5 +1,4 @@
-export const modalContainer =
-  "w-[335px] h-[372px] rounded-2xl bg-gray-50 px-5 py-6 flex flex-col gap-7.5";
+export const modalContainer = "w-[335px] rounded-2xl bg-gray-100 px-5 py-6 flex flex-col gap-7.5";
 
 export const header = "flex items-center justify-between pb-5";
 
