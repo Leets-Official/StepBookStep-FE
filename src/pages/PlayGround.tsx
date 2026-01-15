@@ -1,65 +1,57 @@
-import React, { useState } from "react";
-import AppBar from "@/components/AppBar/AppBar";
+import { useState } from "react";
+import Segment from "@/components/Segment/Segment";
+import type { SegmentValue } from "@/components/Segment/Segment";
+import Toggle from "@/components/Toggle/Toggle";
+import type { ToggleValue } from "@/components/Toggle/Toggle";
+import GoalModal from "@/components/GoalModal/GoalModal";
 
 export default function PlayGround() {
-  // 1. 검색어 상태 관리 (입력 테스트용)
-  const [searchText, setSearchText] = useState("");
+  const [segment, setSegment] = useState<SegmentValue>("day");
 
-  // 2. 이벤트 핸들러
-  const handleBack = () => console.log("뒤로가기 클릭");
-  const handleSetting = () => console.log("설정 클릭");
-  const handleBookmark = () => console.log("북마크 클릭");
-  const handlePen = () => console.log("수정(Pen) 클릭");
+  const [type, setType] = useState<ToggleValue>("time");
+  const [hour, setHour] = useState(0);
+  const [minute, setMinute] = useState(30);
+  const [page, setPage] = useState(0);
 
-  // 검색어 변경 핸들러
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-    console.log("현재 검색어:", e.target.value);
-  };
+  const [open, setOpen] = useState(true);
 
   return (
-    <div className="min-h-screen p-8 flex flex-col items-center gap-10 bg-gray-100">
-      
-      {/* 1. 로고 있는 버전 */}
-      <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-gray-700">1. 로고 있는 버전 (Home)</h2>
-        <div className="border border-gray-300 bg-white">
-          <AppBar 
-            mode="logo" 
-            onSettingClick={handleSetting} 
-          />
-        </div>
+    <div className="min-h-screen flex flex-col items-center bg-white">
+      <div className="mt-10 w-[320px] space-y-6">
+        <Segment value={segment} onChange={setSegment} />
+
+        <Toggle
+          maxPages={320}
+          value={type}
+          onChangeType={setType}
+          hour={hour}
+          minute={minute}
+          page={page}
+          onHourChange={setHour}
+          onMinuteChange={setMinute}
+          onPageChange={setPage}
+        />
       </div>
 
-      {/* 2. 로고 없는 버전 */}
-      <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-gray-700">2. 로고 없는 버전 (Title)</h2>
-        <div className="border border-gray-300 bg-white">
-          <AppBar 
-            mode="title" 
-            title="독서 기록" 
-            onBackClick={handleBack}
-            onBookmarkClick={handleBookmark}
-            onPenClick={handlePen}
+      <div className="flex items-center justify-center mt-20">
+        {open && (
+          <GoalModal
+            maxPages={320}
+            title="목표 수정하기"
+            onClose={() => setOpen(false)}
+            onSave={() => {
+              console.log({
+                segment,
+                type,
+                hour,
+                minute,
+                page,
+              });
+              setOpen(false);
+            }}
           />
-        </div>
+        )}
       </div>
-
-      {/* 3. 검색 버전 (탐색 탭)*/}
-      <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-gray-700">3. 검색 버전 (Search)</h2>
-        
-        <div className="border border-gray-300 bg-white">
-          <AppBar 
-            mode="search"
-            searchText={searchText}
-            onSearchTextChange={handleSearchChange}
-            onBackClick={handleBack}
-            searchPlaceholder="책 제목, 작가, 출판사 검색"
-          />
-        </div>
-      </div>
-
     </div>
   );
 }
