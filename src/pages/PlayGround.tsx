@@ -1,57 +1,26 @@
+import StateCarousel from "@/components/StateCarousel/StateCarousel";
+import type{ ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 import { useState } from "react";
-import Segment from "@/components/Segment/Segment";
-import type { SegmentValue } from "@/components/Segment/Segment";
-import Toggle from "@/components/Toggle/Toggle";
-import type { ToggleValue } from "@/components/Toggle/Toggle";
-import GoalModal from "@/components/GoalModal/GoalModal";
 
-export default function PlayGround() {
-  const [segment, setSegment] = useState<SegmentValue>("day");
+const PlayGround = () => {
+  const [currentStatus, setCurrentStatus] = useState<ReadingStatus>("BEFORE");
 
-  const [type, setType] = useState<ToggleValue>("time");
-  const [hour, setHour] = useState(0);
-  const [minute, setMinute] = useState(30);
-  const [page, setPage] = useState(0);
-
-  const [open, setOpen] = useState(true);
+  const handleStatusChange = (newStatus: ReadingStatus) => {
+    setCurrentStatus(newStatus);
+    console.log("변경된 독서 상태:", newStatus);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white">
-      <div className="mt-10 w-[320px] space-y-6">
-        <Segment value={segment} onChange={setSegment} />
+    <div className="min-h-screen flex flex-col items-center justify-center gap-12">
 
-        <Toggle
-          maxPages={320}
-          value={type}
-          onChangeType={setType}
-          hour={hour}
-          minute={minute}
-          page={page}
-          onHourChange={setHour}
-          onMinuteChange={setMinute}
-          onPageChange={setPage}
+      {/* 테스트할 컴포넌트 */}
+        <StateCarousel 
+          initialStatus="BEFORE" 
+          onChange={handleStatusChange} 
         />
-      </div>
 
-      <div className="flex items-center justify-center mt-20">
-        {open && (
-          <GoalModal
-            maxPages={320}
-            title="목표 수정하기"
-            onClose={() => setOpen(false)}
-            onSave={() => {
-              console.log({
-                segment,
-                type,
-                hour,
-                minute,
-                page,
-              });
-              setOpen(false);
-            }}
-          />
-        )}
-      </div>
     </div>
   );
-}
+};
+
+export default PlayGround;
