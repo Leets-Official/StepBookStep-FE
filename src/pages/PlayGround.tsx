@@ -1,38 +1,26 @@
+import StateCarousel from "@/components/StateCarousel/StateCarousel";
+import type{ ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 import { useState } from "react";
-import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
 
-export default function PlayGround() {
-  // 총 step = 1 + 3 + 1 = 5
-  const MAX_STEP = 5;
+const PlayGround = () => {
+  const [, setCurrentStatus] = useState<ReadingStatus>("BEFORE");
 
-  const [current, setCurrent] = useState(1);
+  const handleStatusChange = (newStatus: ReadingStatus) => {
+    setCurrentStatus(newStatus);
+    console.log("변경된 독서 상태:", newStatus);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white space-y-6">
-      {/* items-center 환경에서도 width 유지 */}
-      <div className="w-[320px]">
-        <SegmentedProgress current={current} />
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-12">
 
-      <div className="text-sm text-gray-600">
-        step {current} / {MAX_STEP}
-      </div>
+      {/* 테스트할 컴포넌트 */}
+        <StateCarousel 
+          initialStatus="BEFORE" 
+          onChange={handleStatusChange} 
+        />
 
-      <div className="flex gap-3">
-        <button
-          className="px-4 py-2 rounded bg-gray-200"
-          onClick={() => setCurrent((v) => Math.max(1, v - 1))}
-        >
-          - 단계
-        </button>
-
-        <button
-          className="px-4 py-2 rounded bg-purple-500 text-white"
-          onClick={() => setCurrent((v) => Math.min(MAX_STEP, v + 1))}
-        >
-          + 단계
-        </button>
-      </div>
     </div>
   );
-}
+};
+
+export default PlayGround;
