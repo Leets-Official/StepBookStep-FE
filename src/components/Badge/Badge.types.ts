@@ -9,5 +9,5 @@ export interface BadgeStyle {
 export interface BadgeProps {
   label: string;
   type?: BadgeType; // level | tag (텍스트 크기 차이)
-  style: BadgeStyle; // 페이지에서 주입
+  style?: BadgeStyle; // 페이지에서 주입
 }
