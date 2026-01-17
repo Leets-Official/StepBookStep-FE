@@ -3,7 +3,7 @@ import type{ ReadingStatus } from "@/components/StateCarousel/StateCarousel.type
 import { useState } from "react";
 
 const PlayGround = () => {
-  const [currentStatus, setCurrentStatus] = useState<ReadingStatus>("BEFORE");
+  const [, setCurrentStatus] = useState<ReadingStatus>("BEFORE");
 
   const handleStatusChange = (newStatus: ReadingStatus) => {
     setCurrentStatus(newStatus);

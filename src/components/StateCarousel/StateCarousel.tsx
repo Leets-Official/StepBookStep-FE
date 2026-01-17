@@ -1,8 +1,7 @@
 import { useState } from "react";
 import type { StateCarouselProps, ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 import { STATE_CONFIGS, CAROUSEL_ORDER, styles } from "@/components/StateCarousel/StateCarousel.styles";
-import { ChevronLeftIcon } from "@/assets/icons";
-import { ChevronRightIcon } from "@/assets/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons"
 
 export const StateCarousel = ({ initialStatus = "BEFORE", onChange }: StateCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(() => {
