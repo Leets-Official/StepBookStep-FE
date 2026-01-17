@@ -1,25 +1,24 @@
 import { container, segmentWrapper, segmentFill } from "./SegmentedProgress.styles";
 
 interface SegmentedProgressProps {
-  total: number; // 전체 단계 수
-  current: number; // 현재 단계 (1부터 시작)
+  current: number; // 전체 step (1부터 시작)
 }
 
-export function SegmentedProgress({ total, current }: SegmentedProgressProps) {
+const SEGMENT_STEPS = [1, 3, 1];
+
+export function SegmentedProgress({ current }: SegmentedProgressProps) {
   return (
     <div className={container}>
-      {Array.from({ length: total }).map((_, idx) => {
-        const isCompleted = idx < current - 1;
-        const isActive = idx === current - 1;
+      {SEGMENT_STEPS.map((stepsInSegment, idx) => {
+        const segmentStartStep = SEGMENT_STEPS.slice(0, idx).reduce((sum, v) => sum + v, 0);
+
+        const filledSteps = Math.min(Math.max(current - segmentStartStep, 0), stepsInSegment);
+
+        const fillPercent = (filledSteps / stepsInSegment) * 100;
 
         return (
           <div key={idx} className={segmentWrapper}>
-            <div
-              className={segmentFill}
-              style={{
-                width: isCompleted ? "100%" : isActive ? "100%" : "0%",
-              }}
-            />
+            <div className={segmentFill} style={{ width: `${fillPercent}%` }} />
           </div>
         );
       })}

@@ -1,7 +1,7 @@
-import PlayGround from "@/pages/PlayGround";
+import SetProfile from "@/pages/Onboarding/SetProfile.tsx";
 
 function App() {
-  return <PlayGround />;
+  return <SetProfile />;
 }
 
 export default App;

@@ -1,6 +1,13 @@
-export type BadgeVariant = "tag" | "lv1" | "lv2" | "lv3";
+export type BadgeType = "level" | "tag";
+
+export interface BadgeStyle {
+  backgroundColor: string;
+  borderColor: string;
+  textColor: string;
+}
 
 export interface BadgeProps {
   label: string;
-  variant?: BadgeVariant;
+  type?: BadgeType; // level | tag (텍스트 크기 차이)
+  style: BadgeStyle; // 페이지에서 주입
 }
