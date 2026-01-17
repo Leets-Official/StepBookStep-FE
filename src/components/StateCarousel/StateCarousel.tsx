@@ -1,18 +1,8 @@
 import { useState } from "react";
 import type { StateCarouselProps, ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 import { STATE_CONFIGS, CAROUSEL_ORDER, styles } from "@/components/StateCarousel/StateCarousel.styles";
-
-const ChevronLeft = ({ className }: { className?: string }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M15 18l-6-6 6-6" />
-  </svg>
-);
-
-const ChevronRight = ({ className }: { className?: string }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M9 18l6-6-6-6" />
-  </svg>
-);
+import { ChevronLeftIcon } from "@/assets/icons";
+import { ChevronRightIcon } from "@/assets/icons";
 
 export const StateCarousel = ({ initialStatus = "BEFORE", onChange }: StateCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(() => {
@@ -59,7 +49,7 @@ export const StateCarousel = ({ initialStatus = "BEFORE", onChange }: StateCarou
         className={`${styles.iconButton} ${leftIconColor}`}
         aria-label="Previous state"
       >
-        <ChevronLeft />
+        <ChevronLeftIcon className="w-6 h-6" />
       </button>
 
       {/* Text Label */}
@@ -74,7 +64,7 @@ export const StateCarousel = ({ initialStatus = "BEFORE", onChange }: StateCarou
         className={`${styles.iconButton} ${rightIconColor}`}
         aria-label="Next state"
       >
-        <ChevronRight />
+        <ChevronRightIcon className="w-6 h-6" />
       </button>
     </div>
   );
