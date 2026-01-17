@@ -6,7 +6,7 @@
     font-family: Pretendard;
     font-display: swap;
     src: local("Pretendard"),
-    url("public/fonts/PretendardVariable.ttf") format('truetype');
+    url("/fonts/PretendardVariable.ttf") format('truetype');
 }
 
 * {
