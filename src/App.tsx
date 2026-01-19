@@ -1,7 +1,8 @@
-import SetProfile from "@/pages/Onboarding/SetProfile.tsx";
+import ReadingStateDetail from "@/pages/PlayGround.tsx";
+import '@/styles/tokens.css';
 
 function App() {
-  return <SetProfile />;
+  return <ReadingStateDetail />;
 }
 
 export default App;

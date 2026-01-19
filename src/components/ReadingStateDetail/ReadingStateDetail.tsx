@@ -1,43 +1,64 @@
-import type { ReadingDetailData } from "@/mocks/readingState.mock"; // 타입 가져오기
+import type { ReadingDetailData } from "@/mocks/readingState.mock";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
+import { Badge } from "../Badge/Badge"; 
+import type { BadgeStyle } from "../Badge/Badge.types";
 import * as S from "./ReadingStateDetail.styles";
+import { StarFilledIcon } from "@/assets/icons";
 
 interface ReadingStateDetailProps {
-  data: ReadingDetailData; // 더미 데이터 구조를 그대로 타입으로 사용
+  data: ReadingDetailData;
 }
 
 export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
   const { isCompleted, title, currentPage, totalPage, startDate, endDate, review, logs } = data;
   const percent = Math.floor((currentPage / totalPage) * 100);
 
+  // 여기가 문제였습니다! 보라색 로직을 싹 지우고 라임색으로 통일했습니다.
+  const currentBadgeStyle: BadgeStyle = isCompleted
+    ? {
+        backgroundColor: "var(--color-lime-300)",
+        borderColor: "var(--color-lime-500)",
+        textColor: "var(--color-purple-800)", 
+      }
+    : {
+        backgroundColor: "var(--color-lime-200)",
+        borderColor: "var(--color-lime-500)",
+        textColor: "var(--color-purple-800)", 
+      };
+
   return (
     <div className={S.container}>
-      {/* 1. 상단 상태 및 제목 */}
+      {/* 헤더 영역 */}
       <div className={S.header}>
-        <div className={`px-3 py-1 rounded-full text-xs font-bd ${isCompleted ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'}`}>
-          {isCompleted ? "완독!" : "읽는 중"}
-        </div>
+        <Badge 
+          label={isCompleted ? "완독!" : "읽는 중"} 
+          type="tag" 
+          style={currentBadgeStyle} 
+        />
         <h2 className={S.title}>{title}</h2>
       </div>
 
-      {/* 2. 진행도 또는 한 줄 평 */}
+      {/* 진행도 또는 한 줄 평 */}
       <div className={S.progressTextContainer}>
         {isCompleted ? (
-          <div className="flex flex-col gap-2">
-            <span className="text-xl font-bd text-gray-800">⭐ 5.0</span>
-            <span className="text-md font-rg text-gray-600 italic">"{review}"</span>
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1 text-md font-semibold text-gray-800"><StarFilledIcon className="w-5 h-5 inline text-purple-500"/> 5.0  </span>
+            <span className="text-md font-semibold text-gray-800">{review}</span>
           </div>
         ) : (
           <>
             <p className={S.progressSub}>
-              <span className={S.progressHighlight}>{currentPage}쪽 ({percent}%)</span> 읽었어요!
+              <span className={S.progressHighlight}>{currentPage}</span>
+              <span className="text-md font-semibold text-black">쪽</span>
+              <span className={S.progressHighlight}> ({percent}%)</span>
+              <span className="text-md font-semibold text-black"> 읽었어요!</span>
             </p>
             <LinearProgress total={totalPage} current={currentPage} />
           </>
         )}
       </div>
 
-      {/* 3. 날짜 정보 */}
+      {/* 날짜 정보 */}
       <div className={S.dateInfoContainer}>
         <div className={S.dateItem}>
           <span className={S.dateLabel}>시작일</span>
@@ -49,13 +70,13 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
         </div>
       </div>
 
-      {/* 4. 독서 기록 리스트 */}
+      {/* 독서 기록 리스트 */}
       <div className={S.recordListContainer}>
         {logs.map((log, index) => (
           <div key={index} className={S.recordItem}>
             <span className={S.recordDate}>{log.date}</span>
             <span className={S.recordDetail}>
-              {log.page}쪽 ({log.percent}%), {log.time}
+              {log.page}쪽({log.percent}%), {log.time}
             </span>
           </div>
         ))}
