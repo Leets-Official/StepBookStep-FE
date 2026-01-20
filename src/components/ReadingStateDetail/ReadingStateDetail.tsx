@@ -1,7 +1,6 @@
 import type { ReadingDetailData } from "@/mocks/readingState.mock";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
-import { Badge } from "../Badge/Badge"; 
-import type { BadgeStyle } from "../Badge/Badge.types";
+import { Badge } from "@/components/Badge/Badge"; 
 import * as S from "./ReadingStateDetail.styles";
 import { StarFilledIcon } from "@/assets/icons";
 
@@ -13,18 +12,9 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
   const { isCompleted, title, currentPage, totalPage, startDate, endDate, review, logs } = data;
   const percent = Math.floor((currentPage / totalPage) * 100);
 
-  // 여기가 문제였습니다! 보라색 로직을 싹 지우고 라임색으로 통일했습니다.
-  const currentBadgeStyle: BadgeStyle = isCompleted
-    ? {
-        backgroundColor: "var(--color-lime-300)",
-        borderColor: "var(--color-lime-500)",
-        textColor: "var(--color-purple-800)", 
-      }
-    : {
-        backgroundColor: "var(--color-lime-200)",
-        borderColor: "var(--color-lime-500)",
-        textColor: "var(--color-purple-800)", 
-      };
+  const currentBadgeStyle = isCompleted
+    ? "bg-lime-300 border-lime-500 text-purple-800"
+    : "bg-lime-200 border-lime-500 text-purple-800";
 
   return (
     <div className={S.container}>
@@ -33,7 +23,7 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
         <Badge 
           label={isCompleted ? "완독!" : "읽는 중"} 
           type="tag" 
-          style={currentBadgeStyle} 
+          className={currentBadgeStyle} 
         />
         <h2 className={S.title}>{title}</h2>
       </div>
