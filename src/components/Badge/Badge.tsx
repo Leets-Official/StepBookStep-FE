@@ -9,6 +9,7 @@ export function Badge({ label, type = "tag", className }: BadgeProps) {
       className={`${baseContain} ${className || ""}`}
     >
       <span className={`${baseText} ${textSizeClass}`}>
+
         {label}
       </span>
     </span>

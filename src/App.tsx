@@ -1,8 +1,7 @@
-import ReadingStateDetail from "@/pages/PlayGround.tsx";
-import '@/styles/tokens.css';
+import PlayGround from "./pages/PlayGround";
 
 function App() {
-  return <ReadingStateDetail />;
+  return <PlayGround />;
 }
 
 export default App;

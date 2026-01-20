@@ -48,6 +48,10 @@ export default {
         },
         white: "var(--color-white)",
         black: "var(--color-black)",
+        error: {
+          DEFAULT: "var(--color-error)",
+          dark: "var(--color-error-dark)",
+        },
       },
 
       /* ===== Typography ===== */
@@ -62,7 +66,6 @@ export default {
         xl: "var(--font-xl)",
         "2xl": "var(--font-2xl)",
         "3xl": "var(--font-3xl)",
-
       },
       fontWeight: {
         rg: "var(--font-weight-rg)",
@@ -79,7 +82,7 @@ export default {
       letterSpacing: {
         base: "var(--letter-spacing-base)",
       },
-      
+
       /*Primitive(Font Size)*/
       height: {
         "btn-lg": "var(--btn-height-lg)",
