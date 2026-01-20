@@ -7,12 +7,8 @@ export function Badge({ label, type = "tag", style }: BadgeProps) {
   return (
     <span
       className={baseContain}
-      style={{
-        backgroundColor: style.backgroundColor,
-        borderColor: style.borderColor,
-      }}
     >
-      <span className={`${baseText} ${textSizeClass}`} style={{ color: style.textColor }}>
+      <span className={`${baseText} ${textSizeClass}`} >
         {label}
       </span>
     </span>
