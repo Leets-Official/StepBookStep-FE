@@ -12,8 +12,7 @@ import {
   isSaturday,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-
-import XIcon from "@/assets/icons/x.svg?react";
+import { XIcon } from "@/assets/icons";
 
 import type { DatePickerProps } from "./DatePicker.types";
 import { styles } from "./DatePicker.styles";
