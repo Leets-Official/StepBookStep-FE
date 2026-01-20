@@ -13,9 +13,8 @@ import {
 } from "date-fns";
 import { ko } from "date-fns/locale";
 import { XIcon } from "@/assets/icons";
-
 import type { DatePickerProps } from "./DatePicker.types";
-import { styles } from "./DatePicker.styles";
+import * as Styles from "@/components/DatePicker/DatePicker.styles";
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
@@ -33,41 +32,50 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <span className={styles.title}>{format(currentMonth, "M월", { locale: ko })}</span>
-        <button type="button" onClick={onClose} className={styles.closeButton} aria-label="Close">
-          <XIcon width={24} height={24} />
+    <div className={Styles.container}>
+      <div className={Styles.header}>
+        <span className={Styles.title}>
+          {format(currentMonth, "M월", { locale: ko })}
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          className={Styles.closeButton}
+          aria-label="Close"
+        >
+          <XIcon className="w-6 h-6" />
         </button>
       </div>
-      <div className={styles.weekDaysGrid}>
+      <div className={Styles.weekDaysGrid}>
         {weekDays.map((day, index) => (
-          <div key={day} className={styles.weekDay(index)}>
+          <div key={day} className={Styles.weekDay(index)}>
             {day}
           </div>
         ))}
       </div>
-      <div className={styles.daysGrid}>
+      <div className={Styles.daysGrid}>
         {days.map((day) => {
           const isCurrentMonth = isSameMonth(day, monthStart);
           const isSelected = selectedDate ? isSameDay(day, selectedDate) : false;
           const isToday = isSameDay(day, baseDate);
 
           return (
-            <div key={day.toString()} className={styles.dayCellWrapper}>
-              {/*오늘이면서 선택되지 않았을 때 표시 */}
-              {isToday && !isSelected && <span className={styles.todayLabel}>오늘</span>}
+            <div key={day.toString()} className={Styles.dayCellWrapper}>
+              {/* 오늘이면서 선택되지 않았을 때 표시 */}
+              {isToday && !isSelected && (
+                <span className={Styles.todayLabel}>오늘</span>
+              )}
 
               <button
                 type="button"
                 onClick={() => isCurrentMonth && onChange(day)}
-                disabled={!isCurrentMonth} // 이번달 날짜가 아니면 ㄴㄴ안됨
-                className={styles.dayButton(
+                disabled={!isCurrentMonth}
+                className={Styles.dayButton(
                   isSelected,
                   isToday,
                   isCurrentMonth,
                   isSunday(day),
-                  isSaturday(day),
+                  isSaturday(day)
                 )}
               >
                 {format(day, "d")}
