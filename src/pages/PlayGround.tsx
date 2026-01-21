@@ -1,41 +1,92 @@
-import React, { useState } from "react";
-import { format } from "date-fns";
-import { DatePicker } from "@/components/DatePicker/DatePicker";
+import { useState } from "react";
+import BookReport from "@/components/BookReport/BookReport";
+import type { BookReportData } from "@/components/BookReport/BookReport.types";
 
-const PlayGround: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [isOpen, setIsOpen] = useState(true);
+const PlayGround = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTimerMode, setIsTimerMode] = useState(false);
+  const [savedLog, setSavedLog] = useState<BookReportData | null>(null);
+
+  // 저장 핸들러
+  const handleSave = (data: BookReportData) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setSavedLog(data);
+      setIsOpen(false);
+      alert("기록이 저장됐수다!!");
+    }, 800);
+  };
+
+  const openManualRecord = () => {
+    setIsTimerMode(false); // 직접 기록 -> 시간 입력 숨김
+    setIsOpen(true);
+  };
+
+  const openTimerRecord = () => {
+    setIsTimerMode(true); // 타이머 기록 -> 시간 입력 표시
+    setIsOpen(true);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <div className="bg-white p-6 rounded-xl  text-center space-y-4 w-[320px]">
-        <p className="text-lg">
-          {selectedDate ? format(selectedDate, "선택된 날짜 : yyyy년 MM월 dd일") : "날짜 미선택"}
-        </p>
+    <div className="min-h-screen flex flex-col items-center py-10">
+      <div className="flex gap-4 mb-8">
+        <button
+          onClick={openManualRecord}
+          className="px-6 py-3 text-black border-black border rounded-lg hover:bg-gray-100 transition"
+        >
+          직접 기록하기
+          <br />
+          <span className="text-xs font-normal">(쪽수만 입력)</span>
+        </button>
 
-        {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="w-full py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium"
-          >
-            Date Picker 열기
-          </button>
-        )}
+        <button
+          onClick={openTimerRecord}
+          className="px-6 py-3 text-black border-black border rounded-lg hover:bg-gray-100 transition"
+        >
+          타이머로 기록하기
+          <br />
+          <span className="text-xs font-normal">(쪽수 + 시간 입력)</span>
+        </button>
       </div>
 
+      {/* 결과 표시 */}
+      {savedLog && (
+        <div className="w-full max-w-md bg-white p-6 rounded-xl border border-purple-100">
+          <h2 className="text-lg font-bold mb-4 text-gray-900">저장된 데이터</h2>
+          <div className="space-y-2 text-sm">
+            <p>
+              독서 상태: <span className="font-semibold">{savedLog.status}</span>
+            </p>
+            <p>기록일: {savedLog.date?.toLocaleDateString()}</p>
+            {/* 쪽수는 항상 표시 */}
+            {(savedLog.status === "READING" || savedLog.status === "BEFORE") && (
+              <p>쪽수: {savedLog.pages}쪽</p>
+            )}
+            {/* 시간은 값이 있을 때만 표시 */}
+            {savedLog.duration && <p>⏱ 시간: {savedLog.duration}</p>}
+            {/* 별점은 완독/중단일 때만 표시 */}
+            {savedLog.rating > 0 && <p>별점: {savedLog.rating}점</p>}
+          </div>
+        </div>
+      )}
+
+      {/* 모달 */}
       {isOpen && (
-        <div className="flex flex-col items-center gap-2">
-          <DatePicker
-            selectedDate={selectedDate}
-            onChange={(date) => {
-              setSelectedDate(date);
-              console.log("날짜 변경됨:", format(date, "yyyy-MM-dd"));
-            }}
-            onClose={() => {
-              setIsOpen(false);
-              console.log("닫기 버튼 클릭됨");
-            }}
-          />
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+          <div className="animate-slide-up mb-0">
+            <BookReport
+              onClose={() => !isLoading && setIsOpen(false)}
+              onSave={handleSave}
+              isTimerMode={isTimerMode}
+              initialData={{
+                status: "READING", // 기본 상태를 '읽는 중' 또는 '읽고 싶은'으로 테스트
+                date: new Date(),
+                duration: isTimerMode ? "" : "",
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

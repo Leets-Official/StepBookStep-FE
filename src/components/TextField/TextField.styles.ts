@@ -1,28 +1,22 @@
 export const wrapper = "flex flex-col gap-2 w-full";
 
-export const title = "text-xs font-semibold leading-4 tracking-normal text-gray-900";
+export const title =
+  "font-['Pretendard'] text-[12px] font-semibold leading-[16px] tracking-[0%] text-gray-900";
 
 export const inputContainer = "relative w-full";
 
 export const inputBase =
-  "w-full h-12 px-6 rounded-full text-base transition-all duration-200 focus:outline-none placeholder:text-gray-300 disabled:cursor-not-allowed";
+  "w-full h-12 px-6 rounded-full transition-all duration-200 focus:outline-none disabled:cursor-not-allowed " +
+  "font-['Pretendard'] text-[14px] font-normal leading-[20px] tracking-[0%] " +
+  "text-gray-900 placeholder:text-gray-300";
 
 export const inputVariants = {
-  // 기본 상태(active=false, focus=false)
-  default: "border border-gray-300 bg-gray-50 text-gray-300",
-
-  // 포커스 상태(active=false, focus=true)
-  focus: "border border-gray-900 bg-gray-50 text-gray-900",
-
-  // 값 입력 상태(active=true, focus=true)
-  filled: "border border-gray-300 bg-gray-50 text-gray-900",
-
-  // active=true, focus=false
-  disabled: "border border-gray-300 bg-gray-50 text-gray-900",
-
-  success: "border border-success bg-white text-gray-900 focus:border-success",
-
-  error: "border border-error bg-white text-gray-900 focus:border-error",
+  default: "border border-gray-300 bg-gray-50",
+  focus: "border border-gray-900 bg-gray-50",
+  filled: "border border-gray-300 bg-gray-50",
+  disabled: "border border-gray-300 bg-gray-50",
+  success: "border border-success bg-white focus:border-success",
+  error: "border border-error bg-white focus:border-error",
 };
 
 export const withIconPadding = "pr-14";
