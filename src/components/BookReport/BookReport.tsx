@@ -51,7 +51,33 @@ export const BookReport: React.FC<BookReportProps> = ({
 
   const handleSaveClick = () => {
     if (onSave) {
-      onSave({ status, date, pages, duration, rating });
+      let cleanDuration = duration;
+      let cleanPages = pages;
+      let cleanRating = rating;
+
+      // 읽기 전이면 기록 데이터 모두 초기화
+      if (status === "BEFORE") {
+        cleanDuration = "";
+        cleanPages = "";
+        cleanRating = 0;
+      }
+
+      if (status === "AFTER" || status === "STOP") {
+        cleanDuration = "";
+        cleanPages = ""; // 만약 완독 시에도 쪽수를 저장해야 한다면 이 줄은 삭제
+      }
+
+      if (status === "READING") {
+        cleanRating = 0;
+      }
+
+      onSave({
+        status,
+        date,
+        pages: cleanPages,
+        duration: cleanDuration,
+        rating: cleanRating,
+      });
     }
   };
 
