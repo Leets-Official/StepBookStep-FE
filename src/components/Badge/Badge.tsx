@@ -1,18 +1,15 @@
 import { baseContain, baseText, levelText, tagText } from "./Badge.styles";
 import type { BadgeProps } from "./Badge.types";
 
-export function Badge({ label, type = "tag", style }: BadgeProps) {
+export function Badge({ label, type = "tag", className }: BadgeProps) {
   const textSizeClass = type === "level" ? levelText : tagText;
 
   return (
     <span
-      className={baseContain}
-      style={{
-        backgroundColor: style.backgroundColor,
-        borderColor: style.borderColor,
-      }}
+      className={`${baseContain} ${className || ""}`}
     >
-      <span className={`${baseText} ${textSizeClass}`} style={{ color: style.textColor }}>
+      <span className={`${baseText} ${textSizeClass}`}>
+
         {label}
       </span>
     </span>

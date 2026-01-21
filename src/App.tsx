@@ -1,4 +1,3 @@
-import SetProfile from "@/pages/Onboarding/SetProfile.tsx";
 import PlayGround from "./pages/PlayGround";
 
 function App() {
