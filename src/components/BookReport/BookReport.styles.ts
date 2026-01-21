@@ -41,12 +41,12 @@ export const datePickerOverlay =
   "absolute top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm";
 
 export const starContainer = "flex gap-[12px] items-center h-[48px]";
-export const starBase = "w-10 h-10 text-[#91D654] [&_path]:stroke-[#91D654] [&_path]:stroke-[1px]";
 
-export const starWrapper = "relative w-10 h-10";
+export const starBase = "w-[50px] h-[50px] text-[#91D654] [&_path]:stroke-[#91D654] [&_path]:stroke-[2px]";
+
+export const starWrapper = "relative w-[50px] h-[50px]";
 export const starHalfOverlay = "absolute top-0 left-0 w-[50%] h-full overflow-hidden";
 
-export const starInteractiveContainer =
-  "relative w-10 h-10 flex items-center justify-center cursor-pointer transition-transform active:scale-95";
+export const starInteractiveContainer = "relative w-[50px] h-[50px] flex items-center justify-center cursor-pointer transition-transform active:scale-95";
 export const starClickLeft = "absolute left-0 top-0 w-1/2 h-full z-10 bg-transparent";
 export const starClickRight = "absolute right-0 top-0 w-1/2 h-full z-10 bg-transparent";
