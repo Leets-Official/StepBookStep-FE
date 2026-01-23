@@ -1,7 +1,7 @@
 import React from "react";
 import type { ButtonProps } from "@/components/Button/Button.types";
-import { base, variants, sizes } from "@/components/Button/Button.styles"; 
-import { cn } from "@/utils/cn"; 
+import { base, variants, sizes } from "@/components/Button/Button.styles";
+import { cn } from "@/utils/cn";
 
 export const Button: React.FC<ButtonProps> = ({
   label,
@@ -12,13 +12,7 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth,
   ...props
 }) => {
-  const cls = cn(
-    base,
-    sizes[size],  
-    variants[variant], 
-    fullWidth && "w-full",
-    className
-  );
+  const cls = cn(base, sizes[size], variants[variant], fullWidth && "w-full", className);
 
   return (
     <button className={cls} disabled={disabled} {...props}>
