@@ -27,7 +27,7 @@ export const CAROUSEL_ORDER: ReadingStatus[] = ["BEFORE", "READING", "AFTER", "S
 
 // 공통 스타일
 export const styles = {
-  container: "relative flex items-center justify-between w-[335px] h-[48px] bg-white rounded-[999px] border border-gray-300 px-[2px] py-0 select-none",
+  container: "relative flex items-center justify-between w-[335px] h-[48px] bg-gray-50 rounded-[999px] border border-gray-300 px-[2px] py-0 select-none",
   
   textBase: "font-semibold text-lg leading-tight tracking-[0%] text-center", // Title 2 Typography
   

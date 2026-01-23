@@ -1,0 +1,16 @@
+import type { ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
+
+export interface BookReportProps {
+  onClose?: () => void;
+  onSave?: (data: BookReportData) => void;
+  initialData?: Partial<BookReportData>;
+  isTimerMode?: boolean;
+}
+
+export interface BookReportData {
+  status: ReadingStatus;
+  date: Date | null;
+  pages: string;
+  duration: string;
+  rating: number;
+}
