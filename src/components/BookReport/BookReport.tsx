@@ -112,7 +112,7 @@ export const BookReport: React.FC<BookReportProps> = ({
             >
               {date ? (
                 <span className={Styles.dateValue}>
-                  {format(date, "yyyy.MM.dd", { locale: ko })}
+                  {format(date, "yyyy. MM. dd", { locale: ko })}
                 </span>
               ) : (
                 <span className={Styles.datePlaceholder}>날짜를 선택해 주세요</span>
