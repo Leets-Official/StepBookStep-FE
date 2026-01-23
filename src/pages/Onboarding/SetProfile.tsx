@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
 import { TextField } from "@/components/TextField/TextField";
 import { Button } from "@/components/Button/Button";
-
 import { ChevronLeftIcon } from "@/assets/icons";
 
 import {
@@ -19,21 +19,23 @@ import {
 
 export default function SetProfile() {
   const [nickname, setNickname] = useState("");
+  const navigate = useNavigate();
+
   const isButtonActive = nickname.length > 0;
 
   const handleNext = () => {
-    console.log("nickname:", nickname);
-  };
-
-  const handleBack = () => {
-    window.history.back(); // or router.back()
+    navigate("/onboarding/level/step-1", {
+      state: {
+        nickname,
+      },
+    });
   };
 
   return (
     <div className={pageWrapper}>
       <div className={appFrame}>
         <div className={header}>
-          <button className={backButton} onClick={handleBack}>
+          <button className={backButton} onClick={() => navigate(-1)}>
             <ChevronLeftIcon />
           </button>
         </div>
@@ -53,14 +55,10 @@ export default function SetProfile() {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               icon={false}
-              helpText={
-                "한글, 영문, 숫자를 포함해 주세요.\n" + "특수문자(@#$%^&*+-_)는 사용할 수 없어요."
-              }
             />
           </div>
         </div>
 
-        {/* 🔽 하단 고정 버튼 */}
         <div className={bottomAction}>
           <Button label="다음" fullWidth disabled={!isButtonActive} onClick={handleNext} />
         </div>
