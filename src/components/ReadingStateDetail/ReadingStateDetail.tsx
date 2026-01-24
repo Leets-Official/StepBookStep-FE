@@ -51,11 +51,11 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
       {/* 날짜 정보 */}
       <div className={S.dateInfoContainer}>
         <div className={S.dateItem}>
-          <span className={S.dateLabel}>시작일</span>
+          <span className={S.dateLabel}>시작일 </span>
           <span className={S.dateValue}>{startDate}</span>
         </div>
         <div className={S.dateItem}>
-          <span className={S.dateLabel}>종료일</span>
+          <span className={S.dateLabel}>종료일&nbsp;</span>
           <span className={S.dateValue}>{isCompleted ? endDate : "-"}</span>
         </div>
       </div>

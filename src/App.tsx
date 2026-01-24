@@ -1,7 +1,7 @@
-import BookList from "@/pages/Routine/BookList";
+import BookDetail from "@/pages/Routine/BookDetail";
 
 function App() {
-  return <BookList />;
+  return <BookDetail />;
 }
 
 export default App;
