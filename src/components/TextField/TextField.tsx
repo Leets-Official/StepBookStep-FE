@@ -45,10 +45,10 @@ export const TextField: React.FC<TextFieldProps> = ({
       return <CheckIcon className="text-[#0530EE]" />;
     }
     if (state === "error") {
-      return <AlertCircleIcon className="text-[#EF1313]" />;
+      return <AlertCircleIcon className="text-error" />;
     }
-    
-    return <SearchIcon />;
+
+    return <SearchIcon className="text-gray-500"/>;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
