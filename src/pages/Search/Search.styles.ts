@@ -4,6 +4,7 @@ export const wrapper = `
   w-full 
   min-h-screen 
   bg-gray-50
+  pt-11
 `;
 
 export const container = `

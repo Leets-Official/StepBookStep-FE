@@ -23,3 +23,4 @@ export { default as XIcon } from "./x.svg?react";
 export { default as KakaoIcon } from "./kakao.svg?react";
 export { default as LogoIcon } from "./logo.svg?react";
 export { default as FilterIcon } from "./filter.svg?react";
+export { default as HelpIcon } from "./help.svg?react";

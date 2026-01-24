@@ -6,10 +6,12 @@ import { BookList } from "@/components/BookList/BookList";
 import TextField from "@/components/TextField/TextField";
 import { FilterIcon } from "@/assets/icons";
 import { dummySearchResults } from "./dummyData";
+import SearchFilter from "./SearchFilter";
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const handleFocus = () => {
     setIsSearchMode(true);
@@ -23,7 +25,6 @@ const Search = () => {
   return (
     <>
       <style>{`
-        /* ... 기존 스타일 태그 내용 유지 ... */
         .search-page-wrapper span[class*="inline-flex"] {
           border-width: 1px !important;
           border-color: rgb(209 213 219) !important;
@@ -60,10 +61,9 @@ const Search = () => {
           color: rgb(75 85 99) !important;
         }
       `}</style>
-
-      {/* wrapper로 감싸서 양옆 배경색 적용 */}
       <div className={S.wrapper}>
         <div className={`${S.container} search-page-wrapper`}>
+          {/* 헤더 영역 */}
           {isSearchMode ? (
             <AppBar
               mode="search"
@@ -83,10 +83,9 @@ const Search = () => {
               />
             </div>
           )}
-
           <div className={S.subHeader}>
             {isSearchMode ? (
-              <button className={S.filterButton} onClick={() => console.log("필터 클릭")}>
+              <button className={S.filterButton} onClick={() => setIsFilterOpen(true)}>
                 {FilterIcon && <FilterIcon className="w-6 h-6 text-gray-500" />}
                 <span className={S.filterText}>필터</span>
               </button>
@@ -96,7 +95,6 @@ const Search = () => {
               </h2>
             )}
           </div>
-
           <div className={S.contentArea}>
             <div className={S.listWrapper}>
               {dummySearchResults.slice(0, 4).map((book, index) => (
@@ -104,8 +102,8 @@ const Search = () => {
               ))}
             </div>
           </div>
-
           <BottomBar defaultTab="search" />
+          {isFilterOpen && <SearchFilter onClose={() => setIsFilterOpen(false)} />}
         </div>
       </div>
     </>
