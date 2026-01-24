@@ -1,4 +1,4 @@
-export type AppBarMode = "logo" | "title" | "search";
+export type AppBarMode = "logo" | "title" | "search" | "none";
 
 export interface AppBarProps {
   mode: AppBarMode;
