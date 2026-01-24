@@ -1,4 +1,4 @@
-import BookList from "@/pages/Routine/BookList"
+import BookList from "@/pages/Routine/BookList";
 
 function App() {
   return <BookList />;
