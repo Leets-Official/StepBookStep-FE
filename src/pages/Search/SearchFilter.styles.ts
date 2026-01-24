@@ -156,3 +156,11 @@ export const footer = `
   border-t
   border-gray-50
 `;
+
+export const chipStyle = `
+  font-['Pretendard'] 
+  font-normal 
+  text-[14px] 
+  leading-[20px] 
+  tracking-[0%]
+`;
