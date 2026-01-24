@@ -19,7 +19,7 @@ export const container = `
 
   [&_nav]:bg-white 
   [&_nav]:z-50
-  [&_nav]:!bottom-[32px]
+
 `;
 
 export const contentArea = `
@@ -39,7 +39,6 @@ export const headerWrapper = `
   bg-white
 `;
 
-// [수정] 칩들과 필터 버튼을 가로로 배치 (gap-3, overflow-hidden)
 export const filterBar = `
   w-full 
   px-[20px] 
@@ -54,7 +53,6 @@ export const filterBar = `
   overflow-hidden
 `;
 
-// [추가] 칩 리스트 (가로 스크롤)
 export const chipList = `
   flex 
   gap-2 
