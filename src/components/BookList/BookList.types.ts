@@ -1,4 +1,4 @@
-export type ReadingState = "before" | "reading" | "after";
+export type ReadingState = "before" | "reading" | "readingdetail" | "after";
 
 export interface BookListProps {
   readingState: ReadingState;
@@ -16,4 +16,9 @@ export interface BookListProps {
 
   currentPage?: number;
   rating?: number;
+
+  targetPeriod?: string;   // "1주일"
+  targetAmount?: number;   // 100
+  remainingAmount?: number;// 82
+  isAchieved?: boolean;    // 목표 달성 여부
 }

@@ -8,11 +8,11 @@ export const row = `
   active:bg-purple-100/40
 `;
 
-export const cover = "w-22 h-30 bg-gray-200 flex-shrink-0";
+export const cover = "w-[88px] h-full bg-gray-200 flex-shrink-0 rounded-sm";
 
 export const content = "py-3 flex-1 space-y-2.5";
 
-export const info = "space-y-1";
+export const info = "space-y-0.5";
 export const title = "text-lg font-semibold text-black line-clamp-1";
 export const author = "text-sm font-semibold text-gray-900";
 export const meta = "text-sm font-light text-gray-600";
@@ -27,3 +27,9 @@ export const progressTop = "flex justify-between text-sm text-gray-700";
 export const dateRow = "flex justify-between text-sm text-gray-700 mb-0.5";
 export const Label = "text-gray-900 font-semibold";
 export const Value = "text-gray-700 font-light";
+
+export const detailMainText = "text-md font-semibold text-gray-800";
+
+export const detailSubText = "text-sm font-regular text-gray-500";
+
+export const highlight = "text-purple-500";
