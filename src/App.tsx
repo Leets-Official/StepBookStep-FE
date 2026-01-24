@@ -1,7 +1,7 @@
-import BookDetail from "@/pages/Routine/BookDetail";
+import Timer from "@/pages/Routine/Timer";
 
 function App() {
-  return <BookDetail />;
+  return <Timer />;
 }
 
 export default App;

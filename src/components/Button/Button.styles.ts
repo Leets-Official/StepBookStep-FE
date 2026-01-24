@@ -13,7 +13,7 @@ export const variants: Record<Variant, string> = {
   primary:
     "bg-purple-500 text-white border-transparent hover:bg-purple-400 active:bg-purple-600 disabled:bg-gray-200 disabled:text-gray-300",
   primaryOutline:
-    "bg-white text-purple-600 border border-purple-500 hover:bg-purple-500/30 active:bg-purple-500 active:text-white disabled:bg-white disabled:text-gray-300 disabled:border-gray-200",
+    "bg-white text-purple-600 border border-purple-100 hover:bg-purple-500/30 active:bg-purple-500 active:text-white disabled:bg-white disabled:text-gray-300 disabled:border-gray-200",
   secondary:
     "bg-lime-400 text-gray-900 border-transparent hover:bg-lime-300 active:bg-lime-500 disabled:bg-gray-200 disabled:text-gray-300",
   secondaryOutline:
