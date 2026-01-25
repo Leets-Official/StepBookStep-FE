@@ -1,14 +1,22 @@
 export const container = `
   fixed 
-  inset-0 
+  top-1/2 
+  left-1/2 
+  -translate-x-1/2 
+  -translate-y-1/2
   z-50 
+  
+  w-full 
+  max-w-[375px] 
+  h-full 
+  max-h-[812px]
+  
   bg-white 
   flex 
   flex-col 
-  w-full 
-  max-w-[375px] 
-  mx-auto
   pt-11
+
+  rounded-[30px] overflow-hidden
 `;
 
 export const header = `
@@ -90,7 +98,6 @@ export const unselectedChip = `
   border-gray-200 
   bg-white 
   text-gray-600 
- 
 `;
 
 export const accordionHeader = `

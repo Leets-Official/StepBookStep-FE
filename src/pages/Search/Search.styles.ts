@@ -1,25 +1,31 @@
 export const wrapper = `
   flex 
   justify-center 
+  items-center 
   w-full 
-  min-h-screen 
-  bg-gray-50
-  pt-11
+  h-screen 
+  bg-gray-100
 `;
 
+// 앱 프레임 설정
 export const container = `
   w-full 
   max-w-[375px] 
-  mx-auto 
-  min-h-screen 
+  h-full 
+  max-h-[812px]
+  
   bg-white 
   relative 
-  flex flex-col
-  pt-11
-
-  [&_nav]:bg-white 
-  [&_nav]:z-50
-
+  flex 
+  flex-col
+  
+  shadow-2xl
+  rounded-[30px]
+  overflow-hidden
+  
+  [&_nav]:absolute 
+  [&_nav]:bottom-0
+  [&_nav]:w-full
 `;
 
 export const contentArea = `
