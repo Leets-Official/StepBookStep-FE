@@ -1,7 +1,8 @@
-import Search from "@/pages/Search/Search";
+import Timer from "@/pages/Routine/BookDetail";
 
 function App() {
-  return <Search />;
+  return <Timer />;
+
 }
 
 export default App;
