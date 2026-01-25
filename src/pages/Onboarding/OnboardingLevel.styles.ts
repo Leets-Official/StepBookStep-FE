@@ -1,8 +1,8 @@
-export const pageWrapper = "w-full h-screen flex justify-center bg-gray-100";
+export const pageWrapper = "min-h-screen bg-gray-050 flex justify-center";
 
-export const appFrame = "w-full max-w-[375px] h-full max-h-[812px] bg-white flex flex-col relative";
+export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center";
 
-export const header = "h-12 flex items-center px-4";
+export const header = "h-16 flex items-center px-4";
 
 export const backButton = "p-1 text-gray-500";
 
@@ -16,7 +16,7 @@ export const option = `
   mt-3 w-full h-12 px-4
   rounded-full
   border border-lime-600
-  text-md text-gray-700 font-normal
+  text-sm text-gray-700 font-normal
   flex items-center gap-3
   transition-all
 `;
@@ -27,8 +27,4 @@ export const optionActive = `
   text-purple-800
 `;
 
-export const bottomAction = `
-  px-5 pb-6
-  sticky bottom-0
-  bg-white
-`;
+export const bottomAction = "px-5 pb-2.5 bottom-0";
