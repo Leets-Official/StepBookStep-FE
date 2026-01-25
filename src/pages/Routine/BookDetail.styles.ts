@@ -18,10 +18,10 @@ export const authorText = "text-md font-semibold text-gray-900 mb-1";
 export const metaText = "text-sm font-light text-gray-600 mb-3";
 
 export const priceRow = "flex items-center gap-2 mb-4";
-export const priceLabel = "text-sm font-normal text-[#7E819A]";
-export const aladinLink = "text-sm font-normal text-[#5D58E0] underline underline-offset-[25%] decoration-solid cursor-pointer  px-1";
+export const priceLabel = "text-sm font-normal text-gray-500";
+export const aladinLink = "text-sm font-normal text-purple-400 underline underline-offset-[25%] decoration-solid cursor-pointer  px-1";
 
 export const tagList = "flex gap-2 mb-6";
-export const divider = "border-none h-[1px] bg-[#E8E9ED] mb-6";
+export const divider = "border-none h-[1px] bg-gray-200 mb-6";
 
 export const tabContainer = "flex w-full mb-2";
