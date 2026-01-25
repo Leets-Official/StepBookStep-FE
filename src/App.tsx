@@ -1,4 +1,4 @@
-import Timer from "@/pages/Routine/Timer";
+import Timer from "@/pages/Routine/BookDetail";
 
 function App() {
   return <Timer />;
