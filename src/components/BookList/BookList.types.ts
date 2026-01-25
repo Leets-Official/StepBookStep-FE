@@ -21,4 +21,9 @@ export interface BookListProps {
   targetAmount?: number;   // 100
   remainingAmount?: number;// 82
   isAchieved?: boolean;    // 목표 달성 여부
+
+  
+  level?: number;    
+  country?: string;  
+  genre?: string;    
 }

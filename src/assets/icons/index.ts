@@ -24,3 +24,5 @@ export { default as KakaoIcon } from "./kakao.svg?react";
 export { default as LogoIcon } from "./logo.svg?react";
 export { default as PlayIcon } from "./play.svg?react";
 export { default as PauseIcon } from "./pause.svg?react"; 
+export { default as FilterIcon } from "./filter.svg?react";
+export { default as HelpIcon } from "./help.svg?react";

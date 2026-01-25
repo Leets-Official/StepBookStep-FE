@@ -105,7 +105,7 @@ export default function BookDetailPage() {
         </main>
 
         <div className={S.bottomBarContainer}>
-          <BottomBar defaultTab="routine" onTabSelect={() => {}} />
+          <BottomBar activeTab="routine" onTabSelect={(id) => {id}} />
         </div>
       </div>
     </div>
