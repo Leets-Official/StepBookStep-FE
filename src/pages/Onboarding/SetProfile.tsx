@@ -4,6 +4,7 @@ import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
 import { TextField } from "@/components/TextField/TextField";
 import { Button } from "@/components/Button/Button";
 import { ChevronLeftIcon } from "@/assets/icons";
+import { useOnboardingStore } from "@/stores/onboardingStore";
 
 import {
   pageWrapper,
@@ -20,16 +21,7 @@ import {
 export default function SetProfile() {
   const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
-
-  const isButtonActive = nickname.length > 0;
-
-  const handleNext = () => {
-    navigate("/onboarding/level/step-1", {
-      state: {
-        nickname,
-      },
-    });
-  };
+  const { setNickname: saveNickname } = useOnboardingStore();
 
   return (
     <div className={pageWrapper}>
@@ -52,6 +44,13 @@ export default function SetProfile() {
             <TextField
               title="닉네임"
               placeholder="2~15자 내로 작성해 주세요."
+              helpText={
+                <>
+                  한글, 영문, 숫자만 사용할 수 있어요.
+                  <br />
+                  특수문자(@#$%^&’*”+_,:)는 사용할 수 없어요.
+                </>
+              }
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               icon={false}
@@ -60,7 +59,15 @@ export default function SetProfile() {
         </div>
 
         <div className={bottomAction}>
-          <Button label="다음" fullWidth disabled={!isButtonActive} onClick={handleNext} />
+          <Button
+            label="다음"
+            fullWidth
+            disabled={!nickname}
+            onClick={() => {
+              saveNickname(nickname);
+              navigate("/onboarding/level/step-1");
+            }}
+          />
         </div>
       </div>
     </div>

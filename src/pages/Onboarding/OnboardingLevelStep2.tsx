@@ -16,6 +16,7 @@ import {
   optionActive,
   bottomAction,
 } from "./OnboardingLevel.styles";
+import { useOnboardingStore } from "@/stores/onboardingStore.ts";
 
 const OPTIONS = [
   "☕ 짧게 끊어 읽는 게 좋아요",
@@ -27,6 +28,7 @@ const OPTIONS = [
 export default function OnboardingLevelStep2() {
   const [selected, setSelected] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { setReadingDuration } = useOnboardingStore();
 
   return (
     <div className={pageWrapper}>
@@ -61,7 +63,10 @@ export default function OnboardingLevelStep2() {
             label="다음"
             fullWidth
             disabled={selected === null}
-            onClick={() => navigate("/onboarding/level/step-3")}
+            onClick={() => {
+              setReadingDuration(selected!);
+              navigate("/onboarding/level/step-3");
+            }}
           />
         </div>
       </div>
