@@ -1,5 +1,3 @@
-// src/pages/Timer/Timer.tsx
-
 import { useState, useEffect, useRef } from "react";
 import * as S from "./Timer.styles";
 import AppBar from "@/components/AppBar/AppBar";
