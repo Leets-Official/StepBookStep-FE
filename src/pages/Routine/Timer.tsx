@@ -19,6 +19,10 @@ export default function TimerPage() {
       timerRef.current = null;
     }
   };
+  const bookData = {
+    title: "제목은두줄넘어가면안보이게설정해야해...제목은두줄넘어가면안보이게설정해야해..",
+    author: "지은이, 옮긴이"
+  };
 
   useEffect(() => {
     if (status === "running") {
@@ -106,8 +110,8 @@ export default function TimerPage() {
           </div>
 
           <div className={S.bookInfoContainer}>
-            <p className={S.bookTitle}>제목은두줄넘어가면안보이게설정해야해...</p>
-            <p className={S.bookAuthor}>지은이, 옮긴이</p>
+            <p className={S.bookTitle}>{bookData.title}</p>
+            <p className={S.bookAuthor}>{bookData.author}</p>
           </div>
         </main>
 

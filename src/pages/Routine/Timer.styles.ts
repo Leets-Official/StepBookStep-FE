@@ -26,12 +26,19 @@ export const iconWrapper = `
   absolute top-[68%] left-1/2 -translate-x-1/2
   flex justify-center items-center h-14
 `;
-export const bookInfoContainer = "text-center mt-auto mb-[80px] flex flex-col items-center w-full";
-export const bookTitle = "text-lg font-semibold text-gray-900 leading-6 mb-1 line-clamp-2 px-2";
+export const bookInfoContainer = "text-center mt-auto mb-10 flex flex-col items-center w-full";
+
+export const bookTitle = `
+  text-lg font-semibold text-gray-900 
+  w-full           
+  truncate            
+  px-4 text-center    
+`;
+
 export const bookAuthor = "text-md font-semibold text-gray-700 leading-5";
 
 export const footer = `
-  px-5 pb-10 pt-4
+  px-5 pb-20 pt-4
   sticky bottom-0
   bg-white
   flex gap-3
