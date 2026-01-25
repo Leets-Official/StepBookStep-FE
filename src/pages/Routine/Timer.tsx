@@ -60,20 +60,20 @@ export default function TimerPage() {
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        <div className={S.headerGroup}>
+        <header className="flex flex-col w-full z-50 bg-white">
           <div className={S.statusBar} />
           <AppBar mode="none" title="타이머로 기록하기" onBackClick={() => window.history.back()} />
-        </div>
+        </header>
 
         <main className={S.content}>
           <div className={S.timerCircleContainer}>
             <svg className={S.svgContainer} viewBox="0 0 335 335">
-              <circle cx="167.5" cy="167.5" r={radius} fill="none" stroke={baseCircleColor} strokeWidth="12" />
+              <circle cx="167.5" cy="167.5" r={radius} fill="none" stroke={baseCircleColor} strokeWidth="8" />
               
               {status !== "ready" && (
                 <circle 
                   cx="167.5" cy="167.5" r={radius} fill="none" 
-                  stroke={progressColor} strokeWidth="12"
+                  stroke={progressColor} strokeWidth="8"
                   strokeDasharray={circumference}
                   strokeDashoffset={strokeDashoffset}
                   strokeLinecap="round"
@@ -92,7 +92,7 @@ export default function TimerPage() {
               
               <h1 className={S.digitalTime}>{formatTime(seconds)}</h1>
               
-              <div className="flex justify-center items-center h-14">
+              <div className={S.iconWrapper}>
                 {status === "running" ? (
                   <PauseIcon className={`${S.controlIcon} text-gray-300`} onClick={() => setStatus("paused")} />
                 ) : (

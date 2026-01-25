@@ -1,21 +1,39 @@
-export const pageWrapper = "min-h-screen bg-gray-100 flex justify-center items-center overflow-hidden";
-export const appFrame = "w-[375px] h-[730px] bg-white flex flex-col relative overflow-hidden";
+export const pageWrapper = "w-full h-screen flex justify-center bg-gray-100 overflow-hidden";
+export const appFrame = "w-full max-w-[375px] h-full max-h-[812px] bg-white flex flex-col relative shadow-lg overflow-hidden";
 
-export const statusBar = "h-[11px] w-full bg-white flex-shrink-0";
-export const headerGroup = "flex flex-col bg-white w-full z-50 flex-shrink-0";
+export const headerGroup = "w-full z-50 bg-white flex-shrink-0";
+export const statusBar = "h-[44px] w-full bg-white flex-shrink-0";
 
-export const content = "flex-1 flex flex-col items-center pt-[60px] px-5";
+export const content = "flex-1 px-5 pt-4 flex flex-col items-center overflow-y-auto";
 
-export const timerCircleContainer = "relative w-[335px] h-[335px] flex items-center justify-center mb-10";
+export const timerCircleContainer = "relative w-[335px] h-[335px] flex items-center justify-center mb-8 flex-shrink-0";
 export const svgContainer = "absolute inset-0 -rotate-90";
-
-export const timerTextContent = "absolute inset-0 flex flex-col items-center justify-center text-center z-10";
-export const statusLabel = "text-purple-600 text-[16px] font-bold h-6 mb-1"; // 마진 조정
-export const digitalTime = "text-[52px] font-bold text-black tracking-tight leading-none mb-4 font-mono"; // 마진 조정
 export const controlIcon = "w-14 h-14 cursor-pointer transition-transform active:scale-95";
 
-export const bookInfoContainer = "text-center mt-auto mb-16 flex flex-col items-center";
-export const bookTitle = "w-[335px] line-clamp-2 font-semibold text-[18px] leading-[1.4] text-[#19191F] mb-1";
-export const bookAuthor = "font-semibold text-[16px] leading-[1.4] text-[#3D3E4D] text-center";
+export const timerTextContent = "absolute inset-0 z-10"; 
 
-export const footer = "p-5 pb-10 flex gap-3 bg-white";
+export const statusLabel = `
+  absolute top-[32%] left-1/2 -translate-x-1/2
+  text-gray-700 text-lg font-medium h-7 whitespace-nowrap
+`; 
+
+export const digitalTime = `
+  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+  text-[48px] font-semibold text-black tracking-tight leading-none font-['Pretendard']
+`; 
+
+export const iconWrapper = `
+  absolute top-[68%] left-1/2 -translate-x-1/2
+  flex justify-center items-center h-14
+`;
+export const bookInfoContainer = "text-center mt-auto mb-[80px] flex flex-col items-center w-full";
+export const bookTitle = "text-lg font-semibold text-gray-900 leading-6 mb-1 line-clamp-2 px-2";
+export const bookAuthor = "text-md font-semibold text-gray-700 leading-5";
+
+export const footer = `
+  px-5 pb-10 pt-4
+  sticky bottom-0
+  bg-white
+  flex gap-3
+  w-full
+`;
