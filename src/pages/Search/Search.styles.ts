@@ -4,10 +4,9 @@ export const wrapper = `
   items-center 
   w-full 
   h-screen 
-  bg-gray-100
+
 `;
 
-// 앱 프레임 설정
 export const container = `
   w-full 
   max-w-[375px] 
@@ -19,8 +18,6 @@ export const container = `
   flex 
   flex-col
   
-  shadow-2xl
-  rounded-[30px]
   overflow-hidden
   
   [&_nav]:absolute 

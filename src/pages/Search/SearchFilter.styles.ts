@@ -15,8 +15,8 @@ export const container = `
   flex 
   flex-col 
   pt-11
-
-  rounded-[30px] overflow-hidden
+  
+  overflow-hidden
 `;
 
 export const header = `
