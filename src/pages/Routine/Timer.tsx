@@ -4,7 +4,7 @@ import AppBar from "@/components/AppBar/AppBar";
 import Button from "@/components/Button/Button";
 import { PlayIcon, PauseIcon } from '@/assets/icons';
 
-type TimerStatus = "ready" | "running" | "paused" | "finished";
+export type TimerStatus = "ready" | "running" | "paused" | "finished";
 
 export default function TimerPage() {
   const [status, setStatus] = useState<TimerStatus>("ready");
