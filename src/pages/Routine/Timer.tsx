@@ -42,8 +42,7 @@ export default function TimerPage() {
   if (hasReachedDouble) {
     strokeDashoffset = 0;
   } else if (hasReachedTarget) {
-    const overtimeSeconds = seconds % targetSeconds;
-    const currentProgress = overtimeSeconds === 0 ? 0 : overtimeSeconds;
+    const currentProgress = seconds % targetSeconds;
     strokeDashoffset = circumference - (currentProgress / targetSeconds * circumference);
   } else {
     strokeDashoffset = circumference - (seconds / targetSeconds * circumference);
