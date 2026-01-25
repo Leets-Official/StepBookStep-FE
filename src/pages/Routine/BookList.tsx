@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as S from "./BookList.styles"; 
+import * as S from "./BookList.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
 import { BookList } from "@/components/BookList/BookList";
@@ -13,27 +13,26 @@ export default function RoutinePage() {
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        
         <div className={S.statusBar} />
-        
-        <header className={S.headerWrapper}> 
-           <AppBar mode="logo" onSettingClick={() => {}} />
+
+        <header className={S.headerWrapper}>
+          <AppBar mode="logo" onSettingClick={() => {}} />
         </header>
 
         <nav className={S.tabContainer}>
           <div className="flex">
-            <Tab 
-              label="루틴" 
-              isActive={activeTab === "routine"} 
-              onClick={() => setActiveTab("routine")} 
+            <Tab
+              label="루틴"
+              isActive={activeTab === "routine"}
+              onClick={() => setActiveTab("routine")}
               className="w-[167.5px]"
             />
           </div>
           <div className="flex">
-            <Tab 
-              label="통계" 
-              isActive={activeTab === "statistics"} 
-              onClick={() => setActiveTab("statistics")} 
+            <Tab
+              label="통계"
+              isActive={activeTab === "statistics"}
+              onClick={() => setActiveTab("statistics")}
               className="w-[167.5px]"
             />
           </div>
@@ -56,8 +55,7 @@ export default function RoutinePage() {
           )}
         </main>
 
-        <BottomBar defaultTab="routine" onTabSelect={(id) => setNavTab(id)} />
-        
+        <BottomBar activeTab={navTab} onTabSelect={setNavTab} />
       </div>
     </div>
   );
