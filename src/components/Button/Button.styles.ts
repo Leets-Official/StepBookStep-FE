@@ -17,6 +17,6 @@ export const variants: Record<Variant, string> = {
   secondary:
     "bg-lime-400 text-gray-900 border-transparent hover:bg-lime-300 active:bg-lime-500 disabled:bg-gray-200 disabled:text-gray-300",
   secondaryOutline:
-    "bg-white text-lime-600 border border-lime-600 hover:bg-lime-50 hover:border-lime-400 active:bg-lime-400 active:text-black disabled:bg-white disabled:text-gray-300 disabled:border-gray-200",
+    "bg-white text-lime-600 border border-lime-600 hover:bg-lime-50 hover:border-lime-400 active:bg-lime-400 active:text-black disabled:bg-white disabled:text-gray-300 disabled:border-gray-200 disabled:text-sm",
   ghost: "bg-transparent text-gray-900 hover:bg-gray-100 active:bg-gray-200 disabled:text-gray-300",
 };
