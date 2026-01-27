@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
-import * as S from "./MyPage.styles"; // import { S }에서 * as S로 변경
+import * as S from "./MyPage.styles"; 
 import type { ReadStatus } from "./MyPage.types";
 import { MOCK_BOOKS as MOCK_DATA } from "./MyPage.mookDate";
 import { useNavigate } from "react-router-dom";
@@ -28,18 +28,13 @@ const MyPage = () => {
   };
 
   return (
-    // 1. 화면 중앙 배치를 위한 래퍼 추가
     <div className={S.pageWrapper}>
-      {/* 2. 모바일 규격 프레임 */}
       <div className={S.appFrame}>
         <AppBar mode="logo" onSettingClick={() => {}} />
         <MyPageHeader activeStatus={activeStatus} onTabChange={setActiveStatus} />
-        
-        {/* 3. 컨텐츠 스크롤 영역 */}
         <main className={S.content}>
           {renderContent()}
         </main>
-
         <div className={S.bottomBarFixed}>
           <BottomBar 
             activeTab="mypage" 

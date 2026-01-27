@@ -23,7 +23,6 @@ export const MyPageHeader = ({ activeStatus, onTabChange }: Props) => {
           label={tab.label}
           isActive={activeStatus === tab.status}
           onClick={() => onTabChange(tab.status)}
-          // flex-1과 함께 whitespace-nowrap을 추가하여 줄바꿈을 방지합니다.
           className="flex-1 whitespace-nowrap text-center" 
         />
       ))}

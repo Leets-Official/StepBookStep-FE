@@ -19,7 +19,7 @@ export const meta = "text-sm font-light text-gray-600";
 
 export const extra = "space-y-1";
 
-export const tagWrap = "flex gap-1 flex-wrap";
+export const tagWrap = "flex gap-1 flex-wrap ";
 
 export const progressWrap = "space-y-2";
 export const progressTop = "flex justify-between text-sm text-gray-700";
