@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -27,6 +28,8 @@ interface BookDetailProps {
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const isBefore = readingStatus === "before";
 
+  const isLoading = true;
+
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
@@ -47,6 +50,21 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const bottomBar = bottomBarConfig[entrySource];
 
+  if (isLoading) {
+    return (
+      <div className={S.pageWrapper}>
+        <div className={S.appFrame}>
+          <AppBar mode="title" onBackClick={() => {}} />
+          <main className={S.content}>
+            {isBefore ? <SkeletonBookDetailBefore /> : <SkeletonBookDetailReading />}
+          </main>
+          {bottomBar.visible && (
+            <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />
+          )}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
