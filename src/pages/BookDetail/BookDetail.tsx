@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 네비게이션 추가
+import { useNavigate } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import AppBar from "@/components/AppBar/AppBar";
@@ -9,15 +9,18 @@ import { Tab } from "@/components/Tab/Tab";
 import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
 import GoalModal from "@/components/GoalModal/GoalModal";
-import { BookReport } from "@/components/BookReport/BookReport"; // 독서 기록 컴포넌트 추가
+import { BookReport } from "@/components/BookReport/BookReport";
+
+import { useBookStore } from "@/stores/useBookStore";
+import type { ReadStatus } from "../MyPage/MyPage.types";
+import type { BookReportData } from "@/components/BookReport/BookReport.types";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
-
 import { MOCK_READING_DATA, MOCK_COMPLETED_DATA } from "@/mocks/readingState.mock";
 import type { ReadingDetailData } from "@/mocks/readingState.mock";
-
 import type { TabId } from "@/components/BottomBar/BottomBar.types";
+
 import * as S from "./BookDetail.styles";
 import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
 
@@ -31,13 +34,15 @@ interface BookDetailProps {
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const navigate = useNavigate();
+  const { updateBookStatus } = useBookStore();
+
   const isBefore = readingStatus === "before";
   const isLoading = false;
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
-  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false); // 기록 모달 상태 추가
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -57,6 +62,22 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const bottomBar = bottomBarConfig[entrySource];
 
+  const handleSaveRecord = (data: BookReportData) => {
+    const statusMap: Record<string, ReadStatus> = {
+      READING: "READING",
+      AFTER: "FINISHED",
+      BEFORE: "BOOKMARKED",
+      STOP: "PAUSED",
+    };
+
+    const mappedStatus = statusMap[data.status];
+
+    updateBookStatus(101, mappedStatus, data.rating);
+
+    setIsRecordModalOpen(false);
+    alert("독서 기록이 저장되었습니다!");
+  };
+
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => !prev);
   };
@@ -73,7 +94,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         <div className={S.appFrame}>
           <AppBar
             mode="title"
-            onBackClick={() => navigate(-1)} // 로딩 중 뒤로 가기 연결
+            onBackClick={() => navigate(-1)} // 뒤로 가기 연결
             isBookmarked={isBookmarked}
             onBookmarkClick={handleBookmarkClick}
             showPenDropdown={!isBefore}
@@ -201,15 +222,11 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           onSave={() => setIsGoalModalOpen(false)}
         />
       )}
-
       {isRecordModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm">
           <BookReport
             onClose={() => setIsRecordModalOpen(false)}
-            onSave={(data) => {
-              console.log("기록 저장됨:", data);
-              setIsRecordModalOpen(false);
-            }}
+            onSave={handleSaveRecord}
             initialData={{
               status:
                 readingStatus === "reading"
