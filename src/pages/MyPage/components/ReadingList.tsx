@@ -1,0 +1,21 @@
+import { BookList } from "@/components/BookList/BookList";
+import * as S from "../MyPage.styles";
+import type { BookItem } from "../MyPage.types";
+
+export const ReadingList = ({ data }: { data: BookItem[] }) => (
+  <div className={S.listWrapper}>
+    {data.map((book) => (
+      <BookList
+        key={book.userBookId}
+        readingState="reading"
+        title={book.title}
+        author={book.author}
+        publisher={book.publisher}
+        publicYear={book.pubDate.split('-')[0]} // 연도만 추출
+        totalPages={book.itemPage}
+        currentPage={book.totalPageRead}
+        startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
+      />
+    ))}
+  </div>
+);

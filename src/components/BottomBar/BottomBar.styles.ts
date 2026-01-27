@@ -7,7 +7,7 @@ export const styles = {
     -translate-x-1/2 
     w-full 
     max-w-[375px] 
-    bg-white
+    bg-gray-50
     border-t border-gray-100 
 
     flex justify-around items-center 
