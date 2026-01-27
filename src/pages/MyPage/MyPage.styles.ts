@@ -1,5 +1,5 @@
 // 1. 전체 레이아웃 가이드: 프레임을 화면 중앙에 배치합니다.
-export const pageWrapper = "min-h-screen bg-white flex justify-center items-center";
+export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center items-center";
 
 // 2. 모바일 앱 프레임: iPhone 13 Mini 규격을 유지하며 테두리와 그림자를 추가합니다.
 export const appFrame = "w-[375px] h-[812px] bg-gray-50 flex flex-col overflow-hidden relative border-x border-gray-50";

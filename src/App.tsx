@@ -8,31 +8,25 @@ import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
 import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
 import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
 import Home from "@/pages/Home/Home.tsx";
+import MyPage from "@/pages/MyPage";
+import Search from "./pages/Search/Search";
 
-import MyPage from "@/pages/MyPage"; 
 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-<<<<<<< HEAD
-        <Route path="/" element={<MyPage />} />
-=======
-        <Route path="/" element={<Home />} />
->>>>>>> develop
+        <Route path="/" element={<Search />} />
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
         <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
         <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
-<<<<<<< HEAD
-
-        <Route path="/mypage" element={<MyPage />} />
-=======
         <Route path="/bookdetail" element={<BookDetailPage />} />
->>>>>>> develop
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );
