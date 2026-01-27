@@ -1,11 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import SetProfile from "@/pages/Onboarding/SetProfile";
 import OnboardingLevelStep1 from "@/pages/Onboarding/OnboardingLevelStep1";
 import OnboardingLevelStep2 from "@/pages/Onboarding/OnboardingLevelStep2";
 import OnboardingLevelStep3 from "@/pages/Onboarding/OnboardingLevelStep3";
-import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre.tsx";
-import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage.tsx";
+import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
+import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
+import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
+import Home from "@/pages/Home/Home.tsx";
 
 import MyPage from "@/pages/MyPage"; 
 
@@ -14,15 +16,23 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+<<<<<<< HEAD
         <Route path="/" element={<MyPage />} />
+=======
+        <Route path="/" element={<Home />} />
+>>>>>>> develop
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
         <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
         <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
+<<<<<<< HEAD
 
         <Route path="/mypage" element={<MyPage />} />
+=======
+        <Route path="/bookdetail" element={<BookDetailPage />} />
+>>>>>>> develop
       </Routes>
     </BrowserRouter>
   );

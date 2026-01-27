@@ -8,6 +8,7 @@ import { XIcon } from "@/assets/icons";
 
 import {
   modalContainer,
+  overlay,
   header,
   title as titleClass,
   closeButton,
@@ -54,38 +55,40 @@ export default function GoalModal({ maxPages, title, onClose, onSave }: GoalModa
       : `${periodText} ${page}쪽 독서해요!`;
 
   return (
-    <div className={modalContainer}>
-      <div className={header}>
-        <h2 className={titleClass}>{title}</h2>
-        <button onClick={onClose} className={closeButton}>
-          <XIcon />
-        </button>
-      </div>
-
-      <p className={quote}>&quot;{goalText}&quot;</p>
-
-      <div className={wrapper}>
-        <div className={section}>
-          <Segment value={period} onChange={setPeriod} />
+    <div className={overlay}>
+      <div className={modalContainer}>
+        <div className={header}>
+          <h2 className={titleClass}>{title}</h2>
+          <button onClick={onClose} className={closeButton}>
+            <XIcon />
+          </button>
         </div>
 
-        <div className={section}>
-          <Toggle
-            maxPages={maxPages}
-            value={type}
-            onChangeType={setType}
-            hour={hour}
-            minute={minute}
-            page={page}
-            onHourChange={setHour}
-            onMinuteChange={setMinute}
-            onPageChange={setPage}
-          />
-        </div>
-      </div>
+        <p className={quote}>&quot;{goalText}&quot;</p>
 
-      <div className={footer}>
-        <Button label="저장하기" fullWidth size="large" onClick={onSave} />
+        <div className={wrapper}>
+          <div className={section}>
+            <Segment value={period} onChange={setPeriod} />
+          </div>
+
+          <div className={section}>
+            <Toggle
+              maxPages={maxPages}
+              value={type}
+              onChangeType={setType}
+              hour={hour}
+              minute={minute}
+              page={page}
+              onHourChange={setHour}
+              onMinuteChange={setMinute}
+              onPageChange={setPage}
+            />
+          </div>
+        </div>
+
+        <div className={footer}>
+          <Button label="저장하기" fullWidth size="large" onClick={onSave} />
+        </div>
       </div>
     </div>
   );
