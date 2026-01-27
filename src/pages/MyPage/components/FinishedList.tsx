@@ -4,9 +4,10 @@ import type { BookItem } from "../MyPage.types"; // BookItem 타입 불러오기
 
 interface Props {
   data: BookItem[];
+  onBookClick: () => void;
 }
 
-export const FinishedList = ({ data }: Props) => (
+export const FinishedList = ({ data, onBookClick }: Props) => (
   <div className={S.listWrapper}>
     {data.map((book) => (
       <BookList
@@ -21,6 +22,7 @@ export const FinishedList = ({ data }: Props) => (
         startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
         endDate={book.finishedAt?.split('T')[0].replace(/-/g, '. ')}
         rating={book.rating}
+        onClick={onBookClick}
       />
     ))}
   </div>

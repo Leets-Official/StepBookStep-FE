@@ -19,11 +19,12 @@ export function BookList({
   targetPeriod,
   targetAmount,
   remainingAmount,
+  onClick
 }: BookListProps) {
   const percent = readingState === "reading" ? Math.round((currentPage / totalPages) * 100) : 0;
 
   return (
-    <div className={S.row}>
+    <div className={S.row} onClick={onClick}>
       <div className={S.cover} />
 
       <div className={S.content}>

@@ -4,9 +4,11 @@ import type { BookItem } from "../MyPage.types";
 
 interface Props {
   data: BookItem[];
+  onBookClick: () => void;
+
 }
 
-export const PausedList = ({ data }: Props) => {
+export const PausedList = ({ data, onBookClick }: Props) => {
   return (
     <div className={S.listWrapper}>
       {data.map((book) => (
@@ -22,6 +24,7 @@ export const PausedList = ({ data }: Props) => {
           startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
           endDate={book.updatedAt.split('T')[0].replace(/-/g, '. ')} // 중단일로 표시됨
           rating={book.rating}
+          onClick={onBookClick}
         />
       ))}
     </div>
