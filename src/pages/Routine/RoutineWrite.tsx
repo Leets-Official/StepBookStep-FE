@@ -38,7 +38,7 @@ export default function RoutineWritePage() {
     setIsReportOpen(false);
     setShowToast(true);
     setTimeout(() => {
-      navigate(-1);
+      navigate("/bookdetail");
     }, 2000);
   };
 
@@ -137,7 +137,8 @@ export default function RoutineWritePage() {
         <Toast 
           message="독서 기록이 저장되었습니다!" 
           isVisible={showToast} 
-          onClose={() => setShowToast(false)} 
+          onClose={() => setShowToast(false)}
+          className="bottom-[70px] top-auto"
         />
 
         {isReportOpen && (
