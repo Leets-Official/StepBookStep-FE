@@ -7,6 +7,7 @@ import { Badge } from "@/components/Badge/Badge";
 import { Tab } from "@/components/Tab/Tab";
 import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
+import GoalModal from "@/components/GoalModal/GoalModal";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
@@ -16,6 +17,7 @@ import type { ReadingDetailData } from "@/mocks/readingState.mock";
 
 import type { TabId } from "@/components/BottomBar/BottomBar.types";
 import * as S from "./BookDetail.styles";
+import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
 
 type EntrySource = "home" | "search" | "routine" | "mypage";
 type ContentTab = "record" | "info";
@@ -27,10 +29,11 @@ interface BookDetailProps {
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const isBefore = readingStatus === "before";
-
   const isLoading = false;
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -50,11 +53,28 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const bottomBar = bottomBarConfig[entrySource];
 
+  const handleBookmarkClick = () => {
+    setIsBookmarked((prev) => !prev);
+  };
+
+  const handlePenClick = () => {
+    if (isBefore) {
+      setIsGoalModalOpen(true);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className={S.pageWrapper}>
         <div className={S.appFrame}>
-          <AppBar mode="title" onBackClick={() => {}} />
+          <AppBar
+            mode="title"
+            onBackClick={() => {}}
+            isBookmarked={isBookmarked}
+            onBookmarkClick={handleBookmarkClick}
+            showPenDropdown={!isBefore}
+            onPenClick={handlePenClick}
+          />
           <main className={S.content}>
             {isBefore ? <SkeletonBookDetailBefore /> : <SkeletonBookDetailReading />}
           </main>
@@ -62,13 +82,32 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />
           )}
         </div>
+
+        {isGoalModalOpen && (
+          <GoalModal
+            maxPages={BOOK_DETAIL_MOCK.totalPage}
+            title="독서 목표 설정"
+            onClose={() => setIsGoalModalOpen(false)}
+            onSave={() => {
+              setIsGoalModalOpen(false);
+            }}
+          />
+        )}
       </div>
     );
   }
+
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        <AppBar mode="title" onBackClick={() => {}} />
+        <AppBar
+          mode="title"
+          onBackClick={() => {}}
+          isBookmarked={isBookmarked}
+          onBookmarkClick={handleBookmarkClick}
+          showPenDropdown={!isBefore}
+          onPenClick={handlePenClick}
+        />
 
         <main className={S.content}>
           <div className={S.coverWrapper}>
@@ -128,9 +167,14 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {isBefore && (
             <section>
               <h2 className={S.sectionTitle}>책 소개</h2>
-              <FullView collapsedHeight={134}>
-                <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
-              </FullView>
+
+              {BOOK_DETAIL_MOCK.description ? (
+                <FullView collapsedHeight={134}>
+                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                </FullView>
+              ) : (
+                <EmptyBookDescription />
+              )}
             </section>
           )}
 
@@ -141,15 +185,31 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              <FullView collapsedHeight={72}>
-                <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
-              </FullView>
+
+              {BOOK_DETAIL_MOCK.description ? (
+                <FullView collapsedHeight={72}>
+                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                </FullView>
+              ) : (
+                <EmptyBookDescription />
+              )}
             </section>
           )}
         </main>
 
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
       </div>
+
+      {isGoalModalOpen && (
+        <GoalModal
+          maxPages={BOOK_DETAIL_MOCK.totalPage}
+          title="목표 설정하기"
+          onClose={() => setIsGoalModalOpen(false)}
+          onSave={() => {
+            setIsGoalModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
