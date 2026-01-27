@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
+import { useNavigate } from "react-router-dom";
 
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -28,6 +29,7 @@ interface BookDetailProps {
 }
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+  const navigate = useNavigate();
   const isBefore = readingStatus === "before";
   const isLoading = false;
 
@@ -102,7 +104,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          onBackClick={() => {}}
+          onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
