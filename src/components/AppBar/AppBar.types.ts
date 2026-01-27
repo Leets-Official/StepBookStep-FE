@@ -9,6 +9,9 @@ export interface AppBarProps {
   onSettingClick?: () => void;
   onBookmarkClick?: () => void;
   onPenClick?: () => void;
+  onTimerClick?: () => void;
+  onDirectClick?: () => void;
+  onGoalClick?: () => void;
 
   /*탐색탭 앱바 전용 props*/
   searchText?: string;

@@ -19,6 +19,9 @@ const AppBar = ({
   onSettingClick,
   onBookmarkClick,
   onPenClick,
+  onTimerClick,
+  onDirectClick,
+  onGoalClick,
   searchText,
   onSearchTextChange,
   searchPlaceholder = "Placeholder",
@@ -26,6 +29,11 @@ const AppBar = ({
 
   const [isPenMenuOpen, setIsPenMenuOpen] = useState(false);
   const penRef = useRef<HTMLDivElement>(null);
+
+  const handleMenuClick = (action?: () => void) => {
+    if (action) action();
+    setIsPenMenuOpen(false);
+  };
 
   // 메뉴 바깥 클릭 시 닫기
   useEffect(() => {
@@ -96,7 +104,10 @@ const AppBar = ({
                 <div className="relative" ref={penRef}>
                   <button 
                     type="button" 
-                    onClick={() => setIsPenMenuOpen(!isPenMenuOpen)}
+                    onClick={() => {
+                      if (onPenClick) onPenClick();
+                      setIsPenMenuOpen(!isPenMenuOpen);
+                    }}
                   >
                     <IconPen className={appBarStyles.icon} />
                   </button>
@@ -112,13 +123,13 @@ const AppBar = ({
                         marginTop: '8px' 
                       }}
                     >
-                      <li className={dropDownItem} onClick={() => { console.log("타이머"); setIsPenMenuOpen(false); }}>
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onTimerClick)}>
                         타이머로 기록하기
                       </li>
-                      <li className={dropDownItem} onClick={() => { console.log("직접"); setIsPenMenuOpen(false); }}>
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onDirectClick)}>
                         직접 기록하기
                       </li>
-                      <li className={dropDownItem} onClick={() => { console.log("수정"); setIsPenMenuOpen(false); }}>
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onGoalClick)}>
                         목표 수정하기
                       </li>
                     </ul>
