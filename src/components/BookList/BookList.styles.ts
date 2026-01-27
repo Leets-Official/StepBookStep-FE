@@ -25,8 +25,8 @@ export const progressWrap = "space-y-2";
 export const progressTop = "flex justify-between text-sm text-gray-700";
 
 export const dateRow = "flex justify-between text-sm text-gray-700 mb-0.5";
-export const Label = "text-gray-900 font-semibold";
-export const Value = "text-gray-700 font-light";
+export const Label = "text-gray-900 font-semibold text-[12px]";
+export const Value = "text-gray-700 font-light text-[12px]";
 
 export const detailMainText = "text-md font-semibold text-gray-800";
 
