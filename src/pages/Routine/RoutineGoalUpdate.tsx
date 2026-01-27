@@ -7,6 +7,7 @@ import { Badge } from "@/components/Badge/Badge";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
 import GoalModal from "@/components/GoalModal/GoalModal";
+import { Toast } from "@/components/Toast/Toast";
 
 import { MOCK_BOOK_DETAIL } from "@/mocks/bookdetail.mock";
 import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
@@ -14,6 +15,7 @@ import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
 export default function GoalUpdatePage() {
   const [activeTab, setActiveTab] = useState<"record" | "info">("record");
   const [isModalOpen, setIsModalOpen] = useState(true); 
+  const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
   const { bookId } = useParams();
   const info = MOCK_BOOK_DETAIL;
@@ -34,7 +36,10 @@ export default function GoalUpdatePage() {
   const handleModalSave = () => {
     console.log("목표가 저장되었습니다!");
     setIsModalOpen(false);
-    navigate(-1);
+    setShowToast(true);
+    setTimeout(() => {
+      navigate("/bookdetail");
+    }, 2000);
   };
 
   return (
@@ -123,6 +128,13 @@ export default function GoalUpdatePage() {
         <div className={S.bottomBarContainer}>
           <BottomBar activeTab="routine" onTabSelect={(id) => {id}} />
         </div>
+
+        <Toast 
+          message="목표가 저장되었습니다!" 
+          isVisible={showToast} 
+          onClose={() => setShowToast(false)}
+          className="bottom-[80px] top-auto"
+        />
 
         {isModalOpen && (
           <>
