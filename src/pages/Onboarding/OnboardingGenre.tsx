@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
 import { Button } from "@/components/Button/Button";
 import { ChevronLeftIcon } from "@/assets/icons";
+import { useOnboardingStore } from "@/stores/onboardingStore";
+import { requestOnboardingResult } from "@/mocks/onboardingResult.mock";
 
 import {
   pageWrapper,
@@ -16,7 +18,7 @@ import {
   chipActive,
   bottomAction,
 } from "./OnboardingGenre.styles";
-import { cn } from "@/utils/cn.ts";
+import { cn } from "@/utils/cn";
 
 const GENRES = [
   "한국소설",
@@ -42,6 +44,8 @@ const UNKNOWN = "잘 모르겠어요";
 export default function OnboardingGenre() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<string[]>([]);
+
+  const { payload, setGenres } = useOnboardingStore();
 
   const hasUnknown = selected.includes(UNKNOWN);
   const hasOther = selected.some((g) => g !== UNKNOWN);
@@ -111,8 +115,8 @@ export default function OnboardingGenre() {
               onClick={() => toggleGenre(UNKNOWN)}
               className={cn(
                 "rounded-full",
-                !hasUnknown && !hasOther && "bg-white text-gray-700 border border-lime-600",
-                hasUnknown && "bg-lime-400/60 border border-lime-600 text-purple-800",
+                !hasUnknown && !hasOther && "bg-white text-gray-700 border border-lime-600 text-sm",
+                hasUnknown && "bg-lime-400/60 border border-lime-600 text-purple-800 text-sm",
               )}
             />
           </div>
@@ -124,8 +128,16 @@ export default function OnboardingGenre() {
             fullWidth
             disabled={!isNextEnabled}
             onClick={() => {
-              console.log("선택한 취향:", selected);
-              navigate("/");
+              setGenres(selected);
+
+              const result = requestOnboardingResult({
+                ...payload,
+                genres: selected,
+              });
+
+              navigate("/onboarding/result", {
+                state: result,
+              });
             }}
           />
         </div>

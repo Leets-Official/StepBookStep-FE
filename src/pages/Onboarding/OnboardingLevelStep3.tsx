@@ -16,6 +16,7 @@ import {
   optionActive,
   bottomAction,
 } from "./OnboardingLevel.styles";
+import { useOnboardingStore } from "@/stores/onboardingStore.ts";
 
 const OPTIONS = [
   "😵 두껍거나 어려워 보이는 책",
@@ -27,6 +28,7 @@ const OPTIONS = [
 export default function OnboardingLevelStep3() {
   const [selected, setSelected] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { setReadingBurden } = useOnboardingStore();
 
   return (
     <div className={pageWrapper}>
@@ -61,7 +63,10 @@ export default function OnboardingLevelStep3() {
             label="다음"
             fullWidth
             disabled={selected === null}
-            onClick={() => navigate("/onboarding/genre")}
+            onClick={() => {
+              setReadingBurden(selected!);
+              navigate("/onboarding/genre");
+            }}
           />
         </div>
       </div>
