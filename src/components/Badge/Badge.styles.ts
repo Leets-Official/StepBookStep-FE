@@ -1,7 +1,11 @@
-export const baseContain = "inline-flex items-center justify-center rounded-full border border-2";
+export const baseContain = "inline-flex items-center rounded-full border";
 
-export const baseText = "font-semibold leading-none";
+export const baseText = "font-semibold text-current";
 
-export const levelText = "text-md px-2 py-0.5";
+export const levelContain = "px-2 py-0.5";
 
-export const tagText = "text-sm px-2.5 py-1";
+export const tagContain = "px-2.5 py-1";
+
+export const levelText = "text-sm leading-5";
+
+export const tagText = "text-xs leading-4";
