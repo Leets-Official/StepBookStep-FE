@@ -3,11 +3,12 @@ import { appBarStyles } from "@/components/AppBar/AppBar.styles";
 import { menu as dropDownMenu, item as dropDownItem } from "@/components/DropDown/DropDown.styles";
 
 import {
-  ChevronLeftIcon as IconChevronLeft,
-  BookmarkEmptyIcon as IconBookmarkEmpty,
-  PenIcon as IconPen,
-  SettingIcon as IconSetting,
-  LogoIcon as IconLogo,
+  ChevronLeftIcon,
+  BookmarkEmptyIcon,
+  PenIcon,
+  SettingIcon,
+  LogoIcon,
+  BookmarkFilledIcon,
 } from "@/assets/icons";
 import TextField from "@/components/TextField/TextField";
 import { useEffect, useRef, useState } from "react";
@@ -15,9 +16,12 @@ import { useEffect, useRef, useState } from "react";
 const AppBar = ({
   mode,
   title,
+  isBookmarked,
   onBackClick,
   onSettingClick,
   onBookmarkClick,
+  onPenClick,
+  showPenDropdown = false,
   searchText,
   onSearchTextChange,
   searchPlaceholder = "Placeholder",
@@ -27,6 +31,8 @@ const AppBar = ({
 
   // 메뉴 바깥 클릭 시 닫기
   useEffect(() => {
+    if (!showPenDropdown) return;
+
     const handler = (e: MouseEvent) => {
       if (penRef.current && !penRef.current.contains(e.target as Node)) {
         setIsPenMenuOpen(false);
@@ -34,14 +40,14 @@ const AppBar = ({
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  }, [showPenDropdown]);
 
   // 탐색탭일 때 별도의 레이아웃 반환
   if (mode === "search") {
     return (
       <header className={appBarStyles.searchContainer}>
         <button type="button" onClick={onBackClick} className={appBarStyles.backButton}>
-          <IconChevronLeft className={appBarStyles.icon} />
+          <ChevronLeftIcon className={appBarStyles.icon} />
         </button>
         <TextField
           value={searchText}
@@ -65,16 +71,16 @@ const AppBar = ({
         {mode === "logo" ? (
           /* 로고 있는 버전 */
           <>
-            <IconLogo className={appBarStyles.logoImage} />
+            <LogoIcon className={appBarStyles.logoImage} />
             <button type="button" onClick={onSettingClick}>
-              <IconSetting className={appBarStyles.icon} />
+              <SettingIcon className={appBarStyles.icon} />
             </button>
           </>
         ) : (
           /* 로고 없는 버전 */
           <>
             <button type="button" onClick={onBackClick}>
-              <IconChevronLeft className={appBarStyles.icon} />
+              <ChevronLeftIcon className={appBarStyles.icon} />
             </button>
 
             <div className="flex-1 flex items-center">
@@ -84,49 +90,38 @@ const AppBar = ({
             {mode !== "none" && (
               <>
                 <button type="button" onClick={onBookmarkClick}>
-                  <IconBookmarkEmpty className={appBarStyles.icon} />
+                  {isBookmarked ? (
+                    <BookmarkFilledIcon className={appBarStyles.icon} />
+                  ) : (
+                    <BookmarkEmptyIcon className={appBarStyles.icon} />
+                  )}
                 </button>
                 <div className="relative" ref={penRef}>
-                  <button type="button" onClick={() => setIsPenMenuOpen(!isPenMenuOpen)}>
-                    <IconPen className={appBarStyles.icon} />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (showPenDropdown) {
+                        setIsPenMenuOpen((prev) => !prev);
+                      } else {
+                        onPenClick?.();
+                      }
+                    }}
+                  >
+                    <PenIcon className={appBarStyles.icon} />
                   </button>
 
-                  {isPenMenuOpen && (
+                  {showPenDropdown && isPenMenuOpen && (
                     <ul
                       className={dropDownMenu}
-                      style={{
-                        width: "155px", // 메뉴 너비 고정
-                        right: 0, // 오른쪽 정렬
-                        left: "auto", // 왼쪽 정렬 해제
-                        top: "100%", // 아이콘 바로 아래
-                        marginTop: "8px",
-                      }}
+                      style={{ width: "155px", right: 0, top: "100%", marginTop: "8px" }}
                     >
-                      <li
-                        className={dropDownItem}
-                        onClick={() => {
-                          console.log("타이머");
-                          setIsPenMenuOpen(false);
-                        }}
-                      >
+                      <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>
                         타이머로 기록하기
                       </li>
-                      <li
-                        className={dropDownItem}
-                        onClick={() => {
-                          console.log("직접");
-                          setIsPenMenuOpen(false);
-                        }}
-                      >
+                      <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>
                         직접 기록하기
                       </li>
-                      <li
-                        className={dropDownItem}
-                        onClick={() => {
-                          console.log("수정");
-                          setIsPenMenuOpen(false);
-                        }}
-                      >
+                      <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>
                         목표 수정하기
                       </li>
                     </ul>
