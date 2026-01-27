@@ -16,7 +16,7 @@ export const sliderWrapper = "relative group";
 
 // 5. 마이페이지 필수 요소 및 스타일 덮어쓰기
 export const tabContainer = "flex border-b border-gray-100 bg-gray-50 px-5";
-export const bottomBarFixed = "absolute bottom-0 w-full bg-gray-50 border-t border-gray-100 z-50";
+export const bottomBarFixed = "absolute bottom-0 w-full bg-gray-50 border-t border-gray-50 z-50";
 
 export const listWrapper = `
   flex flex-col gap-4 px-4 py-5
