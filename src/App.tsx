@@ -4,8 +4,9 @@ import SetProfile from "@/pages/Onboarding/SetProfile";
 import OnboardingLevelStep1 from "@/pages/Onboarding/OnboardingLevelStep1";
 import OnboardingLevelStep2 from "@/pages/Onboarding/OnboardingLevelStep2";
 import OnboardingLevelStep3 from "@/pages/Onboarding/OnboardingLevelStep3";
-import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre.tsx";
-import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage.tsx";
+import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
+import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
+import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
+        <Route path="/bookdetail" element={<BookDetailPage />} />
       </Routes>
     </BrowserRouter>
   );
