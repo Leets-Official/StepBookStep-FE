@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 네비게이션 추가
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
-import { useNavigate } from "react-router-dom";
 
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -9,6 +9,7 @@ import { Tab } from "@/components/Tab/Tab";
 import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
 import GoalModal from "@/components/GoalModal/GoalModal";
+import { BookReport } from "@/components/BookReport/BookReport"; // 독서 기록 컴포넌트 추가
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
@@ -36,6 +37,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false); // 기록 모달 상태 추가
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -71,7 +73,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         <div className={S.appFrame}>
           <AppBar
             mode="title"
-            onBackClick={() => {}}
+            onBackClick={() => navigate(-1)} // 로딩 중 뒤로 가기 연결
             isBookmarked={isBookmarked}
             onBookmarkClick={handleBookmarkClick}
             showPenDropdown={!isBefore}
@@ -84,17 +86,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />
           )}
         </div>
-
-        {isGoalModalOpen && (
-          <GoalModal
-            maxPages={BOOK_DETAIL_MOCK.totalPage}
-            title="독서 목표 설정"
-            onClose={() => setIsGoalModalOpen(false)}
-            onSave={() => {
-              setIsGoalModalOpen(false);
-            }}
-          />
-        )}
       </div>
     );
   }
@@ -104,11 +95,13 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          onBackClick={() => navigate(-1)}
+          title={BOOK_DETAIL_MOCK.title}
+          onBackClick={() => navigate(-1)} // 뒤로 가기 연결
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
           onPenClick={handlePenClick}
+          onDirectRecordClick={() => setIsRecordModalOpen(true)} // 직접 기록하기 연결
         />
 
         <main className={S.content}>
@@ -143,11 +136,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
           <div className={S.tagRow}>
             {BOOK_DETAIL_MOCK.tags.map((tag) => (
-              <Badge 
-                key={tag} 
-                label={tag} 
-                type="tag" 
-                className={S.tagBadge} />
+              <Badge key={tag} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
 
@@ -171,9 +160,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {isBefore && (
-            <section>
+            <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-
               {BOOK_DETAIL_MOCK.description ? (
                 <FullView collapsedHeight={134}>
                   <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
@@ -191,7 +179,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-
               {BOOK_DETAIL_MOCK.description ? (
                 <FullView collapsedHeight={72}>
                   <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
@@ -211,10 +198,28 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           maxPages={BOOK_DETAIL_MOCK.totalPage}
           title="목표 설정하기"
           onClose={() => setIsGoalModalOpen(false)}
-          onSave={() => {
-            setIsGoalModalOpen(false);
-          }}
+          onSave={() => setIsGoalModalOpen(false)}
         />
+      )}
+
+      {isRecordModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm">
+          <BookReport
+            onClose={() => setIsRecordModalOpen(false)}
+            onSave={(data) => {
+              console.log("기록 저장됨:", data);
+              setIsRecordModalOpen(false);
+            }}
+            initialData={{
+              status:
+                readingStatus === "reading"
+                  ? "READING"
+                  : readingStatus === "completed"
+                    ? "AFTER"
+                    : "BEFORE",
+            }}
+          />
+        </div>
       )}
     </div>
   );

@@ -21,6 +21,7 @@ const AppBar = ({
   onSettingClick,
   onBookmarkClick,
   onPenClick,
+  onDirectRecordClick,
   showPenDropdown = false,
   searchText,
   onSearchTextChange,
@@ -118,7 +119,13 @@ const AppBar = ({
                       <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>
                         타이머로 기록하기
                       </li>
-                      <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>
+                      <li
+                        className={dropDownItem}
+                        onClick={() => {
+                          setIsPenMenuOpen(false); 
+                          onDirectRecordClick?.(); 
+                        }}
+                      >
                         직접 기록하기
                       </li>
                       <li className={dropDownItem} onClick={() => setIsPenMenuOpen(false)}>

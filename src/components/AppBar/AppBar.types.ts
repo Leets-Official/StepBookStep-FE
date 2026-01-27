@@ -9,6 +9,7 @@ export interface AppBarProps {
   onSettingClick?: () => void;
   onBookmarkClick?: () => void;
   onPenClick?: () => void;
+  onDirectRecordClick?: () => void;
   showPenDropdown?: boolean;
 
   /*탐색탭 앱바 전용 props*/
