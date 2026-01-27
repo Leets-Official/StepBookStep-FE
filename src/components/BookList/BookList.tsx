@@ -60,21 +60,21 @@ export function BookList({
             </div>
           )}
           {readingState === "readingdetail" && (
-                <>
-                  <p className={S.detailMainText}>
-                    <span className={S.highlight}>{targetPeriod}</span>
-                    <span>에 </span>
-                    <span className={S.highlight}>{targetAmount}</span>
-                    <span>쪽</span>
-                    <span className="text-gray-500"> 독서해요!</span>
-                  </p>
+            <>
+              <p className={S.detailMainText}>
+                <span className={S.highlight}>{targetPeriod}</span>
+                <span>에 </span>
+                <span className={S.highlight}>{targetAmount}</span>
+                <span>쪽</span>
+                <span className="text-gray-500"> 독서해요!</span>
+              </p>
 
-                  <p className={S.detailSubText}>
-                    <span>목표 달성까지 </span>
-                    <span className="text-purple-400">{remainingAmount}</span>
-                    <span>쪽 남았어요!</span>
-                  </p>
-                </>
+              <p className={S.detailSubText}>
+                <span>목표 달성까지 </span>
+                <span className="text-purple-400">{remainingAmount}</span>
+                <span>쪽 남았어요!</span>
+              </p>
+            </>
           )}
 
           {readingState === "after" && (

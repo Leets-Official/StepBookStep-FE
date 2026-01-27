@@ -2,7 +2,7 @@ export type ReadingStatus = "before" | "reading" | "completed";
 
 export interface BookInfo {
   id: number;
-  level: string;
+  level: number;
   title: string;
   author: string;
   publisher: string;
@@ -38,7 +38,7 @@ export interface CompletedReview {
 
 export const BOOK_DETAIL_MOCK: BookInfo = {
   id: 1,
-  level: "Lv.1",
+  level: 1,
   title: "책 제목 어쩌구저쩌구: 어쩌구저쩌구생각보다 제목이긴책이많다",
   author: "지은이, 옮긴이",
   publisher: "출판사",

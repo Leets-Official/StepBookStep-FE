@@ -28,7 +28,7 @@ interface BookDetailProps {
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const isBefore = readingStatus === "before";
 
-  const isLoading = true;
+  const isLoading = false;
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
 
@@ -77,7 +77,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
           <section className={S.infoSection}>
             <Badge
-              label={`${BOOK_DETAIL_MOCK.level}`}
+              label={`Lv. ${BOOK_DETAIL_MOCK.level}`}
               type="level"
               className={S.getLevelBadgeClass(BOOK_DETAIL_MOCK.level)}
             />

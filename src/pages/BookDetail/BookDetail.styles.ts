@@ -15,13 +15,13 @@ export const coverImage =
 /* 책 기본 정보 */
 export const infoSection = "mb-4 px-5";
 
-export function getLevelBadgeClass(level: string) {
+export function getLevelBadgeClass(level: number) {
   switch (level) {
-    case "Lv.1":
+    case 1:
       return "bg-purple-100 border-purple-400 text-purple-800";
-    case "Lv.2":
+    case 2:
       return "bg-purple-200 border-purple-500 text-purple-800";
-    case "Lv.3":
+    case 3:
       return "bg-purple-400 border-purple-500 text-white";
     default:
       return "bg-purple-200 border-purple-500 text-purple-800";
