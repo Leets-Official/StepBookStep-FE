@@ -1,5 +1,5 @@
-export const pageWrapper = "w-full h-screen flex justify-center bg-gray-100 overflow-hidden";
-export const appFrame = "w-full max-w-[375px] h-full max-h-[812px] bg-white flex flex-col relative shadow-lg overflow-hidden";
+export const pageWrapper = "w-full h-screen flex justify-center items-center bg-gray-100 overflow-hidden";
+export const appFrame = "w-full max-w-[375px] h-[812px] bg-gray-50 flex flex-col relative flex-shrink-0";
 
 export const headerGroup = "w-full z-50 bg-white flex-shrink-0";
 export const statusBar = "h-[44px] w-full bg-white flex-shrink-0";
@@ -26,7 +26,7 @@ export const iconWrapper = `
   absolute top-[68%] left-1/2 -translate-x-1/2
   flex justify-center items-center h-14
 `;
-export const bookInfoContainer = "text-center mt-auto mb-10 flex flex-col items-center w-full";
+export const bookInfoContainer = "text-center mt-auto mb-30 flex flex-col items-center w-full";
 
 export const bookTitle = `
   text-lg font-semibold text-gray-900 
@@ -38,9 +38,9 @@ export const bookTitle = `
 export const bookAuthor = "text-md font-semibold text-gray-700 leading-5";
 
 export const footer = `
-  px-5 pb-20 pt-4
+  px-5 pb-30 pt-4
   sticky bottom-0
-  bg-white
+  bg-gray-50
   flex gap-3
   w-full
 `;

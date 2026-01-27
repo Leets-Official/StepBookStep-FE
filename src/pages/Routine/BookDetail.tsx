@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "./BookDetail.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
@@ -16,6 +16,7 @@ import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
 
 export default function BookDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<"record" | "info">("record");
   
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -24,6 +25,14 @@ export default function BookDetailPage() {
   const [toastMessage, setToastMessage] = useState("");
 
   const info = MOCK_BOOK_DETAIL;
+
+  useEffect(() => {
+    if (location.state?.showToast && location.state?.toastMessage) {
+      setToastMessage(location.state.toastMessage);
+      setShowToast(true);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleAladinClick = () => {
     window.open(info.aladinUrl, "_blank");
