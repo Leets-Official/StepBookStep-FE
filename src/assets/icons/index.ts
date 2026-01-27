@@ -28,3 +28,5 @@ export { default as FilterIcon } from "./filter.svg?react";
 export { default as HelpIcon } from "./help.svg?react";
 export { default as TrophyIcon } from "./trophy.svg?react";
 export { default as LikeIcon } from "./like.svg?react";
+export { default as QuestionMarkIcon } from "./question-mark.svg?react";
+export { default as SpeechBubbleIcon } from "./speech-bubble.svg?react";
