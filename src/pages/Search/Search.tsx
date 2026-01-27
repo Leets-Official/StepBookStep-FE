@@ -26,12 +26,10 @@ const Search = () => {
     setIsSearchMode(true);
   };
 
-  
   const handleBackClick = () => {
     setIsSearchMode(false);
     setSearchText("");
-    
-    
+
     setFilters({
       keyword: "",
       level: null,
@@ -158,47 +156,30 @@ const Search = () => {
           {isSearchMode ? (
             <div className={S.filterBar}>
               {/* 필터 버튼 */}
-              <button
-                className={S.filterButton}
-                onClick={() => setIsFilterOpen(true)}
-              >
+              <button className={S.filterButton} onClick={() => setIsFilterOpen(true)}>
                 {FilterIcon && <FilterIcon className="w-6 h-6 text-gray-500" />}
                 <span className={S.filterText}>필터</span>
               </button>
 
-
               <div className={S.chipList}>
                 {filters.level && (
-                  <Chip
-                    label={`Lv.${filters.level}`}
-                    onDelete={() => handleDeleteChip("level")}
-                  />
+                  <Chip label={`Lv.${filters.level}`} onDelete={() => handleDeleteChip("level")} />
                 )}
                 {filters.volume && (
-                  <Chip
-                    label={filters.volume}
-                    onDelete={() => handleDeleteChip("volume")}
-                  />
+                  <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
                 )}
                 {filters.country && (
-                  <Chip
-                    label={filters.country}
-                    onDelete={() => handleDeleteChip("country")}
-                  />
+                  <Chip label={filters.country} onDelete={() => handleDeleteChip("country")} />
                 )}
                 {filters.genre && filters.genre !== "장르" && (
-                  <Chip
-                    label={filters.genre}
-                    onDelete={() => handleDeleteChip("genre")}
-                  />
+                  <Chip label={filters.genre} onDelete={() => handleDeleteChip("genre")} />
                 )}
               </div>
             </div>
           ) : (
             <div className={S.subHeader}>
               <h2 className={S.sectionTitle}>
-                유저들이 많이 선택한 <span className="text-purple-500">Lv.1</span>{" "}
-                도서
+                유저들이 많이 선택한 <span className="text-purple-500">Lv.1</span> 도서
               </h2>
             </div>
           )}
@@ -207,29 +188,32 @@ const Search = () => {
           <div className={S.contentArea}>
             <div className={S.listWrapper}>
               {/*  검색 모드거나, 검색어가 있거나, 필터가 하나라도 적용된 경우 -> filteredBooks (필터링된 결과) 보여줌*/}
-              {(isSearchMode || searchText || filters.level || filters.volume || filters.country || filters.genre) 
-                ? filteredBooks.length > 0 ? (
-                    filteredBooks.map((book, index) => (
-                      <BookList key={index} {...book} readingState="before" />
-                    ))
-                  ) : (
-                    <div className="flex justify-center items-center py-20 text-gray-400">
-                      검색 결과가 없습니다.
-                    </div>
-                  )
-            
-                : dummySearchResults
-                    .filter((book) => book.level === 1) // Lv.1 책만 골라내기
-                    .slice(0, 4)
-                    .map((book, index) => (
-                      <BookList key={index} {...book} readingState="before" />
-                    ))
-              }
+              {isSearchMode ||
+              searchText ||
+              filters.level ||
+              filters.volume ||
+              filters.country ||
+              filters.genre ? (
+                filteredBooks.length > 0 ? (
+                  filteredBooks.map((book, index) => (
+                    <BookList key={index} {...book} readingState="before" />
+                  ))
+                ) : (
+                  <div className="flex justify-center items-center py-20 text-gray-400">
+                    검색 결과가 없습니다.
+                  </div>
+                )
+              ) : (
+                dummySearchResults
+                  .filter((book) => book.level === 1) // Lv.1 책만 골라내기
+                  .slice(0, 4)
+                  .map((book, index) => <BookList key={index} {...book} readingState="before" />)
+              )}
             </div>
           </div>
 
           {/* 4. 하단바 */}
-          <BottomBar defaultTab="search" />
+          <BottomBar activeTab="search" onTabSelect={() => {}} />
 
           {/* 5. 필터 페이지 (모달) */}
           {isFilterOpen && (
