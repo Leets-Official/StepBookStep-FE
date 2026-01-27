@@ -31,13 +31,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
-  const bottomTabMap: Record<EntrySource, TabId> = {
-    home: "home",
-    search: "search",
-    routine: "routine",
-    mypage: "mypage",
-  };
-
   const readingDataMap: Record<Exclude<ReadingStatus, "before">, ReadingDetailData> = {
     reading: MOCK_READING_DATA,
     completed: MOCK_COMPLETED_DATA,
@@ -45,18 +38,25 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const readingData = isBefore ? null : readingDataMap[readingStatus];
 
+  const bottomBarConfig: Record<EntrySource, { visible: boolean; activeTab: TabId }> = {
+    home: { visible: true, activeTab: "home" },
+    search: { visible: true, activeTab: "search" },
+    routine: { visible: true, activeTab: "routine" },
+    mypage: { visible: true, activeTab: "mypage" },
+  };
+
+  const bottomBar = bottomBarConfig[entrySource];
+
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
         <AppBar mode="title" onBackClick={() => {}} />
 
         <main className={S.content}>
-          {/* 표지 */}
           <div className={S.coverWrapper}>
             <div className={S.coverImage} />
           </div>
 
-          {/* 기본 정보 */}
           <section className={S.infoSection}>
             <Badge
               label={`${BOOK_DETAIL_MOCK.level}`}
@@ -71,7 +71,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             </p>
             <p className={S.priceRow}>
               <span className={S.priceText}>{BOOK_DETAIL_MOCK.price.toLocaleString()}원</span>
-
               <a
                 href={BOOK_DETAIL_MOCK.storeLink}
                 target="_blank"
@@ -83,7 +82,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             </p>
           </section>
 
-          {/* 태그 */}
           <div className={S.tagRow}>
             {BOOK_DETAIL_MOCK.tags.map((tag) => (
               <Badge key={tag} label={tag} type="tag" className={S.tags} />
@@ -92,7 +90,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
           <div className={S.divider} />
 
-          {/* 탭 (읽기 전 제외) */}
           {!isBefore && (
             <div className={S.tabRow}>
               <Tab
@@ -110,33 +107,30 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             </div>
           )}
 
-          {/* 읽기 전 */}
           {isBefore && (
             <section>
               <h2 className={S.sectionTitle}>책 소개</h2>
-              <FullView>
+              <FullView collapsedHeight={134}>
                 <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
               </FullView>
             </section>
           )}
 
-          {/* 독서 기록 */}
           {!isBefore && resolvedActiveTab === "record" && readingData && (
             <ReadingStateDetail data={readingData} />
           )}
 
-          {/* 도서 정보 */}
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              <FullView>
+              <FullView collapsedHeight={72}>
                 <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
               </FullView>
             </section>
           )}
         </main>
 
-        <BottomBar activeTab={bottomTabMap[entrySource]} onTabSelect={() => {}} />
+        {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
       </div>
     </div>
   );

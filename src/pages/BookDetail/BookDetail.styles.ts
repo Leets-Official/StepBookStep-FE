@@ -4,7 +4,7 @@ export const pageWrapper = "min-h-screen bg-white flex justify-center items-cent
 export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center bg-gray-050";
 
 /* 콘텐츠 영역 */
-export const content = "flex-1 overflow-y-auto pb-8 no-scrollbar";
+export const content = "flex-1 overflow-y-auto pb-2 no-scrollbar";
 
 /* 책 커버 */
 export const coverWrapper = "flex justify-center mb-5 bg-gray-100 py-5";
