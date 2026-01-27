@@ -25,3 +25,14 @@ export const divider = "border-none h-[1px] bg-gray-200 mb-6";
 
 export const tabContainer = "flex w-full mb-2";
 export const bottomBarContainer = "absolute bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-100 z-50";
+
+export const overlay = 
+  "fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300";
+
+export const reportContainer = 
+  "fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] " +
+  "animate-[slideUp_0.3s_ease-out]";
+
+export const modalContainer = 
+  "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] " +
+  "animate-[fadeIn_0.3s_ease-out]";

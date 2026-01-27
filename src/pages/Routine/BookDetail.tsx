@@ -1,40 +1,93 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./BookDetail.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
 import { Badge } from "@/components/Badge/Badge";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
+import { BookReport } from "@/components/BookReport/BookReport";
+import type { BookReportData } from "@/components/BookReport/BookReport.types";
+import GoalModal from "@/components/GoalModal/GoalModal";
+import { Toast } from "@/components/Toast/Toast";
 
-// 페이지용 데이터와 기존 독서기록 데이터를 각각 가져옵니다.
 import { MOCK_BOOK_DETAIL } from "@/mocks/bookdetail.mock";
-import { MOCK_READING_DATA } from "@/mocks/readingState.mock"; // 기존 mock 경로 사용
+import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
 
 export default function BookDetailPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"record" | "info">("record");
+  
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isGoalOpen, setIsGoalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
   const info = MOCK_BOOK_DETAIL;
 
   const handleAladinClick = () => {
     window.open(info.aladinUrl, "_blank");
   };
 
+  const handlePenClick = () => {
+
+  };
+
+  const handleTimerClick = () => {
+    navigate("/routine/timer");
+  };
+
+  function handleDirectClick() {
+    setIsReportOpen(true);
+  }
+
+  const handleReportClose = () => {
+    setIsReportOpen(false);
+  };
+
+  const handleReportSave = (data: BookReportData) => {
+    console.log("저장된 독서 기록:", data);
+    setIsReportOpen(false);
+    setToastMessage("독서 기록이 저장되었습니다!");
+    setShowToast(true);
+  };
+
+  const handleGoalOpen = () => {
+    setIsGoalOpen(true);
+  };
+
+  const handleGoalClose = () => {
+    setIsGoalOpen(false);
+  };
+
+  const handleGoalSave = () => {
+    console.log("목표가 저장되었습니다!");
+    setIsGoalOpen(false);
+    setToastMessage("목표가 저장되었습니다!");
+    setShowToast(true);
+  };
+
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        {/* 상단 고정: 상태바 + 앱바 */}
         <div className={S.headerGroup}>
           <div className={S.statusBar} />
-          <AppBar mode="title" title="" onBackClick={() => window.history.back()} />
+          <AppBar 
+            mode="title" 
+            title="" 
+            onBackClick={() => window.history.back()} 
+            onPenClick={handlePenClick}
+            onTimerClick={handleTimerClick}
+            onDirectClick={handleDirectClick}
+            onGoalClick={handleGoalOpen}
+          />
         </div>
 
-        {/* 중앙 스크롤 영역 */}
         <main className={S.content}>
-          {/* 이미지 섹션 */}
           <section className={S.coverBgSection}>
             <div className={S.coverPlaceholder} />
           </section>
 
-          {/* 도서 상세 정보 섹션 */}
           <section className={S.infoSection}>
             <div className="mb-2">
                 <Badge 
@@ -70,7 +123,6 @@ export default function BookDetailPage() {
 
             <hr className={S.divider} />
 
-            {/* 탭 메뉴 */}
             <nav className={S.tabContainer}>
               <div className="flex-1 flex justify-center">
                 <Tab 
@@ -90,10 +142,8 @@ export default function BookDetailPage() {
               </div>
             </nav>
 
-            {/* 컨텐츠 하단부: 기존 컴포넌트와 데이터 연결 */}
             <div className="mt-2">
               {activeTab === "record" ? (
-                // 건들지 않아도 되는 기존 데이터 전달
                 <ReadingStateDetail data={MOCK_READING_DATA} />
               ) : (
                 <div className="py-20 text-center text-gray-400">
@@ -107,6 +157,46 @@ export default function BookDetailPage() {
         <div className={S.bottomBarContainer}>
           <BottomBar activeTab="routine" onTabSelect={(id) => {id}} />
         </div>
+
+        <Toast 
+          message={toastMessage} 
+          isVisible={showToast} 
+          onClose={() => setShowToast(false)}
+          className="bottom-[80px] top-auto"
+        />
+
+        {isReportOpen && (
+          <>
+            <div 
+              className={S.overlay}
+              onClick={handleReportClose}
+            />
+            <div className={S.reportContainer}>
+              <BookReport
+                onClose={handleReportClose}
+                onSave={handleReportSave}
+                isTimerMode={false}
+              />
+            </div>
+          </>
+        )}
+
+        {isGoalOpen && (
+          <>
+            <div 
+              className={S.overlay}
+              onClick={handleGoalClose}
+            />
+            <div className={S.modalContainer}>
+              <GoalModal
+                maxPages={info.totalPages}
+                title="목표 수정하기"
+                onClose={handleGoalClose}
+                onSave={handleGoalSave}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
