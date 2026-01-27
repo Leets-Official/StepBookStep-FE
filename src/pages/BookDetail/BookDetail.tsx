@@ -141,7 +141,11 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
           <div className={S.tagRow}>
             {BOOK_DETAIL_MOCK.tags.map((tag) => (
-              <Badge key={tag} label={tag} type="tag" className={S.tags} />
+              <Badge 
+                key={tag} 
+                label={tag} 
+                type="tag" 
+                className={S.tagBadge} />
             ))}
           </div>
 

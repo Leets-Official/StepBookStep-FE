@@ -49,7 +49,7 @@ export const divider = "w-full h-px bg-gray-200 my-6 self-stretch px-5";
 
 /* 탭 */
 export const tabRow =
-  "flex border-md border-transparent mb-4 px-5 text-lg font-semibold text-gray-900";
+  "flex border-md border-transparent mb-4 px-5 text-lg font-semibold text-gray-900 flex-nowrap px-5 overflow-x-auto";
 
 /* 섹션 */
 export const sectionTitle = "text-lg font-semibold text-gray-900 mb-2";
@@ -61,3 +61,7 @@ export const card = "bg-white rounded-xl shadow-sm p-4 mb-4";
 
 /* 하단 영역 */
 export const bottomAction = "px-5 pb-2.5 bottom-0 bg-gray-050";
+
+
+/* 2. 태그 배지: 설계자의 의도대로 3가지 색상(Text, Border, BG)을 주입합니다. */
+export const tagBadge = "text-gray-400 border-gray-300 bg-white whitespace-nowrap flex-shrink-0 font-medium";
