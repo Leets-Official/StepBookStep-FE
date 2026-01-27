@@ -8,6 +8,7 @@ import BottomBar from "@/components/BottomBar/BottomBar";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
 import { BookReport } from "@/components/BookReport/BookReport";
 import type { BookReportData } from "@/components/BookReport/BookReport.types";
+import { Toast } from "@/components/Toast/Toast";
 
 import { MOCK_BOOK_DETAIL } from "@/mocks/bookdetail.mock";
 import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
@@ -15,6 +16,7 @@ import { MOCK_READING_DATA } from "@/mocks/readingState.mock";
 export default function RoutineWritePage() {
   const [activeTab, setActiveTab] = useState<"record" | "info">("record");
   const [isReportOpen, setIsReportOpen] = useState(true); 
+  const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
   const info = MOCK_BOOK_DETAIL;
 
@@ -34,7 +36,10 @@ export default function RoutineWritePage() {
   const handleReportSave = (data: BookReportData) => {
     console.log("저장된 독서 기록:", data);
     setIsReportOpen(false);
-    navigate(-1);
+    setShowToast(true);
+    setTimeout(() => {
+      navigate(-1);
+    }, 2000);
   };
 
   const handleDirectRecordClick = () => {
@@ -128,6 +133,13 @@ export default function RoutineWritePage() {
         <div className={S.bottomBarContainer}>
           <BottomBar activeTab="routine" onTabSelect={(id) => {id}} />
         </div>
+
+        <Toast 
+          message="독서 기록이 저장되었습니다!" 
+          isVisible={showToast} 
+          onClose={() => setShowToast(false)} 
+        />
+
         {isReportOpen && (
           <>
             <div 
