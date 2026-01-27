@@ -8,6 +8,7 @@ import HorizontalBookSliderWeb from "./HorizontalBookSlider.web";
 import HorizontalBookSliderApp from "./HorizontalBookSlider.app";
 import * as S from "./Home.styles";
 import { cn } from "@/utils/cn";
+import SkeletonHome from "@/pages/Home/SkeletonHome";
 
 const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
@@ -17,11 +18,15 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"home" | "search" | "routine" | "mypage">("home");
 
   const [selectedRecommend, setSelectedRecommend] = useState<RecommendFilter>("short");
-
+  const isLoading = true;
   const nickname = "하늘";
   const category = "예술/대중문화";
 
   const Slider = isTouch ? HorizontalBookSliderApp : HorizontalBookSliderWeb;
+
+  if (isLoading) {
+    return <SkeletonHome />;
+  }
 
   return (
     <div className={S.pageWrapper}>
