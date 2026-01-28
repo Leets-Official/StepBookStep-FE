@@ -91,21 +91,17 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     const mappedStatus = statusMap[data.status] || "READING";
     updateBookStatus(101, mappedStatus, data.rating);
 
-    // 완독 여부 확인 (AFTER 또는 FINISHED)
     const isFinished = data.status === "AFTER";
     console.log("완독 여부:", isFinished);
 
-    // 먼저 BookReport 모달 닫기
     setIsReportOpen(false);
 
     if (isFinished) {
       console.log("축하 모달을 띄웁니다!");
-      // BookReport 모달이 완전히 닫힌 후 축하 모달 열기
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
     } else {
-      // 완독이 아닐 때만 저장 완료 토스트 표시
       setTimeout(() => {
         setToastMessage("독서 기록이 저장되었습니다!");
         setShowToast(true);
@@ -266,16 +262,16 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           message={toastMessage}
           isVisible={showToast}
           onClose={() => setShowToast(false)}
-          className="bottom-[80px] top-auto"
+          className="bottom-20 top-auto"
         />
 
         {isReportOpen && (
           <>
             <div
-              className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-100 bg-black/50 backdrop-blur-sm"
               onClick={handleReportClose}
             />
-            <div className="fixed bottom-0 left-0 right-0 z-[101] flex justify-center">
+            <div className="fixed bottom-0 left-0 right-0 z-101 flex justify-center">
               <BookReport
                 onClose={handleReportClose}
                 onSave={handleSaveRecord}

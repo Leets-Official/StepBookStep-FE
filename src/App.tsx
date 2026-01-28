@@ -25,13 +25,10 @@ function App() {
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
         <Route path="/bookdetail" element={<BookDetailPage />} />
-<<<<<<< HEAD
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/home" element={<Home />} />
-=======
         <Route path="/routine/timer" element={<TimerPage />} />      
->>>>>>> develop
       </Routes>
     </BrowserRouter>
   );
