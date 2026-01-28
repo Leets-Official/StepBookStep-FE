@@ -8,12 +8,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
 
 // 차트용 컬러 배열 (token.css 변수 활용)
 const PIE_COLORS = [
-  "var(--purple-500)",
-  "var(--purple-200)",
-  "var(--lime-500)",
-  "var(--lime-400)",
-  "var(--purple-300)",
-  "var(--lime-300)",
+  "var(--color-purple-500)",
+  "var(--color-purple-200)",
+  "var(--color-lime-500)",
+  "var(--color-lime-400)",
+  "var(--color-purple-300)",
+  "var(--color-lime-300)",
 ];
 
 export default function Statistics() {
@@ -90,7 +90,7 @@ export default function Statistics() {
                     {chartData.map((entry, index) => (
                       <Cell 
                         key={index} 
-                        fill={entry.month === maxMonth ? "var(--purple-500)" : "var(--lime-500)"} 
+                        fill={entry.month === maxMonth ? "var(--color-purple-500)" : "var(--color-lime-500)"} 
                       />
                     ))}
                   </Bar>
@@ -138,8 +138,8 @@ export default function Statistics() {
                     </PieChart>
                   </ResponsiveContainer>
                   <div className={S.chartCenterText}>
-                    <span className="text-sm text-gray-600">전체</span>
-                    <span className="text-xl font-bold text-black">{statsData.totalGenreCount}개 분야</span>
+                    <span className="text-lg font-['pretendard'] font-semibold text-gray-900">전체</span>
+                    <span className="text-lg font-['pretendard'] font-semibold text-gray-900">{statsData.totalGenreCount}개 분야</span>
                   </div>
                 </div>
               </div>
