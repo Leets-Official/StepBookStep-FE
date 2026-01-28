@@ -121,11 +121,11 @@ export default function TimerPage() {
                 <h1 className={S.digitalTime}>{formatTime(seconds)}</h1>
                 
                 <div className={S.iconWrapper}>
-                  {status === "running" ? (
-                    <PauseIcon className={`${S.controlIcon} text-gray-300`} onClick={() => setStatus("paused")} />
+                  {(status === "running" || status === "ready") ? (
+                    <PauseIcon className={`${S.controlIcon} ${ status === "ready" ? 'text-gray-300 cursor-not-allowed pointer-events-none' : 'text-gray-300'}`} onClick={() => setStatus("paused")} />
                   ) : (
                     <PlayIcon 
-                      className={`${S.controlIcon} ${status === 'ready' ? 'text-gray-300' : status === "finished" ? 'text-gray-300' : 'text-purple-500'}`}
+                      className={`${S.controlIcon} ${status === "finished" ? 'text-gray-300 cursor-not-allowed pointer-events-none' : 'text-purple-500'}`}
                       onClick={() => setStatus("running")}
                     />
                   )}
