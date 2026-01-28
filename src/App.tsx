@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
+import TimerPage from "@/pages/Routine/Timer";
 import SetProfile from "@/pages/Onboarding/SetProfile";
 import OnboardingLevelStep1 from "@/pages/Onboarding/OnboardingLevelStep1";
 import OnboardingLevelStep2 from "@/pages/Onboarding/OnboardingLevelStep2";
 import OnboardingLevelStep3 from "@/pages/Onboarding/OnboardingLevelStep3";
 import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
 import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
-import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
 import Home from "@/pages/Home/Home.tsx";
 
 function App() {
@@ -21,9 +21,11 @@ function App() {
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
         <Route path="/bookdetail" element={<BookDetailPage />} />
+        <Route path="/routine/timer" element={<TimerPage />} />      
       </Routes>
     </BrowserRouter>
   );
 }
+
 
 export default App;

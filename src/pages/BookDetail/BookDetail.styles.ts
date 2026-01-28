@@ -61,3 +61,12 @@ export const card = "bg-white rounded-xl shadow-sm p-4 mb-4";
 
 /* 하단 영역 */
 export const bottomAction = "px-5 pb-2.5 bottom-0 bg-gray-050";
+
+export const overlay =
+  "fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300";
+
+export const reportContainer =
+  "fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] animate-[slideUp_0.3s_ease-out]";
+
+export const modalContainer =
+  "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] animate-[fadeIn_0.3s_ease-out]";

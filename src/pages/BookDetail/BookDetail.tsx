@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import AppBar from "@/components/AppBar/AppBar";
@@ -7,7 +8,10 @@ import { Badge } from "@/components/Badge/Badge";
 import { Tab } from "@/components/Tab/Tab";
 import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
+import { BookReport } from "@/components/BookReport/BookReport";
+import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import GoalModal from "@/components/GoalModal/GoalModal";
+import { Toast } from "@/components/Toast/Toast";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
@@ -28,12 +32,25 @@ interface BookDetailProps {
 }
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const isBefore = readingStatus === "before";
   const isLoading = false;
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+    if (location.state?.showToast && location.state?.toastMessage) {
+      setToastMessage(location.state.toastMessage);
+      setShowToast(true);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -61,6 +78,24 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     if (isBefore) {
       setIsGoalModalOpen(true);
     }
+  };
+
+  const handleTimerClick = () => {
+    navigate("/routine/timer");
+  };
+
+  const handleDirectClick = () => {
+    setIsReportOpen(true);
+  };
+
+  const handleReportClose = () => {
+    setIsReportOpen(false);
+  };
+
+  const handleReportSave = (data: BookReportData) => {
+    setIsReportOpen(false);
+    setToastMessage("독서 기록이 저장되었습니다!");
+    setShowToast(true);
   };
 
   if (isLoading) {
@@ -107,6 +142,9 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
           onPenClick={handlePenClick}
+          onTimerClick={handleTimerClick}
+          onDirectClick={handleDirectClick}
+          onGoalClick={() => setIsGoalModalOpen(true)}
         />
 
         <main className={S.content}>
@@ -198,6 +236,26 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         </main>
 
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
+      
+        <Toast
+          message={toastMessage}
+          isVisible={showToast}
+          onClose={() => setShowToast(false)}
+          className="bottom-[80px] top-auto"
+        />
+
+        {isReportOpen && (
+          <>
+            <div className={S.overlay} onClick={handleReportClose} />
+            <div className={S.reportContainer}>
+              <BookReport
+                onClose={handleReportClose}
+                onSave={handleReportSave}
+                isTimerMode={false}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {isGoalModalOpen && (
@@ -207,6 +265,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {
             setIsGoalModalOpen(false);
+            setToastMessage("목표가 저장되었습니다!");
+            setShowToast(true);
           }}
         />
       )}
