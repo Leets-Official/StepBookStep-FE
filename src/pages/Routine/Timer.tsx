@@ -141,8 +141,7 @@ export default function TimerPage() {
   
           <footer className={S.footer}>
             {status === "ready" && <Button label="시작하기" fullWidth onClick={() => setStatus("running")} />}
-            {status === "running" && <Button label="종료하기" fullWidth onClick={() => setStatus("finished")} />}
-            {status === "paused" && (
+            {(status === "paused" || status ==="running") && (
               <>
                 <Button label="재설정" variant="primaryOutline" className="flex-1" onClick={() => { setSeconds(0); setStatus("ready"); }} />
                 <Button label="종료" variant="primary" className="flex-1" onClick={() => setStatus("finished")} />
