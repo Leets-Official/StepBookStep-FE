@@ -4,6 +4,7 @@ import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
 import { BookList } from "@/components/BookList/BookList";
 import BottomBar from "@/components/BottomBar/BottomBar";
+import Statistics from "./Statistics";
 import { DUMMY_BOOKS } from "@/mocks/booklist.mock";
 
 export default function RoutinePage() {
@@ -49,9 +50,7 @@ export default function RoutinePage() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400 font-medium">
-              통계 준비 중
-            </div>
+            <Statistics />
           )}
         </main>
 
