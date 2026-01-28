@@ -39,6 +39,7 @@ export const priceText = "text-gray-500 font-normal";
 
 export const storeLink =
   "ml-2 text-purple-400 font-normal underline underline-offset-2 hover:text-purple-700";
+
 /* 태그 */
 export const tagRow = "flex gap-2 mt-3 mb-6 flex-wrap px-5";
 
@@ -62,6 +63,11 @@ export const card = "bg-white rounded-xl shadow-sm p-4 mb-4";
 /* 하단 영역 */
 export const bottomAction = "px-5 pb-2.5 bottom-0 bg-gray-050";
 
-
-/* 2. 태그 배지: 설계자의 의도대로 3가지 색상(Text, Border, BG)을 주입합니다. */
+/* 태그 배지 */
 export const tagBadge = "text-gray-400 border-gray-300 bg-white whitespace-nowrap flex-shrink-0 font-medium";
+
+/* 모달 오버레이 */
+export const overlay = "fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm";
+
+/* 리포트 컨테이너 */
+export const reportContainer = "fixed bottom-0 left-0 right-0 z-[101] flex justify-center";

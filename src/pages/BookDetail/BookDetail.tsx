@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import AppBar from "@/components/AppBar/AppBar";
@@ -8,13 +8,14 @@ import { Badge } from "@/components/Badge/Badge";
 import { Tab } from "@/components/Tab/Tab";
 import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
-import GoalModal from "@/components/GoalModal/GoalModal";
 import { BookReport } from "@/components/BookReport/BookReport";
+import type { BookReportData } from "@/components/BookReport/BookReport.types";
+import GoalModal from "@/components/GoalModal/GoalModal";
+import { Toast } from "@/components/Toast/Toast";
 import { FinishedModal } from "./components/FinishedModal/FinishedModal";
 
 import { useBookStore } from "@/stores/useBookStore";
 import type { ReadStatus } from "../MyPage/MyPage.types";
-import type { BookReportData } from "@/components/BookReport/BookReport.types";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
@@ -35,6 +36,7 @@ interface BookDetailProps {
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { updateBookStatus } = useBookStore();
 
   const isBefore = readingStatus === "before";
@@ -43,8 +45,18 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
-  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+    if (location.state?.showToast && location.state?.toastMessage) {
+      setToastMessage(location.state.toastMessage);
+      setShowToast(true);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -71,6 +83,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     const statusMap: Record<string, ReadStatus> = {
       READING: "READING",
       AFTER: "FINISHED",
+      FINISHED: "FINISHED",
       BEFORE: "BOOKMARKED",
       STOP: "PAUSED",
     };
@@ -78,19 +91,24 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     const mappedStatus = statusMap[data.status] || "READING";
     updateBookStatus(101, mappedStatus, data.rating);
 
+    // 완독 여부 확인 (AFTER 또는 FINISHED)
     const isFinished = data.status === "AFTER";
     console.log("완독 여부:", isFinished);
 
-    setIsRecordModalOpen(false);
+    // 먼저 BookReport 모달 닫기
+    setIsReportOpen(false);
 
     if (isFinished) {
       console.log("축하 모달을 띄웁니다!");
+      // BookReport 모달이 완전히 닫힌 후 축하 모달 열기
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
     } else {
+      // 완독이 아닐 때만 저장 완료 토스트 표시
       setTimeout(() => {
-        alert("독서 기록이 저장되었습니다!");
+        setToastMessage("독서 기록이 저장되었습니다!");
+        setShowToast(true);
       }, 300);
     }
   };
@@ -103,6 +121,18 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     if (isBefore) {
       setIsGoalModalOpen(true);
     }
+  };
+
+  const handleTimerClick = () => {
+    navigate("/routine/timer");
+  };
+
+  const handleDirectClick = () => {
+    setIsReportOpen(true);
+  };
+
+  const handleReportClose = () => {
+    setIsReportOpen(false);
   };
 
   if (isLoading) {
@@ -139,7 +169,9 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
           onPenClick={handlePenClick}
-          onDirectRecordClick={() => setIsRecordModalOpen(true)}
+          onTimerClick={handleTimerClick}
+          onDirectClick={handleDirectClick}
+          onGoalClick={() => setIsGoalModalOpen(true)}
         />
 
         <main className={S.content}>
@@ -229,6 +261,37 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         </main>
 
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
+
+        <Toast
+          message={toastMessage}
+          isVisible={showToast}
+          onClose={() => setShowToast(false)}
+          className="bottom-[80px] top-auto"
+        />
+
+        {isReportOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+              onClick={handleReportClose}
+            />
+            <div className="fixed bottom-0 left-0 right-0 z-[101] flex justify-center">
+              <BookReport
+                onClose={handleReportClose}
+                onSave={handleSaveRecord}
+                isTimerMode={false}
+                initialData={{
+                  status:
+                    readingStatus === "reading"
+                      ? "READING"
+                      : readingStatus === "completed"
+                        ? "AFTER"
+                        : "BEFORE",
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {isGoalModalOpen && (
@@ -236,25 +299,13 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           maxPages={BOOK_DETAIL_MOCK.totalPage}
           title="목표 설정하기"
           onClose={() => setIsGoalModalOpen(false)}
-          onSave={() => setIsGoalModalOpen(false)}
+          onSave={() => {
+            setIsGoalModalOpen(false);
+            setToastMessage("목표가 저장되었습니다!");
+            setShowToast(true);
+          }}
+          count={1}
         />
-      )}
-
-      {isRecordModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm">
-          <BookReport
-            onClose={() => setIsRecordModalOpen(false)}
-            onSave={handleSaveRecord}
-            initialData={{
-              status:
-                readingStatus === "reading"
-                  ? "READING"
-                  : readingStatus === "completed"
-                    ? "AFTER"
-                    : "BEFORE",
-            }}
-          />
-        </div>
       )}
 
       {isFinishedModalOpen && (
