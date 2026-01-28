@@ -8,6 +8,7 @@ import OnboardingLevelStep3 from "@/pages/Onboarding/OnboardingLevelStep3";
 import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
 import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
 import Home from "@/pages/Home/Home.tsx";
+import BookList from "@/pages/Routine/BookList.tsx";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
         <Route path="/bookdetail" element={<BookDetailPage />} />
-        <Route path="/routine/timer" element={<TimerPage />} />      
+        <Route path="/routine/timer" element={<TimerPage />} /> 
+        <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
     </BrowserRouter>
   );
