@@ -122,7 +122,7 @@ export default function TimerPage() {
                 
                 <div className={S.iconWrapper}>
                   {(status === "running" || status === "ready") ? (
-                    <PauseIcon className={`${S.controlIcon} ${ status === "ready" ? 'text-gray-300 cursor-not-allowed pointer-events-none' : 'text-gray-300'}`} onClick={() => setStatus("paused")} />
+                    <PauseIcon className={`${S.controlIcon} ${ status === "ready" ? 'text-gray-300 cursor-not-allowed pointer-events-none' : 'text-purple-500'}`} onClick={() => setStatus("paused")} />
                   ) : (
                     <PlayIcon 
                       className={`${S.controlIcon} ${status === "finished" ? 'text-gray-300 cursor-not-allowed pointer-events-none' : 'text-purple-500'}`}
