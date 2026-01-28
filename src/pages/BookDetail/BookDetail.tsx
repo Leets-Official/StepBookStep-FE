@@ -10,6 +10,7 @@ import { FullView } from "@/components/FullView/FullView";
 import { ReadingStateDetail } from "@/components/ReadingStateDetail/ReadingStateDetail";
 import GoalModal from "@/components/GoalModal/GoalModal";
 import { BookReport } from "@/components/BookReport/BookReport";
+import { FinishedModal } from "./components/FinishedModal/FinishedModal";
 
 import { useBookStore } from "@/stores/useBookStore";
 import type { ReadStatus } from "../MyPage/MyPage.types";
@@ -43,6 +44,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
 
@@ -63,6 +65,9 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const bottomBar = bottomBarConfig[entrySource];
 
   const handleSaveRecord = (data: BookReportData) => {
+    console.log("전달받은 데이터:", data);
+    console.log("전달받은 상태:", data.status);
+
     const statusMap: Record<string, ReadStatus> = {
       READING: "READING",
       AFTER: "FINISHED",
@@ -70,12 +75,24 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       STOP: "PAUSED",
     };
 
-    const mappedStatus = statusMap[data.status];
-
+    const mappedStatus = statusMap[data.status] || "READING";
     updateBookStatus(101, mappedStatus, data.rating);
 
+    const isFinished = data.status === "AFTER";
+    console.log("완독 여부:", isFinished);
+
     setIsRecordModalOpen(false);
-    alert("독서 기록이 저장되었습니다!");
+
+    if (isFinished) {
+      console.log("축하 모달을 띄웁니다!");
+      setTimeout(() => {
+        setIsFinishedModalOpen(true);
+      }, 300);
+    } else {
+      setTimeout(() => {
+        alert("독서 기록이 저장되었습니다!");
+      }, 300);
+    }
   };
 
   const handleBookmarkClick = () => {
@@ -94,7 +111,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         <div className={S.appFrame}>
           <AppBar
             mode="title"
-            onBackClick={() => navigate(-1)} // 뒤로 가기 연결
+            onBackClick={() => navigate(-1)}
             isBookmarked={isBookmarked}
             onBookmarkClick={handleBookmarkClick}
             showPenDropdown={!isBefore}
@@ -117,12 +134,12 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         <AppBar
           mode="title"
           title={BOOK_DETAIL_MOCK.title}
-          onBackClick={() => navigate(-1)} // 뒤로 가기 연결
+          onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
           onPenClick={handlePenClick}
-          onDirectRecordClick={() => setIsRecordModalOpen(true)} // 직접 기록하기 연결
+          onDirectRecordClick={() => setIsRecordModalOpen(true)}
         />
 
         <main className={S.content}>
@@ -156,8 +173,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           </section>
 
           <div className={S.tagRow}>
-            {BOOK_DETAIL_MOCK.tags.map((tag) => (
-              <Badge key={tag} label={tag} type="tag" className={S.tagBadge} />
+            {BOOK_DETAIL_MOCK.tags.map((tag, idx) => (
+              <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
 
@@ -222,6 +239,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           onSave={() => setIsGoalModalOpen(false)}
         />
       )}
+
       {isRecordModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm">
           <BookReport
@@ -237,6 +255,16 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             }}
           />
         </div>
+      )}
+
+      {isFinishedModalOpen && (
+        <FinishedModal
+          onClose={() => {
+            setIsFinishedModalOpen(false);
+            navigate("/mypage");
+          }}
+          count={1}
+        />
       )}
     </div>
   );
