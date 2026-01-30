@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, Cell, ResponsiveContainer, PieChart, Pie } from "recharts";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
 import * as S from "./Statistics.styles"; 
-import type { StatisticsData, ChartMonthData, PieChartData } from "./Statistics.types";
+import type { StatisticsData, ChartMonthData, PieChartData, ApiError } from "./Statistics.types";
 import { MOCK_STATISTICS_DATA } from "@/mocks/statistics.mock";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
 
@@ -21,10 +21,38 @@ export default function Statistics() {
   const [statsData, setStatsData] = useState<StatisticsData | null>(MOCK_STATISTICS_DATA);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [error, setError] = useState<ApiError[] | null>(null);
+
   useEffect(() => {
-    // API 연동 전 Mock 데이터 설정
-    setStatsData(MOCK_STATISTICS_DATA);
+    // API 연동 시뮬레이션
+    const loadData = () => {
+      setIsLoading(true);
+      // Mock 데이터 로딩 (실제론 여기서 response.success를 체크)
+      if (MOCK_STATISTICS_DATA) {
+        setStatsData(MOCK_STATISTICS_DATA);
+        setError(null);
+      } else {
+        setError([{ reason: "데이터가 존재하지 않습니다." }]);
+      }
+      setIsLoading(false);
+    };
+
+    loadData();
   }, [selectedYear]);
+
+  // 로딩 처리 뒤에 에러 UI 렌더링 추가
+if (isLoading) return <div className={S.centerBox}><div className={S.loadingText}>로딩 중...</div></div>;
+
+// 에러가 있을 경우 에러 메시지 표시
+if (error) {
+  return (
+    <div className={S.centerBox}>
+      <div className={S.loadingText}>{error[0].reason}</div>
+    </div>
+  );
+}
+
+if (!statsData) return <div className={S.centerBox}><div className={S.loadingText}>데이터가 없습니다.</div></div>;
 
   const formatReadingTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);

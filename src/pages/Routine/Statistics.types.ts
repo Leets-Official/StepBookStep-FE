@@ -5,7 +5,13 @@ export interface StatisticsResponse {
   code: string;
   message: string;
   data: StatisticsData;
-  error: any[];
+  error: ApiError[] | null;
+}
+
+export interface ApiError {
+  field?: string;   // 에러 발생 필드
+  value?: string;   // 입력된 잘못된 값
+  reason: string;   // 에러 상세 사유
 }
 
 export interface StatisticsData {
