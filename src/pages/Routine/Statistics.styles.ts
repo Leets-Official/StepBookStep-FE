@@ -1,11 +1,9 @@
-// src/pages/Routine/Statistics.styles.ts
-
-export const pageWrapper = "w-full bg-gray-50 flex justify-center";
-export const appFrame = "w-full max-w-[375px] flex flex-col relative";
+export const pageWrapper = "w-full h-screen bg-gray-50 flex justify-center overflow-hidden";
+export const appFrame = "w-full max-w-[375px] h-full max-h-[812px] bg-gray-50 flex flex-col relative";
 export const headerWrapper = "w-full flex-shrink-0 bg-gray-50 z-50";
 
 // 메인 컨텐츠 영역 (공통 여백 및 스크롤)
-export const content = "flex-1 px-0.5 py-2 w-full box-border flex flex-col gap-8 pb-32";
+export const content = "flex-1 px-0.5 py-2 w-full box-border flex flex-col gap-8 pb-32 overflow-y-auto no-scrollbar touch-pan-y";
 
 // 섹션 공통 스타일
 export const sectionTitle = "text-lg font-['pretendard'] font-semibold text-black mb-1";
