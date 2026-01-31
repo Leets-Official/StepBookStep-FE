@@ -1,16 +1,28 @@
-import type { ReadingDetailData } from "@/mocks/readingState.mock";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
 import { Badge } from "@/components/Badge/Badge"; 
 import * as S from "./ReadingStateDetail.styles";
 import { StarFilledIcon } from "@/assets/icons";
+import type { Goal } from "@/api/types";
 
 interface ReadingStateDetailProps {
-  data: ReadingDetailData;
+  goal: Goal; 
+  totalPage: number;
 }
 
-export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
-  const { isCompleted, title, currentPage, totalPage, startDate, endDate, review, logs } = data;
-  const percent = Math.floor((currentPage / totalPage) * 100);
+export function ReadingStateDetail({ goal, totalPage }: ReadingStateDetailProps) {
+  if (!goal) return null;
+
+  const currentPage = goal.currentProgress ?? 0;
+  const isCompleted = currentPage >= totalPage;
+  const percent = totalPage > 0 ? Math.floor((currentPage / totalPage) * 100) : 0;
+  
+  const startDate = goal.createdAt?.split('T')[0].replace(/-/g, '.') || "-";
+  const endDate = goal.updatedAt?.split('T')[0].replace(/-/g, '.') || "-";
+
+  const goalTitle = `${goal.period === "DAILY" ? "하루에 " : ""}${goal.targetAmount}${goal.metric === "TIME" ? "분" : "쪽"} 독서해요!`;
+
+  const review = "멋진 독서 여정이에요!"; 
+  const logs: any[] = []; 
 
   const currentBadgeStyle = isCompleted
     ? "bg-lime-300 border-lime-500 text-purple-800"
@@ -18,21 +30,21 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
 
   return (
     <div className={S.container}>
-      {/* 헤더 영역 */}
       <div className={S.header}>
         <Badge 
           label={isCompleted ? "완독!" : "읽는 중"} 
           type="tag" 
           className={currentBadgeStyle} 
         />
-        <h2 className={S.title}>{title}</h2>
+        <h2 className={S.title}>{goalTitle}</h2> 
       </div>
 
-      {/* 진행도 또는 한 줄 평 */}
       <div className={S.progressTextContainer}>
         {isCompleted ? (
           <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1 text-md font-semibold text-gray-800"><StarFilledIcon className="w-5 h-5 inline text-purple-500"/> 5.0  </span>
+            <span className="flex items-center gap-1 text-md font-semibold text-gray-800">
+              <StarFilledIcon className="w-5 h-5 inline text-purple-500"/> 5.0
+            </span>
             <span className="text-md font-semibold text-gray-800">{review}</span>
           </div>
         ) : (
@@ -48,7 +60,6 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
         )}
       </div>
 
-      {/* 날짜 정보 */}
       <div className={S.dateInfoContainer}>
         <div className={S.dateItem}>
           <span className={S.dateLabel}>시작일 </span>
@@ -60,17 +71,16 @@ export function ReadingStateDetail({ data }: ReadingStateDetailProps) {
         </div>
       </div>
 
-      {/* 독서 기록 리스트 */}
-      <div className={S.recordListContainer}>
-        {logs.map((log, index) => (
-          <div key={index} className={S.recordItem}>
-            <span className={S.recordDate}>{log.date}</span>
-            <span className={S.recordDetail}>
-              {log.page}쪽({log.percent}%), {log.time}
-            </span>
-          </div>
-        ))}
-      </div>
+      {logs.length > 0 && (
+        <div className={S.recordListContainer}>
+          {logs.map((log, index) => (
+            <div key={index} className={S.recordItem}>
+              <span className={S.recordDate}>{log.date}</span>
+              <span className={S.recordDetail}>{log.page}쪽</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
