@@ -141,7 +141,7 @@ if (!statsData) return <div className={S.centerBox}><div className={S.loadingTex
             <h2 className={S.sectionTitle}>누적 목표 달성 기록</h2>
             <div className={S.statsCard}>
               <p className={S.bigValueText}>{statsData.currentAchievementRate}%</p>
-              <div className="mb-2 w-[199px] h-[7px] item-justify-center mx-auto">
+              <div className="mb-2 w-49.75 h-1.75 item-justify-center mx-auto">
                 <LinearProgress total={100} current={statsData.currentAchievementRate} />
               </div>
               <p className="text-xs text-gray-400">
