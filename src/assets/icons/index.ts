@@ -31,3 +31,5 @@ export { default as LikeIcon } from "./like.svg?react";
 export { default as QuestionMarkIcon } from "./question-mark.svg?react";
 export { default as SpeechBubbleIcon } from "./speech-bubble.svg?react";
 export { default as clappingGif } from "./clapping.gif";
+export {default as GlassesOnBooksGif} from "./glasses-on-books.svg?react";
+export {default as TwoSpeechBubblesGif} from "./two-speech-bubbles.svg?react";
