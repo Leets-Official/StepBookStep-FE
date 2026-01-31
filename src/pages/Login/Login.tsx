@@ -15,7 +15,7 @@ export default function LoginPage() {
             <img 
               src="/images/Login.png" 
               alt="Reading Character" 
-              className="w-[280px] h-auto"
+              className="w-[323px] h-[323px]"
             />
           </div>
 
