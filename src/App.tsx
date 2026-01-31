@@ -12,6 +12,7 @@ import MyPage from "@/pages/MyPage";
 import Search from "./pages/Search/Search";
 
 
+import BookList from "@/pages/Routine/BookList.tsx";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/home" element={<Home />} />
         <Route path="/routine/timer" element={<TimerPage />} />      
+        <Route path="/routine/timer" element={<TimerPage />} /> 
+        <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
     </BrowserRouter>
   );
