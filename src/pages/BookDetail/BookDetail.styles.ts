@@ -39,6 +39,7 @@ export const priceText = "text-gray-500 font-normal";
 
 export const storeLink =
   "ml-2 text-purple-400 font-normal underline underline-offset-2 hover:text-purple-700";
+
 /* 태그 */
 export const tagRow = "flex gap-2 mt-3 mb-6 flex-wrap px-5";
 
@@ -49,7 +50,7 @@ export const divider = "w-full h-px bg-gray-200 my-6 self-stretch px-5";
 
 /* 탭 */
 export const tabRow =
-  "flex border-md border-transparent mb-4 px-5 text-lg font-semibold text-gray-900";
+  "flex border-md border-transparent mb-4 px-5 text-lg font-semibold text-gray-900 flex-nowrap px-5 overflow-x-auto";
 
 /* 섹션 */
 export const sectionTitle = "text-lg font-semibold text-gray-900 mb-2";
@@ -62,11 +63,11 @@ export const card = "bg-white rounded-xl shadow-sm p-4 mb-4";
 /* 하단 영역 */
 export const bottomAction = "px-5 pb-2.5 bottom-0 bg-gray-050";
 
-export const overlay =
-  "fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300";
+/* 태그 배지 */
+export const tagBadge = "text-gray-400 border-gray-300 bg-white whitespace-nowrap flex-shrink-0 font-medium";
 
-export const reportContainer =
-  "fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] animate-[slideUp_0.3s_ease-out]";
+/* 모달 오버레이 */
+export const overlay = "fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm";
 
-export const modalContainer =
-  "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] animate-[fadeIn_0.3s_ease-out]";
+/* 리포트 컨테이너 */
+export const reportContainer = "fixed bottom-0 left-0 right-0 z-[101] flex justify-center";

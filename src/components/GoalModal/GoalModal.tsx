@@ -23,9 +23,17 @@ interface GoalModalProps {
   title: string;
   onClose: () => void;
   onSave: () => void;
+  count?: number; // 💡 설계도에 count를 추가했습니다
 }
 
-export default function GoalModal({ maxPages, title, onClose, onSave }: GoalModalProps) {
+// 💡 함수 인자에서 'count'를 명시적으로 꺼내줍니다 (구조 분해 할당)
+export default function GoalModal({ 
+  maxPages, 
+  title, 
+  onClose, 
+  onSave, 
+  count 
+}: GoalModalProps) {
   const [period, setPeriod] = useState<SegmentValue>("day");
   const [type, setType] = useState<ToggleValue>("time");
 
@@ -58,7 +66,15 @@ export default function GoalModal({ maxPages, title, onClose, onSave }: GoalModa
     <div className={overlay}>
       <div className={modalContainer}>
         <div className={header}>
-          <h2 className={titleClass}>{title}</h2>
+          <div className="flex flex-col gap-1">
+            {/* 💡 count 값이 있을 때만 상단에 표시합니다 */}
+            {count && (
+              <span className="text-[12px] font-semibold text-purple-600">
+                {count}번째 목표 설정
+              </span>
+            )}
+            <h2 className={titleClass}>{title}</h2>
+          </div>
           <button onClick={onClose} className={closeButton}>
             <XIcon />
           </button>

@@ -2,7 +2,7 @@ export const styles = {
   // 전체 컨테이너
   container: `
   w-full 
-  bg-white
+  bg-gray-50
   border-t border-gray-100 
   flex justify-around items-center
   pt-[4px]

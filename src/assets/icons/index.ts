@@ -30,3 +30,4 @@ export { default as TrophyIcon } from "./trophy.svg?react";
 export { default as LikeIcon } from "./like.svg?react";
 export { default as QuestionMarkIcon } from "./question-mark.svg?react";
 export { default as SpeechBubbleIcon } from "./speech-bubble.svg?react";
+export { default as clappingGif } from "./clapping.gif";
