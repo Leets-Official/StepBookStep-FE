@@ -1,6 +1,6 @@
 import { BookList } from "@/components/BookList/BookList"; // BookList 컴포넌트 불러오기
-import * as S from "../MyPage.styles";
-import type { BookItem } from "../MyPage.types"; // BookItem 타입 불러오기
+import * as S from "@/pages/MyPage/MyPage.styles";
+import type { BookItem } from "@/pages/MyPage/MyPage.types"; // BookItem 타입 불러오기
 
 interface Props {
   data: BookItem[];
