@@ -41,8 +41,8 @@ function App() {
         <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
-        
-        <Route path="/bookdetail" element={<BookDetailPage />} />
+
+        <Route path="/books/:bookId" element={<BookDetailPage />} />
         <Route path="/routine/timer" element={<TimerPage />} /> 
         <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
