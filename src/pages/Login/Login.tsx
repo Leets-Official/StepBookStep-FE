@@ -1,10 +1,61 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom"; // 파라미터 읽기용 추가
 import { Kakao } from "@/components/Kakao/Kakao";
+import { initKakao, loginWithKakao, exchangeCodeForToken } from "@/utils/KakaoAuth";
+import { kakaoLogin, saveTokens } from "@/services/authService";
 import * as S from "./Login.styles";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); 
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 1. 초기화 및 리다이렉트된 "코드" 처리
+  useEffect(() => {
+    initKakao();
+
+    // 카카오에서 돌아왔을 때 URL에 포함된 'code' 파라미터 확인
+    const authCode = searchParams.get("code");
+    if (authCode) {
+      handleBackendLogin(authCode);
+    }
+  }, [searchParams]);
+
+  /**
+   * [2단계] 카카오 인증 코드를 백엔드에 전달하여 로그인 완료
+   */
+  const handleBackendLogin = async (authCode: string) => {
+    try {
+      setIsLoading(true);
+      console.log('카카오 인증 코드로 백엔드 로그인 시도 중...');
+      const socialToken = await exchangeCodeForToken(authCode);
+      
+      // authService의 kakaoLogin 호출
+      const response = await kakaoLogin(socialToken);
+      
+      saveTokens(response.data.accessToken, response.data.refreshToken);
+      
+      if (response.data.newUser) {
+        navigate("/onboarding/set-profile");
+      } else {
+        navigate("/");
+      }
+    } catch (error: any) {
+      console.error('백엔드 로그인 실패:', error.message);
+      alert('로그인 처리 중 오류가 발생했습니다.');
+      // 에러 발생 시 URL의 파라미터를 지우기 위해 경로 초기화
+      navigate("/login", { replace: true });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
+   * [1단계] 카카오 로그인 버튼 클릭 (카카오 서버로 리다이렉트)
+   */
   const handleKakaoLogin = () => {
-    // 카카오 로그인 로직 연결
-    console.log("카카오 로그인 시작");
+    console.log('카카오 인증 페이지로 이동...');
+    loginWithKakao(); 
   };
 
   return (
@@ -29,7 +80,13 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-3">
-            <Kakao onClick={handleKakaoLogin} />
+            {!isLoading ? (
+              <Kakao onClick={handleKakaoLogin} />
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mb-2"></div>
+              </div>
+            )}
           </div>
         </main>
       </div>
