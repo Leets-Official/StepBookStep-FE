@@ -6,10 +6,15 @@ import { BookList } from "@/components/BookList/BookList";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import Statistics from "./Statistics";
 import { DUMMY_BOOKS } from "@/mocks/booklist.mock";
+import EmptyView from "@/components/EmptyView/EmptyView"; //
+import { GlassesOnBooksGif } from "@/assets/icons"; //
 
 export default function RoutinePage() {
   const [activeTab, setActiveTab] = useState<"routine" | "statistics">("routine");
   const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
+
+  //  true로 설정하면 데이터가 있어도 루틴 탭에서 엠티뷰가 나타남(테스트용)
+  const isTestMode = true;
 
   return (
     <div className={S.pageWrapper}>
@@ -38,17 +43,33 @@ export default function RoutinePage() {
             />
           </div>
         </nav>
-
-        <main className={S.content}>
+        <main className={`${S.content} flex flex-col`}>
           {activeTab === "routine" ? (
-            <>
-              <h2 className={S.sectionTitle}>지금 읽고 있어요</h2>
-              <div className="flex flex-col gap-4 w-full items-stretch">
-                {DUMMY_BOOKS.map((book, index) => (
-                  <BookList key={index} {...book} />
-                ))}
-              </div>
-            </>
+            DUMMY_BOOKS.length === 0 || isTestMode ? (
+              <EmptyView
+                icon={GlassesOnBooksGif}
+                title="아직 도서가 없어요."
+                description={
+                  <>
+                    00님이 좋아하실 도서를 <br /> 고르러 가볼까요?
+                  </>
+                }
+                className="pt-37.75"
+                actionButton={{
+                  label: "도서 탐색하기",
+                  onClick: () => setNavTab("search"),
+                }}
+              />
+            ) : (
+              <>
+                <h2 className={S.sectionTitle}>지금 읽고 있어요</h2>
+                <div className="flex flex-col gap-4 w-full items-stretch">
+                  {DUMMY_BOOKS.map((book, index) => (
+                    <BookList key={index} {...book} />
+                  ))}
+                </div>
+              </>
+            )
           ) : (
             <Statistics />
           )}
