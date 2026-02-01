@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./Search.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -12,6 +13,7 @@ import type { SearchFilterState } from "./Search.types";
 import EmptyView from "@/components/EmptyView/EmptyView";
 
 const Search = () => {
+  const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -38,6 +40,10 @@ const Search = () => {
 
   const handleDeleteChip = (key: keyof SearchFilterState) => {
     setFilters((prev) => ({ ...prev, [key]: null }));
+  };
+
+  const handleBookClick = () => {
+    navigate("/bookdetail?status=before");
   };
 
   const filteredBooks = useMemo(() => {
@@ -122,7 +128,7 @@ const Search = () => {
             Object.values(filters).some((v) => v !== null && v !== "" && v !== "장르") ? (
               filteredBooks.length > 0 ? (
                 filteredBooks.map((book, index) => (
-                  <BookList key={index} {...book} readingState="before" />
+                  <BookList key={index} {...book} readingState="before" onClick={handleBookClick} />
                 ))
               ) : (
                 <EmptyView
@@ -144,7 +150,7 @@ const Search = () => {
               dummySearchResults
                 .filter((book) => book.level === 1)
                 .slice(0, 4)
-                .map((book, index) => <BookList key={index} {...book} readingState="before" />)
+                .map((book, index) => <BookList key={index} {...book} readingState="before" onClick={handleBookClick} />)
             )}
           </div>
         </div>
