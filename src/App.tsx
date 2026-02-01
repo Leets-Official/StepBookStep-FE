@@ -11,10 +11,9 @@ import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
 import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
 import Home from "@/pages/Home/Home.tsx";
 import MyPage from "@/pages/MyPage";
-import Search from "./pages/Search/Search";
-
-
+import Search from "@/pages/Search/Search";
 import BookList from "@/pages/Routine/BookList.tsx";
+import Tutorial from "@/pages/Tutorial/Tutorial";
 
 import Splash from "@/pages/Login/Splash";
 import LoginPage from "@/pages/Login/Login";
@@ -35,6 +34,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Tutorial />} />
         <Route path="/splash" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MyPage />} />
@@ -44,11 +44,14 @@ function App() {
         <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
         <Route path="/onboarding/genre" element={<OnboardingGenre />} />
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
-
         <Route path="/books/:bookId" element={<BookDetailPage />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/routine/timer" element={<TimerPage />} />
+        <Route path="/routine/timer" element={<TimerPage />} />
+        <Route path="/routine/booklist" element={<BookList />} />
+        <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/routine/timer" element={<TimerPage />} />      
         <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
@@ -56,6 +59,5 @@ function App() {
     </QueryClientProvider>
   );
 }
-
 
 export default App;
