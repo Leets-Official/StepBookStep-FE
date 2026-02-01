@@ -40,7 +40,7 @@ export const headerWrapper = `
   px-[20px] 
   flex 
   items-center 
-  bg-white
+  bg-gray-50
 `;
 
 export const filterBar = `
@@ -50,7 +50,7 @@ export const filterBar = `
   flex 
   items-center 
   gap-3 
-  bg-white 
+  bg-gray-50 
   sticky 
   top-0 
   z-10
