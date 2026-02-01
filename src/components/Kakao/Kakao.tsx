@@ -4,13 +4,20 @@ import { kakaoBase, kakaoLayout } from "@/components/Kakao/Kakao.styles";
 
 interface KakaoProps {
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-export const Kakao = ({ onClick }: KakaoProps) => {
+export const Kakao = ({ onClick, disabled = false }: KakaoProps) => {
   return (
     <button
       onClick={onClick}
-      className={cn(kakaoBase, kakaoLayout.container, "bg-[#FEE500] border-none")}
+      disabled={disabled}
+      className={cn(
+        kakaoBase, 
+        kakaoLayout.container, 
+        "bg-[#FEE500] border-none",
+        disabled && "opacity-50 cursor-not-allowed"
+      )}
     >
       <div className="flex items-center justify-center w-[18px] h-[18px]">
         <KakaoIcon />

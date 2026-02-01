@@ -25,7 +25,8 @@ export interface BookListProps {
   
   level?: number;    
   country?: string;  
-  genre?: string;    
+  genre?: string;   
+  
 
   onClick?: () => void;
 }
