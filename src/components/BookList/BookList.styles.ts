@@ -35,4 +35,4 @@ export const detailSubText = "text-sm font-regular text-gray-500";
 export const highlight = "text-purple-500";
 
 export const tagBadge =
-  "text-gray-500 border-gray-300 bg-white whitespace-nowrap flex-shrink-0 font-normal";
+  "text-gray-500 border-gray-300 bg-gray-50 whitespace-nowrap flex-shrink-0 font-normal";
