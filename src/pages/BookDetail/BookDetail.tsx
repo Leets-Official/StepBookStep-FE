@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
+import { useParams } from "react-router-dom";
+import { useBookDetail } from "@/hooks/useReadings";
+import { useRoutines } from "@/hooks/useReadings";
+
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import { Badge } from "@/components/Badge/Badge";
@@ -35,12 +39,22 @@ interface BookDetailProps {
 }
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+  const { bookId } = useParams(); // URL에서 ID 가져오기
+  const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
+  
+  const { data: routines } = useRoutines();
+
   const navigate = useNavigate();
   const location = useLocation();
   const { updateBookStatus } = useBookStore();
 
   const isBefore = readingStatus === "before";
-  const isLoading = false;
+  const isLoading = isBookLoading;
+
+  const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
+  console.log("🔍 현재 서버에서 넘어온 데이터:", bookData);
+
+  const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -159,7 +173,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          title={BOOK_DETAIL_MOCK.title}
+          // title={BOOK_DETAIL_MOCK.title}
           onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
@@ -172,25 +186,31 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
         <main className={S.content}>
           <div className={S.coverWrapper}>
-            <div className={S.coverImage} />
+            <div className={S.coverImage} 
+                style={{ 
+                  backgroundImage: `url(${bookInfo.coverImage})`, 
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+              }}
+            />
           </div>
 
           <section className={S.infoSection}>
             <Badge
-              label={`Lv. ${BOOK_DETAIL_MOCK.level}`}
+              label={`Lv. ${bookInfo.level}`}
               type="level"
-              className={S.getLevelBadgeClass(BOOK_DETAIL_MOCK.level)}
+              className={S.getLevelBadgeClass(bookInfo.level)}
             />
-            <h1 className={S.title}>{BOOK_DETAIL_MOCK.title}</h1>
-            <p className={S.author}>{BOOK_DETAIL_MOCK.author}</p>
+            <h1 className={S.title}>{bookInfo.title}</h1>
+            <p className={S.author}>{bookInfo.author}</p>
             <p className={S.meta}>
-              {BOOK_DETAIL_MOCK.publisher} | {BOOK_DETAIL_MOCK.publishYear} |{" "}
-              {BOOK_DETAIL_MOCK.totalPage}쪽
+              {bookInfo.publisher} | {bookInfo.pubDate} | {bookInfo.totalPage}
+              쪽
             </p>
             <p className={S.priceRow}>
-              <span className={S.priceText}>{BOOK_DETAIL_MOCK.price.toLocaleString()}원</span>
+              <span className={S.priceText}>{bookInfo.priceStandard?.toLocaleString()}원</span>
               <a
-                href={BOOK_DETAIL_MOCK.storeLink}
+                href={bookInfo.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={S.storeLink}
@@ -239,7 +259,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {!isBefore && resolvedActiveTab === "record" && readingData && (
-            <ReadingStateDetail data={readingData} />
+            <ReadingStateDetail goal={currentGoal || (readingData as any)} totalPage={bookInfo.totalPage}/>
           )}
 
           {!isBefore && resolvedActiveTab === "info" && (

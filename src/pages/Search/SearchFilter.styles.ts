@@ -11,7 +11,7 @@ export const container = `
   h-full 
   max-h-[812px]
   
-  bg-white 
+  bg-gray-50
   flex 
   flex-col 
   pt-11
@@ -24,7 +24,7 @@ export const header = `
   items-center 
   h-[56px] 
   px-[20px] 
-  bg-white
+  bg-gray-50
   sticky 
   top-0 
   z-10
@@ -47,6 +47,7 @@ export const headerTitle = `
   leading-[20px] 
   tracking-[0%] 
   text-gray-900
+  
 `;
 
 export const content = `
@@ -96,7 +97,7 @@ export const chipWrapper = `
 export const unselectedChip = `
   border 
   border-gray-200 
-  bg-white 
+  bg-gray-50
   text-gray-600 
 `;
 
@@ -122,7 +123,7 @@ export const tooltipBox = `
   top-[34px] 
   left-0 
   z-20 
-  bg-white 
+  bg-gray-50
   border 
   border-purple-100 
   shadow-[0_4px_20px_rgba(0,0,0,0.08)] 
@@ -159,7 +160,7 @@ export const footer = `
   px-[20px] 
   pb-[30px] 
   pt-4
-  bg-white
+  bg-gray-50
   border-t
   border-gray-50
 `;

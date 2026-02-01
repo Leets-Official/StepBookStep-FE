@@ -1,7 +1,7 @@
 export const appBarStyles = {
   container: "w-[375px] h-11 py-2.5 bg-gray-50 flex justify-center items-center box-content",
 
-  searchContainer: "w-[375px] h-16 bg-white flex items-center px-[10px] box-border gap-[10px]",
+  searchContainer: "w-[375px] h-16 bg-gray-50 flex items-center px-[10px] box-border gap-[10px]",
 
   innerWrapper: "w-[335px] h-6 flex items-center",
 

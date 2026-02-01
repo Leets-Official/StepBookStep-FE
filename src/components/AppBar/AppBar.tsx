@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from "react";
 
 const AppBar = ({
   mode,
-  title,
   isBookmarked,
   onBackClick,
   onSettingClick,
@@ -92,7 +91,8 @@ const AppBar = ({
             </button>
 
             <div className="flex-1 flex items-center">
-              <span className={appBarStyles.titleText}>{title}</span>
+              
+
             </div>
 
             {mode !== "none" && (

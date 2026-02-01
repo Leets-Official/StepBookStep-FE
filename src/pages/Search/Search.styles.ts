@@ -4,6 +4,7 @@ export const wrapper = `
   items-center 
   w-full 
   h-screen 
+  bg-[#B7B7B7]
 
 `;
 
@@ -13,7 +14,7 @@ export const container = `
   h-full 
   max-h-[812px]
   
-  bg-white 
+  bg-gray-50 
   relative 
   flex 
   flex-col
@@ -23,6 +24,13 @@ export const container = `
   [&_nav]:absolute 
   [&_nav]:bottom-0
   [&_nav]:w-full
+`;
+
+export const statusBar = `
+  h-[11px]
+  w-full
+  flex-shrink-0
+  bg-gray-50
 `;
 
 export const contentArea = `
@@ -39,7 +47,7 @@ export const headerWrapper = `
   px-[20px] 
   flex 
   items-center 
-  bg-white
+  bg-gray-50
 `;
 
 export const filterBar = `
@@ -49,7 +57,7 @@ export const filterBar = `
   flex 
   items-center 
   gap-3 
-  bg-white 
+  bg-gray-50 
   sticky 
   top-0 
   z-10
@@ -77,7 +85,7 @@ export const subHeader = `
   h-[56px]
   flex 
   items-center 
-  bg-white 
+  bg-gray-50 
   sticky 
   top-0 
   z-10
@@ -116,4 +124,5 @@ export const sectionTitle = `
   leading-[20px] 
   tracking-[0%] 
   text-gray-900 
+  
 `;

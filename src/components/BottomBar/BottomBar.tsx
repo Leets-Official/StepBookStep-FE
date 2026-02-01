@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { styles } from "./BottomBar.styles";
-import type { BottomBarProps, NavItem } from "./BottomBar.types";
+import type { BottomBarProps, NavItem, TabId } from "./BottomBar.types";
 import { HomeIcon, SearchIcon, ClockIcon, UserIcon } from "@/assets/icons";
 
 const NAV_ITEMS: NavItem[] = [
@@ -9,7 +10,21 @@ const NAV_ITEMS: NavItem[] = [
   { id: "mypage", label: "마이페이지", icon: UserIcon },
 ];
 
+const ROUTE_MAP: Record<TabId, string> = {
+  home: "/home",
+  search: "/search",
+  routine: "/routine/booklist",
+  mypage: "/mypage",
+};
+
 const BottomBar = ({ activeTab, onTabSelect }: BottomBarProps) => {
+  const navigate = useNavigate();
+
+  const handleTabClick = (id: TabId) => {
+    onTabSelect(id);
+    navigate(ROUTE_MAP[id]);
+  };
+
   return (
     <nav className={styles.container}>
       {NAV_ITEMS.map((item) => {
@@ -21,7 +36,7 @@ const BottomBar = ({ activeTab, onTabSelect }: BottomBarProps) => {
           <button
             key={item.id}
             type="button"
-            onClick={() => onTabSelect(item.id)}
+            onClick={() => handleTabClick(item.id)} 
             className={`${styles.button} ${activeColor}`}
           >
             <IconComponent className={`${styles.icon} fill-current`} />
