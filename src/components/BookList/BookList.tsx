@@ -40,7 +40,7 @@ export function BookList({
           {readingState === "before" && tags.length > 0 && (
             <div className={S.tagWrap}>
               {tags.map((tag) => (
-                <Badge key={tag} label={tag}  />
+                <Badge key={tag} label={tag} className={S.tagBadge} />
               ))}
             </div>
           )}

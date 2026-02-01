@@ -58,7 +58,7 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
             onSelect(selectedValue === label ? null : label);
           }
         }}
-        className={`    rounded-full border transition-all duration-200    font-['Pretendard'] font-normal text-[14px] leading-5 tracking-[0%]    ${isSelected ? "bg-lime-400 border-lime-600 text-purple-800" : "bg-white border-lime-400 text-gray-700 hover:bg-gray-50"}
+        className={`    rounded-full border transition-all duration-200    font-['Pretendard'] font-normal text-[14px] leading-5 tracking-[0%]    ${isSelected ? "bg-lime-400 border-lime-600 text-purple-800" : "bg-gray-50 border-lime-400 text-gray-700 hover:bg-gray-50"}
   `}
       />
     );

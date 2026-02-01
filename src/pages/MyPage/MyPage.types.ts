@@ -3,7 +3,7 @@ export type ReadStatus = "READING" | "FINISHED" | "PAUSED" | "BOOKMARKED";
 export interface BookItem {
   userBookId: number;
   bookId: number;
-  title: string;
+  title?: string;
   author: string;
   publisher: string;
   pubDate: string;

@@ -1,8 +1,8 @@
 export const pageWrapper =
-  "min-h-screen bg-gray-100 flex justify-center items-center overflow-hidden";
+  "flex justify-center items-center w-full h-screen bg-[#B7B7B7] overflow-hidden";
 
 export const appFrame =
-  "w-full max-w-[375px] h-full max-h-[812px] min-h-[700px] bg-gray-50 flex flex-col relative overflow-hidden";
+  "w-full max-w-[375px] h-full max-h-[812px] bg-gray-50 flex flex-col relative overflow-hidden";
 
 export const statusBar = "h-[11px] w-full flex-shrink-0 bg-gray-50";
 export const headerWrapper = "w-full flex-shrink-0 bg-white";
