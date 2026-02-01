@@ -4,6 +4,7 @@ export const wrapper = `
   items-center 
   w-full 
   h-screen 
+  bg-[#B7B7B7]
 
 `;
 
@@ -13,7 +14,7 @@ export const container = `
   h-full 
   max-h-[812px]
   
-  bg-white 
+  bg-gray-50 
   relative 
   flex 
   flex-col
@@ -77,7 +78,7 @@ export const subHeader = `
   h-[56px]
   flex 
   items-center 
-  bg-white 
+  bg-gray-50 
   sticky 
   top-0 
   z-10
@@ -116,4 +117,5 @@ export const sectionTitle = `
   leading-[20px] 
   tracking-[0%] 
   text-gray-900 
+  
 `;
