@@ -19,7 +19,7 @@ export function BookList({
   targetPeriod,
   targetAmount,
   remainingAmount,
-  onClick
+  onClick,
 }: BookListProps) {
   const percent = readingState === "reading" ? Math.round((currentPage / totalPages) * 100) : 0;
 
