@@ -63,7 +63,10 @@ const Search = () => {
         const pages = book.totalPages;
         if (filters.volume === "~200쪽" && pages > 200) return false;
         if (filters.volume === "200~250쪽" && (pages < 200 || pages > 250)) return false;
-        if (filters.volume === "251쪽~" && pages < 251) return false;
+        if (filters.volume === "251~350쪽" && (pages < 251 || pages > 350)) return false;
+        if (filters.volume === "351~500쪽" && (pages < 351 || pages > 500)) return false;
+        if (filters.volume === "501~650쪽" && (pages < 501 || pages > 650)) return false;
+        if (filters.volume === "651~쪽" && pages < 651) return false;
       }
       return true;
     });

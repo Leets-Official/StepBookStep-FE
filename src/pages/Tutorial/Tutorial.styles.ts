@@ -1,11 +1,11 @@
 export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center overflow-hidden";
 
 export const appFrame =
-  "w-[375px] h-[812px] flex flex-col bg-gray-50 relative self-center shadow-sm overflow-hidden";
+  "w-[375px] h-[812px] flex flex-col bg-gray-50 relative self-center overflow-hidden";
 
 export const header = "mt-[52px] h-10 flex items-center justify-center relative w-full";
 
-export const skipText = "absolute right-[20px] text-[#8E8EFE] text-base font-medium cursor-pointer";
+export const skipText = "absolute right-[20px] text-purple-400 text-base font-normal text-xs cursor-pointer";
 
 export const content = "flex-1 flex flex-col items-center justify-start px-10 text-center relative";
 
@@ -23,4 +23,4 @@ export const mainButton =
 export const buttonText = "text-white text-lg font-semibold";
 
 export const bottomBarSpace =
-  "absolute bottom-0 w-[375px] h-[32px] flex justify-center items-end pb-2 bg-[#F9F9FB]";
+  "absolute bottom-0 w-[375px] h-[32px] flex justify-center items-end pb-2 bg-gray-50";
