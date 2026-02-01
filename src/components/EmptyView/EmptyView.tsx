@@ -1,6 +1,6 @@
 import { styles } from "./EmptyView.styles";
 import type { EmptyViewProps } from "./EmptyView.types";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Button/Button"; 
 
 const EmptyView = ({
   icon: Icon,
@@ -24,8 +24,7 @@ const EmptyView = ({
             onClick={actionButton.onClick}
             variant="ghost"
             size="small"
-            // 글자에다가 투명도 25% 적용함
-            className="rounded-full border border-lime-600/25 text-gray-700 font-semibold px-6 py-2.5 bg-white"
+            className="rounded-full border border-lime-600/25 text-gray-700 px-6 py-2.5 bg-white font-medium"
           />
         </div>
       )}
