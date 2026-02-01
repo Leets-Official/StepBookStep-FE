@@ -7,9 +7,20 @@ declare global {
 
 // 카카오 SDK 초기화
 export const initKakao = () => {
-  if (window.Kakao && !window.Kakao.isInitialized()) {
-    window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
-    console.log('카카오 SDK 초기화 완료');
+  const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
+  
+  if (!kakaoKey) {
+    console.error('Kakao JavaScript key is not set in environment variables');
+    return;
+  }
+  
+  if (window.Kakao) {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoKey);
+      console.log('카카오 SDK 초기화 완료');
+    }
+  } else {
+    console.error('Kakao SDK is not loaded');
   }
 };
 

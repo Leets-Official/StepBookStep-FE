@@ -43,7 +43,7 @@ const Search = () => {
   };
 
   const handleBookClick = () => {
-    navigate("/bookdetail?status=before");
+    navigate("/books/1?status=before");
   };
 
   const filteredBooks = useMemo(() => {
@@ -72,6 +72,7 @@ const Search = () => {
   return (
     <div className={S.wrapper}>
       <div className={`${S.container} search-page-wrapper`}>
+        <div className={S.statusBar} />
         {isSearchMode ? (
           <AppBar
             mode="search"

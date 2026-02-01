@@ -6,6 +6,8 @@ import { Tab } from "@/components/Tab/Tab";
 import { BookList } from "@/components/BookList/BookList";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import Statistics from "./Statistics";
+import EmptyView from "@/components/EmptyView/EmptyView";
+import { GlassesOnBooksGif } from "@/assets/icons";
 import { useRoutines } from "@/hooks/useReadings";
 
 
@@ -92,9 +94,20 @@ export default function RoutinePage() {
                   ))
                 ) : (
                   !isLoading && !isError && (
-                    <div className="text-center py-20 text-gray-400">
-                      엠티뷰가 들어가야함
-                    </div>
+                    <EmptyView
+                      icon={GlassesOnBooksGif}
+                      title="아직 도서가 없어요."
+                      description={
+                        <>
+                          00님이 즐겨하는 도서를 고르려 가능해요?(멘토?)
+                        </>
+                      }
+                      actionButton={{
+                        label: "도서 탐색하기",
+                        onClick: () => navigate("/search"),
+                      }}
+                      className="pt-28.25"
+                    />
                   )
                 )}
             </>

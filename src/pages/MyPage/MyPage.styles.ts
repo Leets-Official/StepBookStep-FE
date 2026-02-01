@@ -3,6 +3,8 @@ export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center items-
 export const appFrame =
   "w-[375px] h-[812px] bg-gray-50 flex flex-col overflow-hidden relative border-x border-gray-100 shadow-lg";
 
+export const statusBar = "h-[11px] w-full flex-shrink-0 bg-gray-50";
+
 export const content = "flex-1 overflow-y-auto pb-[90px] scrollbar-hide no-scrollbar";
 
 export const headerSection = "px-5 mt-4 mb-3";

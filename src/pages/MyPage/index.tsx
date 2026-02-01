@@ -60,6 +60,7 @@ const MyPage = () => {
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
+        <div className={S.statusBar} />
         <AppBar mode="logo" />
         <MyPageHeader activeStatus={activeStatus} onTabChange={setActiveStatus} />
         <main className={`${S.content} flex flex-col`}>{renderContent()}</main>

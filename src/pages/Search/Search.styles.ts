@@ -26,6 +26,13 @@ export const container = `
   [&_nav]:w-full
 `;
 
+export const statusBar = `
+  h-[11px]
+  w-full
+  flex-shrink-0
+  bg-gray-50
+`;
+
 export const contentArea = `
   flex-1 
   overflow-y-auto 
