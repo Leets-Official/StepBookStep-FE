@@ -10,6 +10,10 @@ import OnboardingLevelStep3 from "@/pages/Onboarding/OnboardingLevelStep3";
 import OnboardingGenre from "@/pages/Onboarding/OnboardingGenre";
 import RoutineResultPage from "@/pages/Onboarding/RoutineResultPage";
 import Home from "@/pages/Home/Home.tsx";
+import MyPage from "@/pages/MyPage";
+import Search from "./pages/Search/Search";
+
+
 import BookList from "@/pages/Routine/BookList.tsx";
 
 import Splash from "@/pages/Login/Splash";
@@ -33,8 +37,7 @@ function App() {
       <Routes>
         <Route path="/splash" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
-
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<MyPage />} />
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
         <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
@@ -43,7 +46,10 @@ function App() {
         <Route path="/onboarding/result" element={<RoutineResultPage />} />
 
         <Route path="/books/:bookId" element={<BookDetailPage />} />
-        <Route path="/routine/timer" element={<TimerPage />} /> 
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/routine/timer" element={<TimerPage />} />      
         <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
     </BrowserRouter>

@@ -16,14 +16,17 @@ import { BookReport } from "@/components/BookReport/BookReport";
 import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import GoalModal from "@/components/GoalModal/GoalModal";
 import { Toast } from "@/components/Toast/Toast";
+import { FinishedModal } from "./components/FinishedModal/FinishedModal";
+
+import { useBookStore } from "@/stores/useBookStore";
+import type { ReadStatus } from "../MyPage/MyPage.types";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
-
 import { MOCK_READING_DATA, MOCK_COMPLETED_DATA } from "@/mocks/readingState.mock";
 import type { ReadingDetailData } from "@/mocks/readingState.mock";
-
 import type { TabId } from "@/components/BottomBar/BottomBar.types";
+
 import * as S from "./BookDetail.styles";
 import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
 
@@ -43,6 +46,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { updateBookStatus } = useBookStore();
+
   const isBefore = readingStatus === "before";
   const isLoading = isBookLoading;
 
@@ -55,6 +60,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
@@ -84,6 +90,39 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const bottomBar = bottomBarConfig[entrySource];
 
+  const handleSaveRecord = (data: BookReportData) => {
+    console.log("전달받은 데이터:", data);
+    console.log("전달받은 상태:", data.status);
+
+    const statusMap: Record<string, ReadStatus> = {
+      READING: "READING",
+      AFTER: "FINISHED",
+      FINISHED: "FINISHED",
+      BEFORE: "BOOKMARKED",
+      STOP: "PAUSED",
+    };
+
+    const mappedStatus = statusMap[data.status] || "READING";
+    updateBookStatus(101, mappedStatus, data.rating);
+
+    const isFinished = data.status === "AFTER";
+    console.log("완독 여부:", isFinished);
+
+    setIsReportOpen(false);
+
+    if (isFinished) {
+      console.log("축하 모달을 띄웁니다!");
+      setTimeout(() => {
+        setIsFinishedModalOpen(true);
+      }, 300);
+    } else {
+      setTimeout(() => {
+        setToastMessage("독서 기록이 저장되었습니다!");
+        setShowToast(true);
+      }, 300);
+    }
+  };
+
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => !prev);
   };
@@ -106,19 +145,13 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     setIsReportOpen(false);
   };
 
-  const handleReportSave = (data: BookReportData) => {
-    setIsReportOpen(false);
-    setToastMessage("독서 기록이 저장되었습니다!");
-    setShowToast(true);
-  };
-
   if (isLoading) {
     return (
       <div className={S.pageWrapper}>
         <div className={S.appFrame}>
           <AppBar
             mode="title"
-            onBackClick={() => {}}
+            onBackClick={() => navigate(-1)}
             isBookmarked={isBookmarked}
             onBookmarkClick={handleBookmarkClick}
             showPenDropdown={!isBefore}
@@ -131,17 +164,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />
           )}
         </div>
-
-        {isGoalModalOpen && (
-          <GoalModal
-            maxPages={BOOK_DETAIL_MOCK.totalPage}
-            title="독서 목표 설정"
-            onClose={() => setIsGoalModalOpen(false)}
-            onSave={() => {
-              setIsGoalModalOpen(false);
-            }}
-          />
-        )}
       </div>
     );
   }
@@ -151,7 +173,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          onBackClick={() => {}}
+          // title={BOOK_DETAIL_MOCK.title}
+          onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
           showPenDropdown={!isBefore}
@@ -198,8 +221,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           </section>
 
           <div className={S.tagRow}>
-            {BOOK_DETAIL_MOCK.tags.map((tag) => (
-              <Badge key={tag} label={tag} type="tag" className={S.tags} />
+            {BOOK_DETAIL_MOCK.tags.map((tag, idx) => (
+              <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
 
@@ -223,9 +246,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {isBefore && (
-            <section>
+            <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-
               {BOOK_DETAIL_MOCK.description ? (
                 <FullView collapsedHeight={134}>
                   <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
@@ -243,7 +265,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-
               {BOOK_DETAIL_MOCK.description ? (
                 <FullView collapsedHeight={72}>
                   <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
@@ -256,22 +277,33 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
         </main>
 
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
-      
+
         <Toast
           message={toastMessage}
           isVisible={showToast}
           onClose={() => setShowToast(false)}
-          className="bottom-[80px] top-auto"
+          className="bottom-20 top-auto"
         />
 
         {isReportOpen && (
           <>
-            <div className={S.overlay} onClick={handleReportClose} />
-            <div className={S.reportContainer}>
+            <div
+              className="fixed inset-0 z-100 bg-black/50 backdrop-blur-sm"
+              onClick={handleReportClose}
+            />
+            <div className="fixed bottom-0 left-0 right-0 z-101 flex justify-center">
               <BookReport
                 onClose={handleReportClose}
-                onSave={handleReportSave}
+                onSave={handleSaveRecord}
                 isTimerMode={false}
+                initialData={{
+                  status:
+                    readingStatus === "reading"
+                      ? "READING"
+                      : readingStatus === "completed"
+                        ? "AFTER"
+                        : "BEFORE",
+                }}
               />
             </div>
           </>
@@ -288,6 +320,17 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             setToastMessage("목표가 저장되었습니다!");
             setShowToast(true);
           }}
+          count={1}
+        />
+      )}
+
+      {isFinishedModalOpen && (
+        <FinishedModal
+          onClose={() => {
+            setIsFinishedModalOpen(false);
+            navigate("/mypage");
+          }}
+          count={1}
         />
       )}
     </div>
