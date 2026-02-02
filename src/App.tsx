@@ -47,12 +47,9 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/routine/timer" element={<TimerPage />} />
-        <Route path="/routine/timer" element={<TimerPage />} />
+        <Route path="/routine/timer/:bookId" element={<TimerPage />} />
         <Route path="/routine/booklist" element={<BookList />} />
         <Route path="/tutorial" element={<Tutorial />} />
-        <Route path="/routine/timer" element={<TimerPage />} />      
-        <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
     </BrowserRouter>
     </QueryClientProvider>
