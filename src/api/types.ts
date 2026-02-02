@@ -144,3 +144,39 @@ export interface UpdateGoalRequest {
   targetAmount?: number;    // 생성/수정 시 필요
   delete?: boolean;         // 삭제 시 true
 }
+
+// ============================================
+// 도서 필터 검색 타입
+// ============================================
+export interface FilterBooksParams {
+  level?: number;           // 난이도 (1, 2, 3)
+  pageRange?: string[];     // 분량 (~200, 201~250, 251~350, 351~500, 501~650, 651~)
+  origin?: string;          // 국가별 분류
+  genre?: string;           // 장르별 분류
+  keyword?: string;         // 검색어 (제목, 저자, 출판사)
+  cursor?: number;          // 마지막으로 조회한 bookId
+}
+
+export interface FilterBooksResponse {
+  books: BookSearchItem[];
+  hasNext: boolean;
+}
+
+// ============================================
+// 도서 검색 타입
+// ============================================
+
+export interface BookSearchItem {
+  bookId: number;
+  coverImage: string;
+  title: string;
+  author: string;
+  publisher: string;
+  pubDate: string;
+  totalPage: number;
+  tags: string[];
+}
+
+export interface SearchBooksParams {
+  keyword?: string;  // 검색어 (제목, 저자, 출판사)
+}

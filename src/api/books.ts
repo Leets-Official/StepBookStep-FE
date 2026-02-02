@@ -1,5 +1,5 @@
 import apiClient from './clients';
-import type { ApiResponse, BookDetailResponse } from './types';
+import type { ApiResponse, BookDetailResponse, SearchBooksParams, BookSearchItem, FilterBooksParams, FilterBooksResponse } from './types';
 
 /**
  * 도서 상세 조회
@@ -14,17 +14,29 @@ export const getBookDetail = async (bookId: number): Promise<BookDetailResponse>
 };
 
 /**
- * 도서 북마크 추가 (Swagger 확인 필요)
- * POST /api/v1/books/{bookId}/bookmark
+ * 도서 검색
+ * GET /api/v1/books/search
  */
-export const addBookmark = async (bookId: number): Promise<void> => {
-  await apiClient.put(`/books/${bookId}/bookmark`);
+
+export const searchBooks = async (params?: SearchBooksParams): Promise<BookSearchItem[]> => {
+  const response = await apiClient.get<ApiResponse<BookSearchItem[]>>(
+    '/books/search',
+    { params }
+  );
+  
+  return response.data.data;
 };
 
+
 /**
- * 도서 북마크 제거 (Swagger 확인 필요)
- * DELETE /api/v1/books/{bookId}/bookmark
+ * 도서 필터 검색
+ * GET /api/v1/books/filter
  */
-export const removeBookmark = async (bookId: number): Promise<void> => {
-  await apiClient.delete(`/books/${bookId}/bookmark`);
+export const filterBooks = async (params?: FilterBooksParams): Promise<FilterBooksResponse> => {
+  const response = await apiClient.get<ApiResponse<FilterBooksResponse>>(
+    '/books/filter',
+    { params }
+  );
+  
+  return response.data.data;
 };
