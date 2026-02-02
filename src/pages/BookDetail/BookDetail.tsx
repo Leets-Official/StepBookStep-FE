@@ -134,7 +134,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   };
 
   const handleTimerClick = () => {
-    navigate("/routine/timer");
+    navigate(`/routine/timer/${bookId}`);
   };
 
   const handleDirectClick = () => {
@@ -293,6 +293,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             />
             <div className="fixed bottom-0 left-0 right-0 z-101 flex justify-center">
               <BookReport
+                bookId={Number(bookId)}
                 onClose={handleReportClose}
                 onSave={handleSaveRecord}
                 isTimerMode={false}
