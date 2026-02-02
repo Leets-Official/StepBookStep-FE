@@ -1,5 +1,5 @@
 import apiClient from './clients';
-import type { ApiResponse, RoutineItem, RoutineListData, Goal, CreateReadingLogRequest, CreateReadingLogResponse, UpdateGoalRequest } from './types';
+import type { ApiResponse, RoutineItem, RoutineListData, Goal, CreateReadingLogRequest, CreateReadingLogResponse, UpdateGoalRequest, ReadingLog } from './types';
 
 /**
  * 루틴 목록 조회
@@ -42,6 +42,17 @@ export const createReadingLog = async (
   return response.data.data;
 };
 
+/**
+ * 독서 기록 조회
+ * GET /api/v1/books/{bookId}/reading-logs/{recordId}
+ */
+export const getReadingLogs = async (bookId: number): Promise<ReadingLog[]> => {
+  const response = await apiClient.get<ApiResponse<ReadingLog[]>>(
+    `/books/${bookId}/reading-logs`
+  );
+  
+  return response.data.data;
+};
 
 /**
  * 독서 목표 생성/수정/삭제
