@@ -180,3 +180,58 @@ export interface BookSearchItem {
 export interface SearchBooksParams {
   keyword?: string;  // 검색어 (제목, 저자, 출판사)
 }
+
+// ============================================
+// 통계 관련 타입 (Swagger)
+// ============================================
+
+export interface GetStatisticsParams {
+  year?: number;  // 조회 연도 (기본값: 현재 연도)
+}
+
+export interface BookSummary {
+  finishedBookCount: number;
+  totalWeightKg: number;
+}
+
+export interface MonthlyDataItem {
+  month: number;
+  bookCount: number;
+  currentMonth: boolean;
+}
+
+export interface MonthlyGraph {
+  year: number;
+  monthlyData: MonthlyDataItem[];
+}
+
+export interface CumulativeTime {
+  hours: number;
+  minutes: number;
+  totalMinutes: number;
+}
+
+export interface GoalAchievement {
+  achievementRate: number;
+  maxAchievementRate: number;
+}
+
+export interface CategoryItem {
+  rank: number;
+  categoryName: string;
+  bookCount: number;
+  percentage: number;
+}
+
+export interface CategoryPreference {
+  totalBookCount: number;
+  categories: CategoryItem[];
+}
+
+export interface StatisticsResponse {
+  bookSummary: BookSummary;
+  monthlyGraph: MonthlyGraph;
+  cumulativeTime: CumulativeTime;
+  goalAchievement: GoalAchievement;
+  categoryPreference: CategoryPreference;
+}
