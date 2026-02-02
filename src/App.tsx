@@ -37,7 +37,6 @@ function App() {
         <Route path="/" element={<Tutorial />} />
         <Route path="/splash" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<MyPage />} />
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
         <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // 파라미터 읽기용 추가
 import { Kakao } from "@/components/Kakao/Kakao";
 import { initKakao, loginWithKakao, exchangeCodeForToken } from "@/utils/KakaoAuth";
@@ -9,6 +9,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); 
   const [isLoading, setIsLoading] = useState(false);
+  const processingRef = useRef(false);
 
   // 1. 초기화 및 리다이렉트된 "코드" 처리
   useEffect(() => {
@@ -16,8 +17,12 @@ export default function LoginPage() {
 
     // 카카오에서 돌아왔을 때 URL에 포함된 'code' 파라미터 확인
     const authCode = searchParams.get("code");
-    if (authCode) {
+
+    if (authCode && !processingRef.current) {
+      processingRef.current = true; 
       handleBackendLogin(authCode);
+      
+      window.history.replaceState({}, '', window.location.pathname);
     }
   }, [searchParams]);
 
@@ -38,7 +43,7 @@ export default function LoginPage() {
       if (response.data.newUser) {
         navigate("/onboarding/set-profile");
       } else {
-        navigate("/");
+        navigate("/home");
       }
     } catch (error: any) {
       console.error('백엔드 로그인 실패:', error.message);
