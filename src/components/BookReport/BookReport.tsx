@@ -7,6 +7,7 @@ import { DatePicker } from "@/components/DatePicker/DatePicker";
 import TextField from "@/components/TextField/TextField";
 import type { ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 import type { BookReportProps } from "./BookReport.types";
+import { useCreateReadingLog } from "@/hooks/useReadings";
 import * as Styles from "./BookReport.styles";
 
 type StarState = "FULL" | "HALF" | "EMPTY";
@@ -31,6 +32,7 @@ const StarIcon = ({ state }: { state: StarState }) => {
 };
 
 export const BookReport: React.FC<BookReportProps> = ({
+  bookId,
   onClose,
   onSave,
   initialData,
@@ -44,40 +46,81 @@ export const BookReport: React.FC<BookReportProps> = ({
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
+  const createReadingLogMutation = useCreateReadingLog();
+
   const handleDateSelect = (selectedDate: Date) => {
     setDate(selectedDate);
     setIsDatePickerOpen(false);
   };
 
-  const handleSaveClick = () => {
-    if (onSave) {
-      let cleanDuration = duration;
-      let cleanPages = pages;
-      let cleanRating = rating;
+  // duration을 초 단위로 변환하는 함수 (HH:MM:SS 형식 → 초)
+  const convertDurationToSeconds = (timeString: string): number => {
+    if (!timeString) return 0;
+    
+    const parts = timeString.split(':');
+    if (parts.length === 3) {
+      const [hours, minutes, seconds] = parts.map(Number);
+      return hours * 3600 + minutes * 60 + seconds;
+    }
+    return 0;
+  };
 
-      // 읽기 전이면 기록 데이터 모두 초기화
-      if (status === "BEFORE") {
-        cleanDuration = "";
-        cleanPages = "";
-        cleanRating = 0;
+  const handleSaveClick = async () => {
+    if (!bookId) {
+      console.error("bookId가 없습니다.");
+      return;
+    }
+
+    // ReadingStatus → API bookStatus 매핑
+    const statusMap: Record<ReadingStatus, "READING" | "FINISHED" | "STOPPED"> = {
+      BEFORE: "READING", // 읽고 싶은 → 읽는 중으로 처리
+      READING: "READING",
+      AFTER: "FINISHED",
+      STOP: "STOPPED",
+    };
+
+    const bookStatus = statusMap[status];
+
+    try {
+      const requestData: any = {
+        bookStatus,
+        recordDate: date ? format(date, "yyyy-MM-dd") : undefined,
+      };
+
+      // READING 상태일 때
+      if (bookStatus === "READING") {
+        if (pages) {
+          requestData.readQuantity = parseInt(pages, 10);
+        }
+        if (isTimerMode && duration) {
+          requestData.durationSeconds = convertDurationToSeconds(duration);
+        }
       }
 
-      if (status === "AFTER" || status === "STOP") {
-        cleanDuration = "";
-        cleanPages = ""; // 만약 완독 시에도 쪽수를 저장해야 한다면 이 줄은 삭제
+      // FINISHED/STOPPED 상태일 때
+      if (bookStatus === "FINISHED" || bookStatus === "STOPPED") {
+        requestData.rating = rating;
       }
 
-      if (status === "READING") {
-        cleanRating = 0;
-      }
-
-      onSave({
-        status,
-        date,
-        pages: cleanPages,
-        duration: cleanDuration,
-        rating: cleanRating,
+      const result = await createReadingLogMutation.mutateAsync({
+        bookId,
+        data: requestData,
       });
+
+      console.log("독서 기록 생성 성공:", result);
+
+      // 성공 후 onSave 콜백 호출
+      if (onSave) {
+        onSave({
+          status,
+          date,
+          pages,
+          duration,
+          rating,
+        });
+      }
+    } catch (error) {
+      console.error("독서 기록 생성 실패:", error);
     }
   };
 
@@ -138,6 +181,7 @@ export const BookReport: React.FC<BookReportProps> = ({
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
                   icon={false}
+                  disabled
                 />
               )}
             </>
@@ -175,8 +219,13 @@ export const BookReport: React.FC<BookReportProps> = ({
       </div>
 
       <div className={Styles.saveButtonContainer}>
-        <button type="button" onClick={handleSaveClick} className={Styles.saveButton}>
-          저장하기
+        <button 
+          type="button" 
+          onClick={handleSaveClick} 
+          className={Styles.saveButton}
+          disabled={createReadingLogMutation.isPending}
+        >
+          {createReadingLogMutation.isPending ? "저장 중..." : "저장하기"}
         </button>
       </div>
 
