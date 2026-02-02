@@ -116,3 +116,31 @@ export interface RoutineItem {
 export interface RoutineListData {
   routines: RoutineItem[];
 }
+
+// ============================================
+// 독서 기록 생성 관련 타입
+// ============================================
+
+export interface CreateReadingLogRequest {
+  bookStatus: "READING" | "FINISHED" | "STOPPED";
+  recordDate?: string;      // 생략 시 오늘 날짜
+  readQuantity?: number;    // READING 상태일 때 필수
+  durationSeconds?: number; // READING & TIME 목표일 때 필수
+  rating?: number;          // FINISHED/STOPPED 상태일 때 필수 (1-5)
+}
+
+export interface CreateReadingLogResponse {
+  recordId: number;
+}
+
+
+// ============================================
+// 독서 목표 생성/수정/삭제 관련 타입
+// ============================================
+
+export interface UpdateGoalRequest {
+  period?: GoalPeriod;      // 생성/수정 시 필요
+  metric?: GoalMetric;      // 생성/수정 시 필요
+  targetAmount?: number;    // 생성/수정 시 필요
+  delete?: boolean;         // 삭제 시 true
+}
