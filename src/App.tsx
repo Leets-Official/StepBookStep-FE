@@ -1,4 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BookDetailPage from "@/pages/BookDetail/BookDetailPage";
@@ -30,12 +32,31 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const [loading, setLoading] = useState(() => {
+    const hasSeenSplash = sessionStorage.getItem("hasSeenSplash");
+    return !hasSeenSplash; // 기록이 없으면 true(보여줌), 있으면 false(안 보여줌)
+  });
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+        sessionStorage.setItem("hasSeenSplash", "true");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
+  if (loading) {
+    return <Splash />;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Tutorial />} />
-        <Route path="/splash" element={<Splash />} />
+        <Route path="/" element={<RootRedirect />} />
+        <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
@@ -54,6 +75,24 @@ function App() {
     </BrowserRouter>
     </QueryClientProvider>
   );
+}
+
+function RootRedirect() {
+  const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (!hasSeenTutorial) {
+    // 튜토리얼을 한 번도 안 본 유저
+    return <Navigate to="/tutorial" replace />;
+  }
+  
+  if (!accessToken) {
+    // 튜토리얼은 봤지만 로그인이 안 된 유저
+    return <Navigate to="/login" replace />;
+  }
+
+  // 둘 다 통과하면 홈으로!
+  return <Navigate to="/home" replace />;
 }
 
 export default App;
