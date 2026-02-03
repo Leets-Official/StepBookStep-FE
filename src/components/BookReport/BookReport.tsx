@@ -9,6 +9,7 @@ import type { ReadingStatus } from "@/components/StateCarousel/StateCarousel.typ
 import type { BookReportProps } from "./BookReport.types";
 import { useCreateReadingLog } from "@/hooks/useReadings";
 import * as Styles from "./BookReport.styles";
+import type { CreateReadingLogRequest } from "@/api/types";
 
 type StarState = "FULL" | "HALF" | "EMPTY";
 
@@ -82,7 +83,7 @@ export const BookReport: React.FC<BookReportProps> = ({
     const bookStatus = statusMap[status];
 
     try {
-      const requestData: any = {
+      const requestData: CreateReadingLogRequest = {
         bookStatus,
         recordDate: date ? format(date, "yyyy-MM-dd") : undefined,
       };
