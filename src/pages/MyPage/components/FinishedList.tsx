@@ -13,7 +13,7 @@ export const FinishedList = ({ data, onBookClick }: Props) => (
       <BookList
         key={book.userBookId}
         readingState="after"
-        title={book.title}
+        title={book.title || "제목 없음"}
         author={book.author}
         publisher={book.publisher}
         publicYear={book.pubDate.split('-')[0]}

@@ -13,7 +13,7 @@ export const ReadingList = ({ data, onBookClick }: Props) => (
       <BookList
         key={book.userBookId}
         readingState="reading"
-        title={book.title}
+        title={book.title || ""}
         author={book.author}
         publisher={book.publisher}
         publicYear={book.pubDate.split('-')[0]} // 연도만 추출

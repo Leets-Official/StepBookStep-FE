@@ -218,7 +218,7 @@ export default function Statistics() {
                         innerRadius={60} 
                         outerRadius={90}
                       >
-                        {pieData.map((entry, index) => (
+                        {pieData.map((_entry, index) => (
                           <Cell 
                             key={index} 
                             fill={PIE_COLORS[index % PIE_COLORS.length]} 

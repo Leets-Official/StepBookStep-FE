@@ -15,7 +15,7 @@ export const WishList = ({ data, onBookClick }: Props) => {
         <BookList
           key={book.userBookId}
           readingState="before" //
-          title={book.title}
+          title={book.title || ""}
           author={book.author}
           publisher={book.publisher}
           publicYear={book.pubDate.split('-')[0]} // 연도 추출
