@@ -133,6 +133,19 @@ export interface CreateReadingLogResponse {
   recordId: number;
 }
 
+// ============================================
+// 독서 기록 조회 타입
+// ============================================
+
+export interface ReadingLog {
+  recordId: number;
+  recordDate: string;
+  readQuantity?: number;
+  durationSeconds?: number;
+  rating?: number;
+  bookStatus: "READING" | "FINISHED" | "STOPPED";
+}
+
 
 // ============================================
 // 독서 목표 생성/수정/삭제 관련 타입

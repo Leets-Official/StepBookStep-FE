@@ -1,6 +1,7 @@
 import type { ReadingStatus } from "@/components/StateCarousel/StateCarousel.types";
 
 export interface BookReportProps {
+  bookId: number;
   onClose?: () => void;
   onSave?: (data: BookReportData) => void;
   initialData?: Partial<BookReportData>;
