@@ -42,7 +42,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const { bookId } = useParams(); // URL에서 ID 가져오기
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   const { data: routines } = useRoutines();
-  const { data: readingLogs } = useReadingLogs(Number(bookId), !isBefore);
 
   const navigate = useNavigate();
   const location = useLocation();
