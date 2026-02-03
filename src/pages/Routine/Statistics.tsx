@@ -18,11 +18,11 @@ const PIE_COLORS = [
 
 // 무게 기준 이미지 (300g, 400g, 700g, 1.3kg, 1.5kg)
 const getWeightImage = (kg: number) => {
-  if (kg < 0.4) return { name: "컵라면", emoji: "🍜" };
-  if (kg < 0.7) return { name: "햄버거", emoji: "🍔" };
-  if (kg < 1.3) return { name: "소형 노트북", emoji: "💻" };
-  if (kg < 1.5) return { name: "전공책", emoji: "📚" };
-  return { name: "아령", emoji: "🏋️" };
+  if (kg < 0.4) return { name: "컵라면", src: "/images/300g.png" };
+  if (kg < 0.7) return { name: "햄버거", src: "/images/400g.png" };
+  if (kg < 1.3) return { name: "소형 노트북", src: "/images/700g.png" };
+  if (kg < 1.5) return { name: "전공책", src: "/images/1.3kg.png" };
+  return { name: "아령", src: "/images/1.5kg.png" };
 };
 
 export default function Statistics() {
@@ -103,9 +103,12 @@ export default function Statistics() {
             <h2 className={S.sectionTitle}>얼마나 읽었나요?</h2>
             <div className={S.weightCard}>
               <div className={S.weightGraphicBox}>
-                <div>
-                  <div className="text-4xl mb-1">{weightImage.emoji}</div>
-                  <div className="text-xs text-gray-400">{weightImage.name}</div>
+                <div className="flex flex-col items-center">
+                  <img 
+                    src={weightImage.src} 
+                    alt={weightImage.name} 
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
               </div>
               <div className={S.weightInfo}>
