@@ -30,6 +30,13 @@ export default function TimerPage() {
     return `${h}:${m}:${s}`;
   };
 
+  // 1. 한국어 포맷 함수 
+  const formatKoreanTime = (totalSeconds: number) => {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m.toString().padStart(2, "0")}분 ${s.toString().padStart(2, "0")}초`;
+};
+
   const bookInfo = bookData?.bookInfo || {
     title: "로딩 중...",
     author: "로딩 중..."
@@ -169,7 +176,7 @@ export default function TimerPage() {
                   onSave={handleReportSave}
                   isTimerMode={true}
                   initialData={{
-                    duration: formatTime(seconds)
+                    duration: formatKoreanTime(seconds)
                   }}
                 />
               </div>
