@@ -41,7 +41,6 @@ interface BookDetailProps {
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams(); // URL에서 ID 가져오기
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
-  
   const { data: routines } = useRoutines();
 
   const navigate = useNavigate();
@@ -134,7 +133,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   };
 
   const handleTimerClick = () => {
-    navigate("/routine/timer");
+    navigate(`/routine/timer/${bookId}`);
   };
 
   const handleDirectClick = () => {
@@ -258,8 +257,11 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             </section>
           )}
 
-          {!isBefore && resolvedActiveTab === "record" && readingData && (
-            <ReadingStateDetail goal={currentGoal || (readingData as any)} totalPage={bookInfo.totalPage}/>
+          {!isBefore && resolvedActiveTab === "record" && currentGoal && (
+            <ReadingStateDetail 
+              goal={currentGoal} 
+              totalPage={bookInfo.totalPage}
+            />
           )}
 
           {!isBefore && resolvedActiveTab === "info" && (
@@ -293,6 +295,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             />
             <div className="fixed bottom-0 left-0 right-0 z-101 flex justify-center">
               <BookReport
+                bookId={Number(bookId)}
                 onClose={handleReportClose}
                 onSave={handleSaveRecord}
                 isTimerMode={false}

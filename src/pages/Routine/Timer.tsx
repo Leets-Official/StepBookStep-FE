@@ -6,10 +6,15 @@ import Button from "@/components/Button/Button";
 import { PlayIcon, PauseIcon } from '@/assets/icons';
 import { BookReport } from "@/components/BookReport/BookReport";
 import type { BookReportData } from "@/components/BookReport/BookReport.types";
+import { useParams } from "react-router-dom";
+import { useBookDetail } from "@/hooks/useReadings";
 
 export type TimerStatus = "ready" | "running" | "paused" | "finished";
 
 export default function TimerPage() {
+  const { bookId } = useParams();
+  const { data: bookData } = useBookDetail(Number(bookId));
+
   const [status, setStatus] = useState<TimerStatus>("ready");
   const [seconds, setSeconds] = useState(0);
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -25,6 +30,11 @@ export default function TimerPage() {
     return `${h}:${m}:${s}`;
   };
 
+  const bookInfo = bookData?.bookInfo || {
+    title: "로딩 중...",
+    author: "로딩 중..."
+  };
+
   const handleSave = () => {
     setIsReportOpen(true);
   };
@@ -36,7 +46,7 @@ export default function TimerPage() {
   const handleReportSave = (data: BookReportData) => {
     console.log("저장된 독서 기록:", data);
     setIsReportOpen(false);
-    navigate("/bookdetail", { 
+    navigate("/routine/booklist", { 
       state: { 
         showToast: true, 
         toastMessage: "독서 기록이 저장되었습니다!" 
@@ -50,11 +60,7 @@ export default function TimerPage() {
       timerRef.current = null;
     }
   };
-  const bookData = {
-    title: "제목은두줄넘어가면안보이게설정해야해...제목은두줄넘어가면안보이게설정해야해..",
-    author: "지은이, 옮긴이"
-  };
-
+  
   useEffect(() => {
     if (status === "running") {
       timerRef.current = window.setInterval(() => setSeconds(prev => prev + 1), 1000);
@@ -134,8 +140,8 @@ export default function TimerPage() {
             </div>
   
             <div className={S.bookInfoContainer}>
-              <p className={S.bookTitle}>{bookData.title}</p>
-              <p className={S.bookAuthor}>{bookData.author}</p>
+              <p className={S.bookTitle}>{bookInfo.title}</p>
+              <p className={S.bookAuthor}>{bookInfo.author}</p>
             </div>
           </main>
   
@@ -158,6 +164,7 @@ export default function TimerPage() {
               />
               <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] animate-[slideUp_0.3s_ease-out]">
                 <BookReport
+                  bookId={Number(bookId)}
                   onClose={handleReportClose}
                   onSave={handleReportSave}
                   isTimerMode={true}

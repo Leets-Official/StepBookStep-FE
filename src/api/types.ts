@@ -116,3 +116,122 @@ export interface RoutineItem {
 export interface RoutineListData {
   routines: RoutineItem[];
 }
+
+// ============================================
+// 독서 기록 생성 관련 타입
+// ============================================
+
+export interface CreateReadingLogRequest {
+  bookStatus: "READING" | "FINISHED" | "STOPPED";
+  recordDate?: string;      // 생략 시 오늘 날짜
+  readQuantity?: number;    // READING 상태일 때 필수
+  durationSeconds?: number; // READING & TIME 목표일 때 필수
+  rating?: number;          // FINISHED/STOPPED 상태일 때 필수 (1-5)
+}
+
+export interface CreateReadingLogResponse {
+  recordId: number;
+}
+
+
+// ============================================
+// 독서 목표 생성/수정/삭제 관련 타입
+// ============================================
+
+export interface UpdateGoalRequest {
+  period?: GoalPeriod;      // 생성/수정 시 필요
+  metric?: GoalMetric;      // 생성/수정 시 필요
+  targetAmount?: number;    // 생성/수정 시 필요
+  delete?: boolean;         // 삭제 시 true
+}
+
+// ============================================
+// 도서 필터 검색 타입
+// ============================================
+export interface FilterBooksParams {
+  level?: number;           // 난이도 (1, 2, 3)
+  pageRange?: string[];     // 분량 (~200, 201~250, 251~350, 351~500, 501~650, 651~)
+  origin?: string;          // 국가별 분류
+  genre?: string;           // 장르별 분류
+  keyword?: string;         // 검색어 (제목, 저자, 출판사)
+  cursor?: number;          // 마지막으로 조회한 bookId
+}
+
+export interface FilterBooksResponse {
+  books: BookSearchItem[];
+  hasNext: boolean;
+}
+
+// ============================================
+// 도서 검색 타입
+// ============================================
+
+export interface BookSearchItem {
+  bookId: number;
+  coverImage: string;
+  title: string;
+  author: string;
+  publisher: string;
+  pubDate: string;
+  totalPage: number;
+  tags: string[];
+}
+
+export interface SearchBooksParams {
+  keyword?: string;  // 검색어 (제목, 저자, 출판사)
+}
+
+// ============================================
+// 통계 관련 타입 (Swagger)
+// ============================================
+
+export interface GetStatisticsParams {
+  year?: number;  // 조회 연도 (기본값: 현재 연도)
+}
+
+export interface BookSummary {
+  finishedBookCount: number;
+  totalWeightKg: number;
+}
+
+export interface MonthlyDataItem {
+  month: number;
+  bookCount: number;
+  currentMonth: boolean;
+}
+
+export interface MonthlyGraph {
+  year: number;
+  monthlyData: MonthlyDataItem[];
+}
+
+export interface CumulativeTime {
+  hours: number;
+  minutes: number;
+  totalMinutes: number;
+}
+
+export interface GoalAchievement {
+  achievementRate: number;
+  maxAchievementRate: number;
+}
+
+export interface CategoryItem {
+  rank: number;
+  categoryName: string;
+  bookCount: number;
+  percentage: number;
+}
+
+export interface CategoryPreference {
+  totalBookCount: number;
+  categories: CategoryItem[];
+}
+
+export interface StatisticsResponse {
+  bookSummary: BookSummary;
+  monthlyGraph: MonthlyGraph;
+  cumulativeTime: CumulativeTime;
+  goalAchievement: GoalAchievement;
+  categoryPreference: CategoryPreference;
+}

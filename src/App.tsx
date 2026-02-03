@@ -37,7 +37,6 @@ function App() {
         <Route path="/" element={<Tutorial />} />
         <Route path="/splash" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<MyPage />} />
         <Route path="/onboarding/set-profile" element={<SetProfile />} />
         <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
         <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
@@ -48,12 +47,9 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/routine/timer" element={<TimerPage />} />
-        <Route path="/routine/timer" element={<TimerPage />} />
+        <Route path="/routine/timer/:bookId" element={<TimerPage />} />
         <Route path="/routine/booklist" element={<BookList />} />
         <Route path="/tutorial" element={<Tutorial />} />
-        <Route path="/routine/timer" element={<TimerPage />} />      
-        <Route path="/routine/booklist" element={<BookList />} />     
       </Routes>
     </BrowserRouter>
     </QueryClientProvider>

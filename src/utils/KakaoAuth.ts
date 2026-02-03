@@ -1,26 +1,26 @@
 // 카카오 SDK 타입 선언
+interface KakaoAuth {
+  authorize: (options: { redirectUri: string }) => void;
+  logout: (callback: () => void) => void;
+}
+
+interface Kakao {
+  init: (key: string) => void;
+  isInitialized: () => boolean;
+  Auth: KakaoAuth;
+}
+
 declare global {
   interface Window {
-    Kakao: any;
+    Kakao: Kakao | undefined;
   }
 }
 
 // 카카오 SDK 초기화
 export const initKakao = () => {
-  const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
-  
-  if (!kakaoKey) {
-    console.error('Kakao JavaScript key is not set in environment variables');
-    return;
-  }
-  
-  if (window.Kakao) {
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(kakaoKey);
-      console.log('카카오 SDK 초기화 완료');
-    }
-  } else {
-    console.error('Kakao SDK is not loaded');
+  if (window.Kakao && !window.Kakao.isInitialized()) {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
+    console.log('카카오 SDK 초기화 완료');
   }
 };
 
@@ -46,7 +46,7 @@ export const logoutKakao = () => {
  * 인가 코드를 카카오 액세스 토큰으로 교환하는 함수
  */
 export const exchangeCodeForToken = async (code: string) => {
-  const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY; // [주의] REST API 키가 필요합니다!
+  const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY; 
   const REDIRECT_URI = 'http://localhost:5173/login';
 
   const params = new URLSearchParams();
