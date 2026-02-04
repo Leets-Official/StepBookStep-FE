@@ -44,9 +44,11 @@ export function BookList({
         <div className={S.extra}>
           {readingState === "before" && tags.length > 0 && (
             <div className={S.tagWrap}>
-              {tags.map((tag) => (
-                <Badge key={tag} label={tag} className={S.tagBadge} />
-              ))}
+              {tags
+                .filter((t) => !!t && t.trim().length > 0)
+                .map((tag) => (
+                  <Badge key={tag} label={tag} className={S.tagBadge} />
+                ))}
             </div>
           )}
 
