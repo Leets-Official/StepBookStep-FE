@@ -43,6 +43,7 @@ export interface BookDetailResponse {
 // 도서 목록 아이템 타입 (검색/필터용)
 // GET /api/v1/books/search & /api/v1/books/filter
 // ============================================
+
 export interface BookSearchItem {
   bookId: number;
   coverImage: string;

@@ -57,6 +57,12 @@ export const BookReport: React.FC<BookReportProps> = ({
   // duration을 초 단위로 변환하는 함수 (HH:MM:SS 형식 → 초)
   const convertDurationToSeconds = (timeString: string): number => {
     if (!timeString) return 0;
+
+    const match = timeString.match(/(\d+)분\s*(\d+)초/);
+    if (match) {
+      const [_, mins, secs] = match;
+      return parseInt(mins, 10) * 60 + parseInt(secs, 10);
+    }
     
     const parts = timeString.split(':');
     if (parts.length === 3) {
@@ -88,14 +94,14 @@ export const BookReport: React.FC<BookReportProps> = ({
         recordDate: date ? format(date, "yyyy-MM-dd") : undefined,
       };
 
+      // 타이머 모드라면 시간 포함 로직
+      if (isTimerMode && duration) {
+        requestData.durationSeconds = convertDurationToSeconds(duration);
+      }
+
       // READING 상태일 때
-      if (bookStatus === "READING") {
-        if (pages) {
-          requestData.readQuantity = parseInt(pages, 10);
-        }
-        if (isTimerMode && duration) {
-          requestData.durationSeconds = convertDurationToSeconds(duration);
-        }
+      if (bookStatus === "READING" && pages) {
+        requestData.readQuantity = parseInt(pages, 10);
       }
 
       // FINISHED/STOPPED 상태일 때

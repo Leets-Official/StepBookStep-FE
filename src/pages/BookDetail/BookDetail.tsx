@@ -23,8 +23,6 @@ import type { ReadStatus } from "../MyPage/MyPage.types";
 
 import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";
-import { MOCK_READING_DATA, MOCK_COMPLETED_DATA } from "@/mocks/readingState.mock";
-import type { ReadingDetailData } from "@/mocks/readingState.mock";
 import type { TabId } from "@/components/BottomBar/BottomBar.types";
 
 import * as S from "./BookDetail.styles";
@@ -72,13 +70,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   }, [location, navigate]);
 
   const resolvedActiveTab: ContentTab = isBefore ? "info" : activeTab;
-
-  const readingDataMap: Record<Exclude<ReadingStatus, "before">, ReadingDetailData> = {
-    reading: MOCK_READING_DATA,
-    completed: MOCK_COMPLETED_DATA,
-  };
-
-  const readingData = isBefore ? null : readingDataMap[readingStatus];
 
   const bottomBarConfig: Record<EntrySource, { visible: boolean; activeTab: TabId }> = {
     home: { visible: true, activeTab: "home" },
@@ -187,7 +178,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           <div className={S.coverWrapper}>
             <div className={S.coverImage} 
                 style={{ 
-                  backgroundImage: `url(${bookInfo.coverImage})`, 
+                  backgroundImage: `url(${bookData?.bookInfo?.coverImage})`, 
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
               }}
@@ -203,13 +194,13 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             <h1 className={S.title}>{bookInfo.title}</h1>
             <p className={S.author}>{bookInfo.author}</p>
             <p className={S.meta}>
-              {bookInfo.publisher} | {bookInfo.pubDate} | {bookInfo.totalPage}
+              {bookInfo.publisher} | {bookData?.bookInfo?.pubDate} | {bookInfo.totalPage}
               쪽
             </p>
             <p className={S.priceRow}>
-              <span className={S.priceText}>{bookInfo.priceStandard?.toLocaleString()}원</span>
+              <span className={S.priceText}>{bookData?.bookInfo?.priceStandard?.toLocaleString()}원</span>
               <a
-                href={bookInfo.link}
+                href={bookData?.bookInfo?.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={S.storeLink}
