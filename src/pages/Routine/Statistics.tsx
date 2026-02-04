@@ -19,9 +19,9 @@ const PIE_COLORS = [
 // 무게 기준 이미지 (300g, 400g, 700g, 1.3kg, 1.5kg)
 const getWeightImage = (kg: number) => {
   if (kg < 0.4) return { name: "컵라면", src: "/images/300g.png" };
-  if (kg < 0.7) return { name: "햄버거", src: "/images/400g.png" };
-  if (kg < 1.3) return { name: "소형 노트북", src: "/images/700g.png" };
-  if (kg < 1.5) return { name: "전공책", src: "/images/1.3kg.png" };
+  if (0.4 <= kg && kg < 0.7) return { name: "햄버거", src: "/images/400g.png" };
+  if (0.7 <= kg &&kg < 1.3) return { name: "소형 노트북", src: "/images/700g.png" };
+  if (1.3 <= kg &&kg < 1.5) return { name: "전공책", src: "/images/1.3kg.png" };
   return { name: "아령", src: "/images/1.5kg.png" };
 };
 
