@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"; // 파라미터
 import { Kakao } from "@/components/Kakao/Kakao";
 import { initKakao, loginWithKakao, exchangeCodeForToken } from "@/utils/KakaoAuth";
 import { kakaoLogin, saveTokens } from "@/services/authService";
+import { useUserStore } from "@/stores/useUserStore";
 import * as S from "./Login.styles";
 
 export default function LoginPage() {
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [searchParams] = useSearchParams(); 
   const [isLoading, setIsLoading] = useState(false);
   const processingRef = useRef(false);
+  const { setUserInfo } = useUserStore();
 
   // 1. 초기화 및 리다이렉트된 "코드" 처리
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function LoginPage() {
       const response = await kakaoLogin(socialToken);
       
       saveTokens(response.data.accessToken, response.data.refreshToken);
+      setUserInfo(response.data.nickname, 1);
       
       if (response.data.newUser) {
         navigate("/onboarding/set-profile");
