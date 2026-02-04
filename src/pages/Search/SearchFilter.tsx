@@ -12,14 +12,22 @@ interface SearchFilterProps {
 }
 
 const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) => {
-  const volumeOptions = ["~200쪽", "200~250쪽", "251~350쪽", "351~500쪽", "501~650쪽", "651~쪽"];
-  const volumeLabels = ["~200", "201~250", "251~350", "351~500", "501~650", "651~"];
+  const volumeOptions = ["~200", "250", "350", "500", "650", "651~"];
+
+  // 슬라이더 아래 표시될 라벨
+  const volumeLabels = ["~200", "~250", "~350", "~500", "~650", "651~"];
 
   const [level, setLevel] = useState<number | null>(currentFilters.level);
+
   const initialVolume = currentFilters.volume || "";
   const initialIndex = volumeOptions.indexOf(initialVolume);
 
+  // 기존 설정값이 있으면 그 위치, 없으면 0(맨앞에)
   const [volumeIndex, setVolumeIndex] = useState<number>(initialIndex !== -1 ? initialIndex : 0);
+
+  // 사용자가 슬라이더를 건드렸는지 확인 - 기존 필터가 없었다면 false
+  const [isVolumeTouched, setIsVolumeTouched] = useState(initialIndex !== -1);
+
   const [country, setCountry] = useState<string | null>(currentFilters.country);
   const [genre, setGenre] = useState<string | null>(currentFilters.genre);
 
@@ -32,13 +40,21 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
   const genres = ["로맨스", "역사소설", "무협소설", "판타지", "추리/미스테리", "희곡"];
 
   const handleApplyClick = () => {
+    // 슬라이더를 조작했거나 기존 값이 있을 때만 값을 보냄, 아니면 null
+    const finalVolume = isVolumeTouched ? volumeOptions[volumeIndex] : null;
+
     onApply({
       keyword: currentFilters.keyword,
       level,
-      volume: volumeOptions[volumeIndex],
+      volume: finalVolume,
       country,
       genre,
     });
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVolumeIndex(parseInt(e.target.value));
+    setIsVolumeTouched(true);
   };
 
   const renderChip = (
@@ -82,7 +98,6 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
       </header>
 
       <div className={S.content}>
-        {/* 난이도 섹션 */}
         <section className={S.section}>
           <div className={`${S.sectionHeader} relative`}>
             <h2 className={S.sectionTitle}>난이도</h2>
@@ -97,14 +112,20 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
                   <span className={S.tooltipLabel}>Lv.1</span>
                   <span className={S.tooltipDesc}>가볍게 읽기 좋은 난이도예요.</span>
                 </div>
-                {/* ... 중략 (Lv.2, Lv.3 설명) */}
+                <div className={S.tooltipItem}>
+                  <span className={S.tooltipLabel}>Lv.2</span>
+                  <span className={S.tooltipDesc}>보통 수준의 도서입니다.</span>
+                </div>
+                <div className={S.tooltipItem}>
+                  <span className={S.tooltipLabel}>Lv.3</span>
+                  <span className={S.tooltipDesc}>도전 레벨의 도서입니다.</span>
+                </div>
               </div>
             )}
           </div>
           <div className={S.chipWrapper}>{levels.map((lv) => renderChip(lv, level, setLevel))}</div>
         </section>
 
-        {/* 분량 섹션 수정된 부분 */}
         <section className={S.section}>
           <div className={S.sectionHeader}>
             <h2 className={S.sectionTitle}>분량 (쪽수)</h2>
@@ -115,7 +136,10 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
               <div
                 className={S.volumeFilledTrack}
                 style={{
-                  width: `${(volumeIndex / (volumeOptions.length - 1)) * 100}%`,
+                  width: isVolumeTouched
+                    ? `${(volumeIndex / (volumeOptions.length - 1)) * 100}%`
+                    : "0%",
+                  backgroundColor: isVolumeTouched ? "#5C4FE5" : "transparent",
                 }}
               />
               <input
@@ -124,7 +148,7 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
                 max={volumeOptions.length - 1}
                 step="1"
                 value={volumeIndex}
-                onChange={(e) => setVolumeIndex(parseInt(e.target.value))}
+                onChange={handleVolumeChange}
                 className={S.volumeSlider}
               />
             </div>
@@ -132,7 +156,9 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
               {volumeLabels.map((label, idx) => (
                 <span
                   key={label}
-                  className={`${S.volumeLabel} ${volumeIndex === idx ? S.activeVolumeLabel : ""}`}
+                  className={`${S.volumeLabel} ${
+                    isVolumeTouched && volumeIndex === idx ? S.activeVolumeLabel : ""
+                  }`}
                 >
                   {label}
                 </span>
@@ -140,8 +166,6 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
             </div>
           </div>
         </section>
-
-        {/* 국가별 분류 */}
         <section className={S.section}>
           <div className={S.accordionHeader} onClick={() => setIsCountryOpen(!isCountryOpen)}>
             <h2 className={S.sectionTitle}>국가별 분류</h2>
@@ -158,7 +182,6 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
           )}
         </section>
 
-        {/* 장르별 분류 */}
         <section className={S.section}>
           <div className={S.accordionHeader} onClick={() => setIsGenreOpen(!isGenreOpen)}>
             <h2 className={S.sectionTitle}>장르별 분류</h2>

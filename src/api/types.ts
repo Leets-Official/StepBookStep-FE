@@ -67,12 +67,12 @@ export interface SearchBooksParams {
 // GET /api/v1/books/filter
 // ============================================
 export interface FilterBooksParams {
-  level?: number; // 난이도 (1, 2, 3)
-  pageRange?: string[]; // 분량
-  origin?: string; // 국가별 분류
-  genre?: string; // 장르별 분류
-  keyword?: string; // 검색어 (필터 내 검색)
-  cursor?: number; // 페이지네이션 커서 (마지막 bookId)
+  level?: number;
+  pageRange?: string;
+  origin?: string;
+  genre?: string;
+  keyword?: string;
+  cursor?: number;
 }
 
 export interface FilterBooksResponse {
