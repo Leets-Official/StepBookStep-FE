@@ -18,7 +18,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"home" | "search" | "routine" | "mypage">("home");
 
   const [selectedRecommend, setSelectedRecommend] = useState<RecommendFilter>("short");
-  const isLoading = true;
+  const isLoading = false;
   const nickname = "하늘";
   const category = "예술/대중문화";
 
