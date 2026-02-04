@@ -17,9 +17,9 @@ export const modal = `
 
 export const title = "text-xl font-bold text-black mb-2";
 
-export const description = "text-md text-gray-600 mb-6 leading-5 font-regular";
+export const description = "text-md text-gray-600leading-5 font-regular";
 
-export const actions = "flex gap-2";
+export const actions = "mt-4 flex gap-2";
 
 export const cancelButton = `
   flex-1
