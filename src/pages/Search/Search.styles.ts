@@ -38,7 +38,7 @@ export const contentArea = `
   overflow-y-auto 
   px-[20px] 
   pb-[130px] 
-  scrollbar-hide
+  no-scrollbar
 `;
 
 export const headerWrapper = `
@@ -68,7 +68,7 @@ export const chipList = `
   flex 
   gap-2 
   overflow-x-auto 
-  scrollbar-hide 
+  no-scrollbar 
   items-center
   flex-1
 `;

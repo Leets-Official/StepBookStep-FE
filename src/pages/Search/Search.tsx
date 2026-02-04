@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Search.styles";
 import AppBar from "@/components/AppBar/AppBar";
@@ -6,17 +6,23 @@ import BottomBar from "@/components/BottomBar/BottomBar";
 import { BookList } from "@/components/BookList/BookList";
 import TextField from "@/components/TextField/TextField";
 import { Chip } from "@/components/Chip/Chip";
-import { FilterIcon, TwoSpeechBubblesGif } from "@/assets/icons";
-import { dummySearchResults } from "./dummyData";
-import SearchFilter from "./SearchFilter";
-import type { SearchFilterState } from "./Search.types";
 import EmptyView from "@/components/EmptyView/EmptyView";
+import SearchFilter from "./SearchFilter";
+import { SkeletonBookList } from "@/components/skeleton";
+import { FilterIcon, TwoSpeechBubblesGif } from "@/assets/icons";
+import { mapBookInfoToMock } from "@/api/types";
+import { useRecommendedBooks, useSearchBooksInfinite, useSearchBooks } from "@/hooks/useBooks";
+import { useUserStore } from "@/stores/useUserStore";
+
+import type { SearchFilterState } from "./Search.types";
+import type { FilterBooksParams } from "@/api/types";
 
 const Search = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { nickname, level: userLevel } = useUserStore();
   const [filters, setFilters] = useState<SearchFilterState>({
     keyword: "",
     level: null,
@@ -24,58 +30,106 @@ const Search = () => {
     country: null,
     genre: null,
   });
+  // 필터가 하나라도 적용되었는지 확인
+  const hasActiveFilters = useMemo(() => {
+    return !!(
+      filters.level ||
+      filters.volume ||
+      filters.country ||
+      (filters.genre && filters.genre !== "장르")
+    );
+  }, [filters]);
+
+  const isSimpleSearch = !!searchText && !hasActiveFilters;
+  const apiParams: FilterBooksParams = useMemo(() => {
+    return {
+      keyword: searchText || undefined,
+      level: filters.level || undefined,
+      pageRange: filters.volume || undefined,
+
+      origin: filters.country || undefined,
+      genre: filters.genre !== "장르" ? filters.genre || undefined : undefined,
+    };
+  }, [searchText, filters]);
+
+  const { data: recommendedData, isLoading: isRecLoading } = useRecommendedBooks();
+
+  const { data: simpleSearchData, isLoading: isSimpleLoading } = useSearchBooks(
+    searchText,
+    isSimpleSearch,
+  );
+  const {
+    data: filterSearchData,
+    fetchNextPage: fetchFilterNext,
+    hasNextPage: hasFilterNext,
+    isFetchingNextPage: isFilterFetching,
+    isLoading: isFilterLoading,
+  } = useSearchBooksInfinite(apiParams);
+  const displayBooks = useMemo(() => {
+    if (!isSearchMode) {
+      return recommendedData || [];
+    }
+    if (isSimpleSearch) {
+      return simpleSearchData || [];
+    }
+    return filterSearchData?.pages.flatMap((page) => page.books) || [];
+  }, [isSearchMode, isSimpleSearch, recommendedData, simpleSearchData, filterSearchData]);
+
+  const isLoading = !isSearchMode
+    ? isRecLoading
+    : isSimpleSearch
+      ? isSimpleLoading
+      : isFilterLoading;
+  const isEmptyResult = isSearchMode && !isLoading && displayBooks.length === 0;
+  const canFetchNext = isSearchMode && !isSimpleSearch && hasFilterNext;
+  const isFetchingNext = isSearchMode && !isSimpleSearch && isFilterFetching;
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && canFetchNext && !isFetchingNext) {
+          fetchFilterNext();
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [canFetchNext, isFetchingNext, fetchFilterNext]);
 
   const handleFocus = () => setIsSearchMode(true);
-
   const handleBackClick = () => {
     setIsSearchMode(false);
     setSearchText("");
     setFilters({ keyword: "", level: null, volume: null, country: null, genre: null });
   };
-
   const handleApplyFilter = (newFilters: SearchFilterState) => {
     setFilters(newFilters);
     setIsFilterOpen(false);
   };
-
   const handleDeleteChip = (key: keyof SearchFilterState) => {
     setFilters((prev) => ({ ...prev, [key]: null }));
   };
-
-  const handleBookClick = () => {
-    navigate("/books/1?status=before");
+  const handleBookClick = (bookId: number) => {
+    navigate(`/books/${bookId}?status=before`);
   };
 
-  const filteredBooks = useMemo(() => {
-    return dummySearchResults.filter((book) => {
-      if (searchText) {
-        const lowerSearch = searchText.toLowerCase();
-        if (
-          !book.title.toLowerCase().includes(lowerSearch) &&
-          !book.author.toLowerCase().includes(lowerSearch)
-        )
-          return false;
-      }
-      if (filters.level !== null && book.level !== filters.level) return false;
-      if (filters.country && book.country !== filters.country) return false;
-      if (filters.genre && filters.genre !== "장르" && book.genre !== filters.genre) return false;
-      if (filters.volume) {
-        const pages = book.totalPages;
-        if (filters.volume === "~200쪽" && pages > 200) return false;
-        if (filters.volume === "200~250쪽" && (pages < 200 || pages > 250)) return false;
-        if (filters.volume === "251~350쪽" && (pages < 251 || pages > 350)) return false;
-        if (filters.volume === "351~500쪽" && (pages < 351 || pages > 500)) return false;
-        if (filters.volume === "501~650쪽" && (pages < 501 || pages > 650)) return false;
-        if (filters.volume === "651~쪽" && pages < 651) return false;
-      }
-      return true;
-    });
-  }, [searchText, filters]);
+  const renderSkeletons = () => (
+    <>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <SkeletonBookList key={`skeleton-${index}`} />
+      ))}
+    </>
+  );
 
   return (
     <div className={S.wrapper}>
       <div className={`${S.container} search-page-wrapper`}>
         <div className={S.statusBar} />
+
         {isSearchMode ? (
           <AppBar
             mode="search"
@@ -120,45 +174,55 @@ const Search = () => {
         ) : (
           <div className={S.subHeader}>
             <h2 className={S.sectionTitle}>
-              유저들이 많이 선택한 <span className="text-purple-500">Lv.1</span> 도서
+              {nickname}님을 위한 <span className="text-purple-500">Lv.{userLevel}</span> 도서
             </h2>
           </div>
         )}
 
         <div className={S.contentArea}>
           <div className={S.listWrapper}>
-            {isSearchMode ||
-            searchText ||
-            Object.values(filters).some((v) => v !== null && v !== "" && v !== "장르") ? (
-              filteredBooks.length > 0 ? (
-                filteredBooks.map((book, index) => (
-                  <BookList key={index} {...book} readingState="before" onClick={handleBookClick} />
-                ))
-              ) : (
-                <EmptyView
-                  icon={TwoSpeechBubblesGif}
-                  title="검색 결과가 없어요."
-                  description={
-                    <>
-                      검색어나 필터를 변경하고 <br /> 다시 시도해 보세요.
-                    </>
-                  }
-                  className="pt-37.75" //필터 박스와의 간격 151px
-                  actionButton={{
-                    label: "필터 초기화하기",
-                    onClick: handleBackClick,
-                  }}
-                />
-              )
+            {isLoading ? (
+              renderSkeletons()
+            ) : isEmptyResult ? (
+              <EmptyView
+                icon={TwoSpeechBubblesGif}
+                title="검색 결과가 없어요."
+                description={
+                  <>
+                    검색어나 필터를 변경하고 <br /> 다시 시도해 보세요.
+                  </>
+                }
+                className="pt-37.75"
+                actionButton={{ label: "필터 초기화하기", onClick: handleBackClick }}
+              />
             ) : (
-              dummySearchResults
-                .filter((book) => book.level === 1)
-                .slice(0, 4)
-                .map((book, index) => <BookList key={index} {...book} readingState="before" onClick={handleBookClick} />)
+              <>
+                {displayBooks.map((book) => (
+                  <BookList
+                    key={book.bookId}
+                    {...mapBookInfoToMock(book)}
+                    readingState="before"
+                    onClick={() => handleBookClick(book.bookId)}
+                  />
+                ))}
+
+                {canFetchNext && (
+                  <div
+                    ref={observerRef}
+                    className="w-full h-15 flex justify-center items-center mt-4 pb-4"
+                  >
+                    {isFetchingNext && (
+                      <div className="w-6 h-6 border-[3px] border-gray-200 border-t-purple-600 rounded-full animate-spin" />
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
+
         <BottomBar activeTab="search" onTabSelect={() => {}} />
+
         {isFilterOpen && (
           <SearchFilter
             currentFilters={filters}

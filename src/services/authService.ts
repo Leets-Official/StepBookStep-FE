@@ -110,3 +110,13 @@ export const clearTokens = () => {
   localStorage.removeItem('refreshToken');
   console.log('토큰 삭제 완료');
 };
+
+/**
+ * 로그아웃 (토큰 삭제 + Zustand store 초기화)
+ */
+export const logout = (resetUserStore?: () => void) => {
+  clearTokens();
+  if (resetUserStore) {
+    resetUserStore();
+  }
+};

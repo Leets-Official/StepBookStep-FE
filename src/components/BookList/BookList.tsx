@@ -19,13 +19,18 @@ export function BookList({
   targetPeriod,
   targetAmount,
   remainingAmount,
+  coverImage, // 책 커버 이미지 가져올라고 사용
   onClick,
 }: BookListProps) {
   const percent = readingState === "reading" ? Math.round((currentPage / totalPages) * 100) : 0;
 
   return (
     <div className={S.row} onClick={onClick}>
-      <div className={S.cover} />
+      <div className={S.cover}>
+        {coverImage && (
+          <img src={coverImage} alt={title} className="w-full h-full object-cover rounded-sm" />
+        )}
+      </div>
 
       <div className={S.content}>
         <div className={S.info}>
@@ -39,9 +44,11 @@ export function BookList({
         <div className={S.extra}>
           {readingState === "before" && tags.length > 0 && (
             <div className={S.tagWrap}>
-              {tags.map((tag) => (
-                <Badge key={tag} label={tag} className={S.tagBadge} />
-              ))}
+              {tags
+                .filter((t) => !!t && t.trim().length > 0)
+                .map((tag) => (
+                  <Badge key={tag} label={tag} className={S.tagBadge} />
+                ))}
             </div>
           )}
 

@@ -17,15 +17,17 @@ export interface BookListProps {
   currentPage?: number;
   rating?: number;
 
-  targetPeriod?: string;   // "1주일"
-  targetAmount?: number;   // 100
-  remainingAmount?: number;// 82
-  isAchieved?: boolean;    // 목표 달성 여부
+  targetPeriod?: string;   
+  targetAmount?: number;   
+  remainingAmount?: number;
+  isAchieved?: boolean;    
 
   
   level?: number;    
   country?: string;  
   genre?: string;   
   
+  coverImage?: string;
+
   onClick?: () => void;
 }
