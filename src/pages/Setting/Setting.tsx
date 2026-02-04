@@ -18,11 +18,9 @@ export default function Setting() {
         <AppBar mode="none" title="설정" onBackClick={() => history.back()} />
 
         <main className={S.content}>
-          {/* 내 정보 */}
           <section className={S.section}>
             <p className={S.sectionTitle}>내 정보</p>
 
-            {/* 연결된 계정 */}
             <div className={S.kakaoRow}>
               <span className={S.label}>연결된 계정</span>
 
@@ -32,14 +30,12 @@ export default function Setting() {
               </div>
             </div>
 
-            {/* 닉네임 수정 */}
             <button className={S.rowButton} onClick={() => navigate("/setting/nickname")}>
               <span className={S.label}>닉네임 수정</span>
               <span className={S.chevron}>›</span>
             </button>
 
-            {/* 선호 레벨/분야 수정 (추후 구현) */}
-            <button className={S.rowButton}>
+            <button className={S.rowButton} onClick={() => navigate("/setting/preference-edit")}>
               <span className={S.label}>선호 레벨/분야 수정</span>
               <span className={S.chevron}>›</span>
             </button>
@@ -47,7 +43,6 @@ export default function Setting() {
 
           <div className={S.divider} />
 
-          {/* 기타 */}
           <section className={S.section}>
             <p className={S.sectionTitle}>기타</p>
 
@@ -60,7 +55,6 @@ export default function Setting() {
               <span className={S.label}>로그아웃</span>
             </button>
 
-            {/* 회원 탈퇴 */}
             <button className={S.rowButton} onClick={() => setIsWithdrawOpen(true)}>
               <span className={S.withdraw}>회원 탈퇴</span>
             </button>

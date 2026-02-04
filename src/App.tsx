@@ -19,16 +19,18 @@ import Tutorial from "@/pages/Tutorial/Tutorial";
 
 import Splash from "@/pages/Login/Splash";
 import LoginPage from "@/pages/Login/Login";
+import Setting from "@/pages/Setting/Setting.tsx";
+import ChangeNickname from "@/pages/Setting/ChangeNickname.tsx";
+import PreferenceEditPage from "@/pages/Setting/PreferenceEdit.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
-      staleTime: 60 * 1000, 
+      staleTime: 60 * 1000,
     },
   },
-
 });
 
 function App() {
@@ -53,26 +55,29 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<RootRedirect />} />
-        <Route path="/tutorial" element={<Tutorial />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/onboarding/set-profile" element={<SetProfile />} />
-        <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
-        <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
-        <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
-        <Route path="/onboarding/genre" element={<OnboardingGenre />} />
-        <Route path="/onboarding/result" element={<RoutineResultPage />} />
-        <Route path="/books/:bookId" element={<BookDetailPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/routine/timer/:bookId" element={<TimerPage />} />
-        <Route path="/routine/booklist" element={<BookList />} />
-        <Route path="/tutorial" element={<Tutorial />} />
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="/tutorial" element={<Tutorial />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/onboarding/set-profile" element={<SetProfile />} />
+          <Route path="/onboarding/level/step-1" element={<OnboardingLevelStep1 />} />
+          <Route path="/onboarding/level/step-2" element={<OnboardingLevelStep2 />} />
+          <Route path="/onboarding/level/step-3" element={<OnboardingLevelStep3 />} />
+          <Route path="/onboarding/genre" element={<OnboardingGenre />} />
+          <Route path="/onboarding/result" element={<RoutineResultPage />} />
+          <Route path="/books/:bookId" element={<BookDetailPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/routine/timer/:bookId" element={<TimerPage />} />
+          <Route path="/routine/booklist" element={<BookList />} />
+          <Route path="/tutorial" element={<Tutorial />} />
+          <Route path="/setting" element={<Setting />} />
+          <Route path="/setting/nickname" element={<ChangeNickname />} />
+          <Route path="/setting/preference-edit" element={<PreferenceEditPage />} />
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }
@@ -85,7 +90,7 @@ function RootRedirect() {
     // 튜토리얼을 한 번도 안 본 유저
     return <Navigate to="/tutorial" replace />;
   }
-  
+
   if (!accessToken) {
     // 튜토리얼은 봤지만 로그인이 안 된 유저
     return <Navigate to="/login" replace />;
