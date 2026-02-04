@@ -12,13 +12,13 @@ import {
 } from "@/assets/icons";
 import TextField from "@/components/TextField/TextField";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AppBar = ({
   mode,
   title,
   isBookmarked,
   onBackClick,
-  onSettingClick,
   onBookmarkClick,
   onPenClick,
   onTimerClick,
@@ -31,6 +31,7 @@ const AppBar = ({
 }: AppBarProps) => {
   const [isPenMenuOpen, setIsPenMenuOpen] = useState(false);
   const penRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleMenuClick = (action?: () => void) => {
     if (action) action();
@@ -80,7 +81,7 @@ const AppBar = ({
           /* 로고 있는 버전 */
           <>
             <LogoIcon className={appBarStyles.logoImage} />
-            <button type="button" onClick={onSettingClick}>
+            <button type="button" onClick={() => navigate("/setting")}>
               <SettingIcon className={appBarStyles.icon} />
             </button>
           </>

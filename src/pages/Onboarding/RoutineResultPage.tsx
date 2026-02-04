@@ -1,7 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeftIcon } from "@/assets/icons";
 import { Button } from "@/components/Button/Button";
 import type { RoutineResult } from "@/types/onboarding";
+import { useOnboardingStore } from "@/stores/onboardingStore";
+import { postOnboarding } from "@/api/onboarding";
 
 import {
   pageWrapper,
@@ -46,7 +49,42 @@ const ROUTINE_UI = {
 
 export default function RoutineResultPage() {
   const navigate = useNavigate();
-  const { state } = useLocation() as { state: RoutineResult };
+  const { payload, reset } = useOnboardingStore();
+
+  const [state, setState] = useState<RoutineResult | null>(null);
+
+  useEffect(() => {
+    const fetchResult = async () => {
+      try {
+        const res = await postOnboarding({
+          nickname: payload.nickname,
+          levelAnswers: {
+            readingFrequency: String(payload.level.readingFrequency),
+            readingDuration: String(payload.level.readingDuration),
+            difficultyPreference: String(payload.level.readingBurden),
+          },
+          categoryIds: [],
+          genreIds: payload.genres.map(Number),
+        });
+
+        const routineType = res.routineTokens.period === "하루" ? "DAY" : "WEEK";
+
+        const pages = Number(res.routineTokens.amount.replace("쪽", ""));
+
+        setState({
+          nickname: payload.nickname,
+          routineType,
+          pages,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchResult();
+  }, []);
+
+  if (!state) return null;
 
   const ui = ROUTINE_UI[state.routineType];
 
@@ -80,7 +118,14 @@ export default function RoutineResultPage() {
         </div>
 
         <div className={bottomAction}>
-          <Button label="시작하기" fullWidth onClick={() => navigate("/")} />
+          <Button
+            label="시작하기"
+            fullWidth
+            onClick={() => {
+              reset();
+              navigate("/");
+            }}
+          />
         </div>
       </div>
     </div>
