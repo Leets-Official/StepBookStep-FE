@@ -150,7 +150,7 @@ export default function Statistics() {
                     dataKey="month" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 12, fill: "#9CA3AF" }} 
+                    tick={{ fontSize: 12, fill: "#7E819A" }} 
                   />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                     {chartData.map((entry, index: number) => (
