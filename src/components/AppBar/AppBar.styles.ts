@@ -8,8 +8,10 @@ export const appBarStyles = {
   // 로고 없는 거
   titleModeWrapper: "gap-3",
 
-  // 로고 있는 거 
+  // 로고 있는 거
   logoModeWrapper: "justify-between",
+
+  title: "text-black font-semibold text-md",
 
   icon: "w-6 h-6 cursor-pointer text-gray-500",
 
