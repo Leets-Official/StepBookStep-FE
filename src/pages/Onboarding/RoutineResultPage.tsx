@@ -31,21 +31,21 @@ import {
 const ROUTINE_UI = {
   DAY: {
     title: (pages: number, basis?: string) => ({
-      strong: `하루에 ${pages}쪽${basis ? `${basis}` : ""}`,
+      strong: `하루에 ${pages}쪽 ${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-day.png",
   },
   WEEK: {
     title: (pages: number, basis?: string) => ({
-      strong: `1주일에 ${pages}쪽${basis ? `${basis}` : ""}`,
+      strong: `1주일에 ${pages}쪽 ${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-week.png",
   },
   MONTH: {
     title: (pages: number, basis?: string) => ({
-      strong: `1개월에 ${pages}쪽${basis ? `${basis}` : ""}`,
+      strong: `1개월에 ${pages}쪽 ${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-month.png",
@@ -124,8 +124,10 @@ export default function RoutineResultPage() {
 
           <div className={card}>
             <div className={cardTitle}>
-              <div className={cardTitleStrong}>{ui.title(state.pages, state.basis).strong}</div>
-              <div className={cardTitleWeak}>{ui.title(state.pages).weak}</div>
+              <span className={cardTitleStrong}>{ui.title(state.pages, state.basis).strong}</span>
+            </div>
+            <div className={cardTitle}>
+              <span className={cardTitleWeak}>{ui.title(state.pages).weak}</span>
             </div>
 
             <div className={illustrationWrapper}>
@@ -140,7 +142,7 @@ export default function RoutineResultPage() {
             fullWidth
             onClick={() => {
               reset();
-              navigate("/");
+              navigate("/home");
             }}
           />
         </div>

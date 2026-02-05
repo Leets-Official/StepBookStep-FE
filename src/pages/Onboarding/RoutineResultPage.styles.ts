@@ -16,7 +16,7 @@ export const card =
   "mt-7 bg-white rounded-xl p-5 flex flex-col items-center " +
   "shadow-[0_8px_24px_rgba(83,63,255,0.12)]";
 
-export const cardTitle = "flex items-baseline mb-4";
+export const cardTitle = "flex items-baseline mb-2";
 
 export const cardTitleStrong = "text-xl font-bold text-purple-500";
 
