@@ -16,7 +16,7 @@ export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
     nickname: string;
-    newUser: boolean;
+    isNewUser: boolean;
   };
   error?: Array<{
     field: string;
@@ -61,7 +61,7 @@ export const kakaoLogin = async (
 
     console.log('로그인 성공!');
     console.log('닉네임:', data.data.nickname);
-    console.log('신규 유저:', data.data.newUser);
+    console.log('신규 유저:', data.data.isNewUser);
     
     return data;
   } catch (error) {
