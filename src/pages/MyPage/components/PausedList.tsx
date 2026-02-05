@@ -22,6 +22,7 @@ export const PausedList = ({ data, onBookClick }: Props) => {
           startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
           endDate={book.updatedAt ? book.updatedAt.split("T")[0].replace(/-/g, ". ") : ""}
           rating={book.rating}
+          coverImage={book.coverUrl}
           onClick={() => onBookClick(book.bookId)}
         />
       ))}
