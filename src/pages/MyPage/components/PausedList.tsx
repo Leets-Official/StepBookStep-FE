@@ -4,8 +4,7 @@ import type { BookItem } from "../MyPage.types";
 
 interface Props {
   data: BookItem[];
-  onBookClick: () => void;
-
+  onBookClick: (bookId: number) => void;
 }
 
 export const PausedList = ({ data, onBookClick }: Props) => {
@@ -14,17 +13,16 @@ export const PausedList = ({ data, onBookClick }: Props) => {
       {data.map((book) => (
         <BookList
           key={book.userBookId}
-          readingState="after" //
+          readingState="after"
           title={book.title || ""}
           author={book.author}
           publisher={book.publisher}
-          publicYear={book.pubDate.split('-')[0]}
+          publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
           totalPages={book.itemPage}
-          // 날짜 포맷팅: "2026. 01. 14" 형식으로 변환
-          startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
-          endDate={book.updatedAt.split('T')[0].replace(/-/g, '. ')} // 중단일로 표시됨
+          startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
+          endDate={book.updatedAt ? book.updatedAt.split("T")[0].replace(/-/g, ". ") : ""}
           rating={book.rating}
-          onClick={onBookClick}
+          onClick={() => onBookClick(book.bookId)}
         />
       ))}
     </div>

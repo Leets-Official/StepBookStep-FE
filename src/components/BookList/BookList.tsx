@@ -19,7 +19,7 @@ export function BookList({
   targetPeriod,
   targetAmount,
   remainingAmount,
-  coverImage, // 책 커버 이미지 가져올라고 사용
+  coverImage,
   onClick,
 }: BookListProps) {
   const percent = readingState === "reading" ? Math.round((currentPage / totalPages) * 100) : 0;
@@ -99,10 +99,10 @@ export function BookList({
                 </span>
               </div>
 
-              {rating !== undefined && (
+              {rating !== undefined && rating !== null && (
                 <div className={`flex items-center gap-1`}>
                   <StarFilledIcon className="w-4 h-4 text-purple-500" />
-                  <span className={S.Label}>{rating.toFixed(1)}</span>
+                  <span className={S.Label}>{(rating ?? 0).toFixed(1)}</span>
                 </div>
               )}
             </>

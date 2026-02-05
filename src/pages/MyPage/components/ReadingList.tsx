@@ -4,7 +4,7 @@ import type { BookItem } from "../MyPage.types";
 
 interface Props {
   data: BookItem[];
-  onBookClick: () => void; 
+  onBookClick: (bookId: number) => void;
 }
 
 export const ReadingList = ({ data, onBookClick }: Props) => (
@@ -16,11 +16,11 @@ export const ReadingList = ({ data, onBookClick }: Props) => (
         title={book.title || ""}
         author={book.author}
         publisher={book.publisher}
-        publicYear={book.pubDate.split('-')[0]} // 연도만 추출
+        publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
         totalPages={book.itemPage}
-        currentPage={book.totalPageRead}
-        startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
-        onClick={onBookClick}
+        currentPage={book.totalPagesRead || 0}
+        startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
+        onClick={() => onBookClick(book.bookId)}
       />
     ))}
   </div>

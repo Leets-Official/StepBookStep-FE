@@ -89,7 +89,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       AFTER: "FINISHED",
       FINISHED: "FINISHED",
       BEFORE: "BOOKMARKED",
-      STOP: "PAUSED",
+      STOP: "STOPPED",
     };
 
     const mappedStatus = statusMap[data.status] || "READING";
@@ -160,7 +160,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   return (
     <div className={S.pageWrapper}>
-      <div className={S.appFrame}>
+      <div className={S.appFrame}>f
         <AppBar
           mode="title"
           // title={BOOK_DETAIL_MOCK.title}
