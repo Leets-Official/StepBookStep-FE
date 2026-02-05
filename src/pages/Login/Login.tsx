@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom"; // 파라미터 읽기용 추가
+import { useNavigate, useSearchParams } from "react-router-dom"; 
 import { Kakao } from "@/components/Kakao/Kakao";
-import { initKakao, loginWithKakao, exchangeCodeForToken } from "@/utils/KakaoAuth";
-import { kakaoLogin, saveTokens } from "@/services/authService";
+import { initKakao, loginWithKakao } from "@/utils/KakaoAuth";
+import { kakaoLoginCallback, saveTokens } from "@/services/authService";
 import { useUserStore } from "@/stores/useUserStore";
 import * as S from "./Login.styles";
 
@@ -10,41 +10,79 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const processingRef = useRef(false);
+  const processingRef = useRef(false); // StrictMode 중복 방지
   const { setUserInfo } = useUserStore();
 
-  // 1. 초기화 및 리다이렉트된 "코드" 처리
   useEffect(() => {
     initKakao();
 
-    // 카카오에서 돌아왔을 때 URL에 포함된 'code' 파라미터 확인
     const authCode = searchParams.get("code");
 
     if (authCode && !processingRef.current) {
       processingRef.current = true;
-      handleBackendLogin(authCode);
+      handleCodeExchange(authCode);
 
       window.history.replaceState({}, "", window.location.pathname);
     }
   }, [searchParams]);
 
   /**
-   * [2단계] 카카오 인증 코드를 백엔드에 전달하여 로그인 완료
+   * 인가 코드를 Access Token으로 교환하고 백엔드 로그인 진행
    */
-  const handleBackendLogin = async (authCode: string) => {
+  const handleCodeExchange = async (code: string) => {
     try {
       setIsLoading(true);
-      const socialToken = await exchangeCodeForToken(authCode);
+      console.log('카카오 토큰 교환 시작...');
 
-      // authService의 kakaoLogin 호출
-      const response = await kakaoLogin(socialToken);
-      console.log("전체 응답 데이터:", response.data);
+      // 1. 카카오 토큰 REST API 호출
+      const params = new URLSearchParams();
+      params.append('grant_type', 'authorization_code');
+      params.append('client_id', import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
+      params.append('redirect_uri', window.location.origin + '/login');
+      params.append('code', code);
 
-      const isNewUser = response.data.isNewUser;
-      const hasDefaultNickname = response.data.nickname === "사용자";
+      const response = await fetch('https://kauth.kakao.com/oauth/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
+        body: params,
+      });
 
-      saveTokens(response.data.accessToken, response.data.refreshToken);
-      setUserInfo(response.data.nickname, 1);
+      const data = await response.json();
+
+      if (!response.ok || !data.access_token) {
+        throw new Error(data.error_description || '카카오 토큰 발급 실패');
+      }
+
+      console.log('Access Token 발급 성공');
+      
+      // 2. 백엔드 로그인 진행
+      await handleBackendLogin(data.access_token);
+
+    } catch (error: any) {
+      console.error('로그인 프로세스 에러:', error);
+      alert(`로그인 중 오류가 발생했습니다: ${error.message}`);
+      setIsLoading(false);
+      processingRef.current = false; // 실패 시 재시도 허용
+      navigate("/login", { replace: true });
+    }
+  };
+
+  /**
+   * 백엔드 로그인 요청
+   */
+  const handleBackendLogin = async (token: string) => {
+    try {
+      // Access Token을 백엔드로 전달
+      const response = await kakaoLoginCallback(token);
+      console.log('전체 응답 데이터:', response.data);
+
+      const { accessToken, refreshToken, nickname, isNewUser } = response.data;
+      const hasDefaultNickname = nickname === "사용자";
+      
+      saveTokens(accessToken, refreshToken);
+      setUserInfo(nickname, 1);
 
       localStorage.setItem("isNewUser", String(isNewUser));
 
@@ -60,11 +98,12 @@ export default function LoginPage() {
       navigate("/login", { replace: true });
     } finally {
       setIsLoading(false);
+      processingRef.current = false;
     }
   };
 
   /**
-   * [1단계] 카카오 로그인 버튼 클릭 (카카오 서버로 리다이렉트)
+   * 카카오 로그인 버튼 클릭 (리다이렉트)
    */
   const handleKakaoLogin = () => {
     console.log("카카오 인증 페이지로 이동...");

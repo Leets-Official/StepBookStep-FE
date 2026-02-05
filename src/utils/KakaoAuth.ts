@@ -24,12 +24,13 @@ export const initKakao = () => {
   }
 };
 
-// 카카오 로그인 함수
+// 카카오 로그인 함수 (Redirect 방식)
 export const loginWithKakao = () => {
   if (!window.Kakao) return;
 
+  const redirectUri = window.location.origin + '/login';
   window.Kakao.Auth.authorize({
-    redirectUri: 'http://localhost:5173/login', 
+    redirectUri,
   });
 };
 
@@ -40,35 +41,4 @@ export const logoutKakao = () => {
       console.log('카카오 로그아웃 완료');
     });
   }
-};
-
-/**
- * 인가 코드를 카카오 액세스 토큰으로 교환하는 함수
- */
-export const exchangeCodeForToken = async (code: string) => {
-  const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY; 
-  const REDIRECT_URI = 'http://localhost:5173/login';
-
-  const params = new URLSearchParams();
-  params.append('grant_type', 'authorization_code');
-  params.append('client_id', REST_API_KEY);
-  params.append('redirect_uri', REDIRECT_URI);
-  params.append('code', code);
-
-  params.append('client_secret', import.meta.env.VITE_KAKAO_CLIENT_SECRET);
-
-  const response = await fetch('https://kauth.kakao.com/oauth/token', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-    body: params,
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error_description || '토큰 교환 실패');
-  }
-
-  return data.access_token; 
 };
