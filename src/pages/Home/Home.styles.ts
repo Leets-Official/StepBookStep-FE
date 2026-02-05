@@ -1,4 +1,4 @@
-export const pageWrapper = "min-h-screen bg-white flex justify-center items-center";
+export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center items-center";
 
 export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center bg-gray-50";
 
@@ -49,7 +49,7 @@ export const statsCard =
 
 export const statsSection = "flex-1 flex items-center justify-center";
 
-export const statsHeader = "mt-10 mx-5 flex items-center justify-between mb-3";
+export const statsHeader = "mt-10 mx-5 flex items-center justify-between mb-3 gap-42";
 
 export const statsTitle = "text-lg font-semibold text-gray-900";
 

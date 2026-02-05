@@ -8,9 +8,9 @@ import * as S from "./Login.styles";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); 
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const hasProcessed = useRef(false); // StrictMode 중복 방지
+  const processingRef = useRef(false); // StrictMode 중복 방지
   const { setUserInfo } = useUserStore();
 
   useEffect(() => {
@@ -18,14 +18,11 @@ export default function LoginPage() {
 
     const authCode = searchParams.get("code");
 
-    if (authCode) {
-      if (hasProcessed.current) return;
-      hasProcessed.current = true;
-      
-      // URL 정리
-      window.history.replaceState({}, '', window.location.pathname);
-      
+    if (authCode && !processingRef.current) {
+      processingRef.current = true;
       handleCodeExchange(authCode);
+
+      window.history.replaceState({}, "", window.location.pathname);
     }
   }, [searchParams]);
 
@@ -67,7 +64,7 @@ export default function LoginPage() {
       console.error('로그인 프로세스 에러:', error);
       alert(`로그인 중 오류가 발생했습니다: ${error.message}`);
       setIsLoading(false);
-      hasProcessed.current = false; // 실패 시 재시도 허용
+      processingRef.current = false; // 실패 시 재시도 허용
       navigate("/login", { replace: true });
     }
   };
@@ -88,18 +85,20 @@ export default function LoginPage() {
       setUserInfo(nickname, 1);
 
       localStorage.setItem("isNewUser", String(isNewUser));
-      
+
       if (isNewUser || hasDefaultNickname) {
         navigate("/onboarding/set-profile", { replace: true });
       } else {
         navigate("/home", { replace: true });
       }
     } catch (error: any) {
-      console.error('백엔드 로그인 실패:', error.message);
-      alert(`로그인 실패: ${error.message}`);
-      setIsLoading(false);
-      hasProcessed.current = false;
+      console.error("백엔드 로그인 실패:", error.message);
+      alert("로그인 처리 중 오류가 발생했습니다.");
+      // 에러 발생 시 URL의 파라미터를 지우기 위해 경로 초기화
       navigate("/login", { replace: true });
+    } finally {
+      setIsLoading(false);
+      processingRef.current = false;
     }
   };
 
@@ -107,8 +106,8 @@ export default function LoginPage() {
    * 카카오 로그인 버튼 클릭 (리다이렉트)
    */
   const handleKakaoLogin = () => {
-    console.log('카카오 인증 페이지로 이동...');
-    loginWithKakao(); 
+    console.log("카카오 인증 페이지로 이동...");
+    loginWithKakao();
   };
 
   return (
@@ -116,20 +115,16 @@ export default function LoginPage() {
       <div className={S.appFrame}>
         <main className="flex flex-col items-center justify-center flex-1 px-5">
           <div className="mb-12">
-            <img 
-              src="/images/Login.png" 
-              alt="Reading Character" 
-              className="w-80.75 h-80.75"
-            />
+            <img src="/images/Login.png" alt="Reading Character" className="w-80.75 h-80.75" />
           </div>
 
           <div className="text-center mb-10">
             <h1 className={S.loginTitle}>
-              만만한 책부터<br />탄탄한 습관까지
+              만만한 책부터
+              <br />
+              탄탄한 습관까지
             </h1>
-            <p className={S.loginSubTitle}>
-              한 단계씩 쌓아가는 나의 독서 습관
-            </p>
+            <p className={S.loginSubTitle}>한 단계씩 쌓아가는 나의 독서 습관</p>
           </div>
 
           <div className="mt-3">

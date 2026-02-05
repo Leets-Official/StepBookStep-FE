@@ -1,5 +1,14 @@
-import apiClient from './clients';
-import type { ApiResponse, RoutineItem, RoutineListData, Goal, CreateReadingLogRequest, CreateReadingLogResponse, UpdateGoalRequest, ReadingLog } from './types';
+import apiClient from "./clients";
+import type {
+  ApiResponse,
+  RoutineItem,
+  RoutineListData,
+  Goal,
+  CreateReadingLogRequest,
+  CreateReadingLogResponse,
+  UpdateGoalRequest,
+} from "./types";
+import type { ReadingLog } from "@/mocks/readingState.mock.ts";
 
 /**
  * 루틴 목록 조회
@@ -7,10 +16,8 @@ import type { ApiResponse, RoutineItem, RoutineListData, Goal, CreateReadingLogR
  * * 루틴 탭에서 '지금 읽고 있어요' 목록을 불러올 때 사용
  */
 export const getRoutines = async (): Promise<RoutineItem[]> => {
-  const response = await apiClient.get<ApiResponse<RoutineListData>>(
-    '/routines'
-  );
-  
+  const response = await apiClient.get<ApiResponse<RoutineListData>>("/routines");
+
   return response.data.data.routines;
 };
 
@@ -19,10 +26,8 @@ export const getRoutines = async (): Promise<RoutineItem[]> => {
  * GET /api/v1/books/{bookId}/goals
  */
 export const getBookGoal = async (bookId: number): Promise<Goal> => {
-  const response = await apiClient.get<ApiResponse<Goal>>(
-    `/books/${bookId}/goals`
-  );
-  
+  const response = await apiClient.get<ApiResponse<Goal>>(`/books/${bookId}/goals`);
+
   return response.data.data;
 };
 
@@ -32,13 +37,13 @@ export const getBookGoal = async (bookId: number): Promise<Goal> => {
  */
 export const createReadingLog = async (
   bookId: number,
-  data: CreateReadingLogRequest
+  data: CreateReadingLogRequest,
 ): Promise<CreateReadingLogResponse> => {
   const response = await apiClient.post<ApiResponse<CreateReadingLogResponse>>(
     `/books/${bookId}/reading-logs`,
-    data
+    data,
   );
-  
+
   return response.data.data;
 };
 
@@ -47,10 +52,8 @@ export const createReadingLog = async (
  * GET /api/v1/books/{bookId}/reading-logs/{recordId}
  */
 export const getReadingLogs = async (bookId: number): Promise<ReadingLog[]> => {
-  const response = await apiClient.get<ApiResponse<ReadingLog[]>>(
-    `/books/${bookId}/reading-logs`
-  );
-  
+  const response = await apiClient.get<ApiResponse<ReadingLog[]>>(`/books/${bookId}/reading-logs`);
+
   return response.data.data;
 };
 
@@ -59,14 +62,8 @@ export const getReadingLogs = async (bookId: number): Promise<ReadingLog[]> => {
  * PATCH /api/v1/books/{bookId}/goals
  */
 
-export const updateBookGoal = async (
-  bookId: number,
-  data: UpdateGoalRequest
-): Promise<Goal> => {
-  const response = await apiClient.patch<ApiResponse<Goal>>(
-    `/books/${bookId}/goals`,
-    data
-  );
-  
+export const updateBookGoal = async (bookId: number, data: UpdateGoalRequest): Promise<Goal> => {
+  const response = await apiClient.patch<ApiResponse<Goal>>(`/books/${bookId}/goals`, data);
+
   return response.data.data;
 };

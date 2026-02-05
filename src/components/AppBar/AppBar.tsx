@@ -12,12 +12,13 @@ import {
 } from "@/assets/icons";
 import TextField from "@/components/TextField/TextField";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AppBar = ({
   mode,
+  title,
   isBookmarked,
   onBackClick,
-  onSettingClick,
   onBookmarkClick,
   onPenClick,
   onTimerClick,
@@ -30,6 +31,7 @@ const AppBar = ({
 }: AppBarProps) => {
   const [isPenMenuOpen, setIsPenMenuOpen] = useState(false);
   const penRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleMenuClick = (action?: () => void) => {
     if (action) action();
@@ -49,7 +51,7 @@ const AppBar = ({
     return () => document.removeEventListener("mousedown", handler);
   }, [showPenDropdown]);
 
-  // 탐색탭일 때 별도의 레이아웃 반환
+  // 탐색탭 전용
   if (mode === "search") {
     return (
       <header className={appBarStyles.searchContainer}>
@@ -79,22 +81,25 @@ const AppBar = ({
           /* 로고 있는 버전 */
           <>
             <LogoIcon className={appBarStyles.logoImage} />
-            <button type="button" onClick={onSettingClick}>
+            <button type="button" onClick={() => navigate("/setting")}>
               <SettingIcon className={appBarStyles.icon} />
             </button>
           </>
         ) : (
-          /* 로고 없는 버전 */
+          /* 로고 없는 버전 (title / none 공통) */
           <>
-            <button type="button" onClick={onBackClick}>
-              <ChevronLeftIcon className={appBarStyles.icon} />
-            </button>
+            {/* 왼쪽 영역: 뒤로가기 + 타이틀 */}
+            <div className="flex items-center gap-2 flex-1">
+              <button type="button" onClick={onBackClick}>
+                <ChevronLeftIcon className={appBarStyles.icon} />
+              </button>
 
-            <div className="flex-1 flex items-center">
-              
-
+              {(mode === "title" || mode === "none") && title && (
+                <span className={appBarStyles.title}>{title}</span>
+              )}
             </div>
 
+            {/* 우측 아이콘: mode === none 이면 숨김 */}
             {mode !== "none" && (
               <>
                 <button type="button" onClick={onBookmarkClick}>
@@ -104,6 +109,7 @@ const AppBar = ({
                     <BookmarkEmptyIcon className={appBarStyles.icon} />
                   )}
                 </button>
+
                 <div className="relative" ref={penRef}>
                   <button
                     type="button"

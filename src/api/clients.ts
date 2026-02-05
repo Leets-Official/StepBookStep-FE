@@ -1,49 +1,43 @@
-import axios from 'axios';
+import axios, { AxiosError } from "axios";
+import type { AxiosResponse } from "axios";
 
 const BASE_URL = import.meta.env.VITE_STEPBOOKSTEP_BASE_URL;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 10_000,
+  withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-// Request 인터셉터 - 모든 요청에 토큰 자동 추가
+// Request 인터셉터
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
-    
-    if (token) {
+    const token = localStorage.getItem("accessToken");
+
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
+
     return config;
   },
-  (error) => {
-    console.error('Request Error:', error);
-    return Promise.reject(error);
-  }
+  (error: AxiosError) => Promise.reject(error),
 );
 
-// Response 인터셉터 - 에러 처리
+// Response 인터셉터
 apiClient.interceptors.response.use(
-  (response) => {
-    console.log('API Response:', response.config.url, response.data);
-    return response;
-  },
-  (error) => {
-    console.error('Response Error:', error.response?.data || error.message);
-    
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-    //   window.location.href = '/login';
+      localStorage.removeItem("accessToken");
+      // 필요 시 로그인 이동
+      // window.location.href = "/login";
     }
-    
+
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;
