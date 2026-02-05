@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getBookGoal, getRoutines } from "@/api/readings";
 import { getBookDetail } from "@/api/books";
-import { createReadingLog, getReadingLogs } from "@/api/readings";
-import type { CreateReadingLogRequest } from "@/api/types";
+import { createReadingLog, getReadingLogs, updateBookGoal } from "@/api/readings";
+import type { CreateReadingLogRequest, UpdateGoalRequest } from "@/api/types";
 
 /** 1. 도서 상세 정보 조회 훅 */
 export const useBookDetail = (bookId: number) => {
@@ -57,5 +57,20 @@ export const useReadingLogs = (bookId: number, enabled = true) => {
     queryKey: ['readingLogs', bookId],
     queryFn: () => getReadingLogs(bookId),
     enabled: enabled && !!bookId,
+  });
+};
+
+/** 6. 독서 목표 생성/수정/삭제 훅 */
+export const useUpdateBookGoal = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ bookId, data }: { bookId: number; data: UpdateGoalRequest }) => 
+      updateBookGoal(bookId, data),
+    onSuccess: (_, variables) => {
+      // 성공 시 관련 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ['goal', variables.bookId] });
+      queryClient.invalidateQueries({ queryKey: ['routines'] });
+    },
   });
 };

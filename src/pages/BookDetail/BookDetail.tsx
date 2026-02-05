@@ -307,12 +307,17 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
       {isGoalModalOpen && (
         <GoalModal
-          maxPages={BOOK_DETAIL_MOCK.totalPage}
-          title="목표 설정하기"
+          bookId={Number(bookId)}
+          maxPages={bookInfo.totalPage}
+          title={currentGoal ? "목표 수정하기" : "목표 설정하기"}
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {
             setIsGoalModalOpen(false);
-            setToastMessage("목표가 저장되었습니다!");
+            setToastMessage(
+              currentGoal 
+                ? "목표가 수정되었습니다!" 
+                : "목표가 저장되었습니다!"
+            ); 
             setShowToast(true);
           }}
           count={1}
