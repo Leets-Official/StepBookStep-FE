@@ -38,7 +38,7 @@ interface BookDetailProps {
 }
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
-  const { bookId } = useParams(); // URL에서 ID 가져오기
+  const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   const { data: routines } = useRoutines();
 
@@ -51,9 +51,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
 
-  // 디버깅용 로그
-  // console.log("🔍 현재 서버에서 넘어온 데이터:", bookData);
-
   const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
@@ -64,10 +61,15 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  // [추가] 서버에서 책 정보를 받아오면 북마크 상태를 동기화
+  // 👇 [수정됨] 서버 데이터를 정확하게 연결하여 초기 하트 상태 설정
   useEffect(() => {
     if (bookData) {
-      setIsBookmarked(bookData.bookmarked);
+      // (bookData as any)를 사용해서 타입 검사를 우회합니다.
+      // "서버에서 isBookmarked가 오든 bookmarked가 오든 다 체크해줘!" 라는 뜻입니다.
+      const serverData = bookData as any;
+
+      const initialStatus = serverData.isBookmarked ?? serverData.bookmarked ?? false;
+      setIsBookmarked(initialStatus);
     }
   }, [bookData]);
 
@@ -91,9 +93,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const bottomBar = bottomBarConfig[entrySource];
 
   const handleSaveRecord = (data: BookReportData) => {
-    // console.log("전달받은 데이터:", data);
-    // console.log("전달받은 상태:", data.status);
-
     const statusMap: Record<string, ReadStatus> = {
       READING: "READING",
       AFTER: "FINISHED",
@@ -106,12 +105,10 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     updateBookStatus(101, mappedStatus, data.rating);
 
     const isFinished = data.status === "AFTER";
-    // console.log("완독 여부:", isFinished);
 
     setIsReportOpen(false);
 
     if (isFinished) {
-      // console.log("축하 모달을 띄웁니다!");
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
@@ -123,26 +120,26 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     }
   };
 
-  // [수정] 북마크 클릭 핸들러 (API 연동)
+  // 북마크 버튼 클릭 핸들러
   const handleBookmarkClick = async () => {
-    // 낙관적 업데이트: 화면 먼저 변경
+    // 낙관적 업데이트: 화면 먼저 즉시 변경 (반응속도 향상)
     const newStatus = !isBookmarked;
     setIsBookmarked(newStatus);
 
     try {
       if (newStatus) {
-        // 북마크 등록 (PUT)
+        // 북마크 등록 (API 호출)
         await addBookmark(Number(bookId));
         setToastMessage("북마크에 저장되었습니다.");
       } else {
-        // 북마크 해제 (DELETE)
+        // 북마크 해제 (API 호출)
         await removeBookmark(Number(bookId));
         setToastMessage("북마크가 해제되었습니다.");
       }
       setShowToast(true);
     } catch (error) {
       console.error("북마크 변경 실패:", error);
-      // 실패 시 롤백
+      // 에러 발생 시 원래대로 되돌리기 (롤백)
       setIsBookmarked(!newStatus);
       setToastMessage("오류가 발생했습니다. 다시 시도해 주세요.");
       setShowToast(true);
