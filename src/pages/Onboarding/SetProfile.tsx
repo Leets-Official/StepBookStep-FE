@@ -5,6 +5,8 @@ import { TextField } from "@/components/TextField/TextField";
 import { Button } from "@/components/Button/Button";
 import { ChevronLeftIcon } from "@/assets/icons";
 import { useOnboardingStore } from "@/stores/onboardingStore";
+import { checkNickname } from "@/api/user";
+import { getNicknameErrorMessage } from "@/utils/nickname";
 
 import {
   pageWrapper,
@@ -20,8 +22,42 @@ import {
 
 export default function SetProfile() {
   const [nickname, setNickname] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [available, setAvailable] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const { setNickname: saveNickname } = useOnboardingStore();
+
+  const handleNext = async () => {
+    setError(null);
+    setAvailable(null);
+
+    const errorMessage = getNicknameErrorMessage(nickname);
+    if (errorMessage) {
+      setError(errorMessage);
+      return;
+    }
+
+    try {
+      setChecking(true);
+      const res = await checkNickname(nickname);
+
+      if (!res.isAvailable) {
+        setError("이미 사용 중인 닉네임이에요.");
+        setAvailable(false);
+        return;
+      }
+
+      setAvailable(true);
+      saveNickname(nickname);
+      navigate("/onboarding/level/step-1");
+    } catch {
+      setError("닉네임 확인 중 오류가 발생했어요.");
+    } finally {
+      setChecking(false);
+    }
+  };
 
   return (
     <div className={pageWrapper}>
@@ -48,11 +84,27 @@ export default function SetProfile() {
                 <>
                   한글, 영문, 숫자만 사용할 수 있어요.
                   <br />
-                  특수문자(@#$%^&’*”+_,:)는 사용할 수 없어요.
+                  특수문자는 사용할 수 없어요.
+                  {error && (
+                    <>
+                      <br />
+                      <span style={{ color: "#EF4444" }}>{error}</span>
+                    </>
+                  )}
+                  {available && (
+                    <>
+                      <br />
+                      <span style={{ color: "#22C55E" }}>사용 가능한 닉네임이에요!</span>
+                    </>
+                  )}
                 </>
               }
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={(e) => {
+                setNickname(e.target.value);
+                setError(null);
+                setAvailable(null);
+              }}
               icon={false}
             />
           </div>
@@ -60,13 +112,10 @@ export default function SetProfile() {
 
         <div className={bottomAction}>
           <Button
-            label="다음"
+            label={checking ? "확인 중..." : "다음"}
             fullWidth
-            disabled={!nickname}
-            onClick={() => {
-              saveNickname(nickname);
-              navigate("/onboarding/level/step-1");
-            }}
+            disabled={!nickname || checking}
+            onClick={handleNext}
           />
         </div>
       </div>

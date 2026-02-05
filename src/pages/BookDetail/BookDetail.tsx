@@ -39,6 +39,7 @@ interface BookDetailProps {
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams(); // URL에서 ID 가져오기
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
+  
   const { data: routines } = useRoutines();
 
   const navigate = useNavigate();
@@ -249,8 +250,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {!isBefore && resolvedActiveTab === "record" && currentGoal && (
-            <ReadingStateDetail 
-              goal={currentGoal} 
+            <ReadingStateDetail
+              goal={currentGoal}
               totalPage={bookInfo.totalPage}
             />
           )}

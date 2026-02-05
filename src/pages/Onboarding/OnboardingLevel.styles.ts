@@ -1,6 +1,6 @@
-export const pageWrapper = "min-h-screen bg-gray-050 flex justify-center";
+export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center";
 
-export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center";
+export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center bg-gray-50";
 
 export const header = "h-16 flex items-center px-4";
 
