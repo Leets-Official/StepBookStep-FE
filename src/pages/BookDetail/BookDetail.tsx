@@ -61,11 +61,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  // 👇 [수정됨] 서버 데이터를 정확하게 연결하여 초기 하트 상태 설정
   useEffect(() => {
     if (bookData) {
-      // (bookData as any)를 사용해서 타입 검사를 우회합니다.
-      // "서버에서 isBookmarked가 오든 bookmarked가 오든 다 체크해줘!" 라는 뜻입니다.
       const serverData = bookData as any;
 
       const initialStatus = serverData.isBookmarked ?? serverData.bookmarked ?? false;
@@ -120,26 +117,22 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     }
   };
 
-  // 북마크 버튼 클릭 핸들러
   const handleBookmarkClick = async () => {
-    // 낙관적 업데이트: 화면 먼저 즉시 변경 (반응속도 향상)
     const newStatus = !isBookmarked;
     setIsBookmarked(newStatus);
 
     try {
       if (newStatus) {
-        // 북마크 등록 (API 호출)
         await addBookmark(Number(bookId));
         setToastMessage("북마크에 저장되었습니다.");
       } else {
-        // 북마크 해제 (API 호출)
         await removeBookmark(Number(bookId));
         setToastMessage("북마크가 해제되었습니다.");
       }
       setShowToast(true);
     } catch (error) {
       console.error("북마크 변경 실패:", error);
-      // 에러 발생 시 원래대로 되돌리기 (롤백)
+
       setIsBookmarked(!newStatus);
       setToastMessage("오류가 발생했습니다. 다시 시도해 주세요.");
       setShowToast(true);
