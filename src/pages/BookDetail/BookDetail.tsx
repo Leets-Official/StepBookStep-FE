@@ -277,14 +277,10 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {!isBefore && resolvedActiveTab === "record" && currentGoal && (
-<<<<<<< HEAD
-            <ReadingStateDetail goal={currentGoal} totalPage={bookInfo.totalPage} />
-=======
             <ReadingStateDetail
               goal={currentGoal}
               totalPage={bookInfo.totalPage}
             />
->>>>>>> develop
           )}
 
           {!isBefore && resolvedActiveTab === "info" && (

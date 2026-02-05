@@ -66,7 +66,6 @@ const MyPage = () => {
           title="아직 도서가 없어요."
           description={
             <>
-         
               {displayNickname}님이 좋아하실 도서를 <br /> 고르러 가볼까요?
             </>
           }
