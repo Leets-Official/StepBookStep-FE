@@ -5,7 +5,7 @@ export default function SkeletonBookDetailBefore() {
     <div className="px-5 space-y-6">
       {/* 커버 */}
       <div className="flex justify-center mb-2 py-5">
-        <SkeletonBase className="w-[110px] h-[160px]" />
+        <SkeletonBase className="w-27.5 h-40" />
       </div>
 
       {/* 레벨 */}
