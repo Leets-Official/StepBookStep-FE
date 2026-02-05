@@ -42,13 +42,14 @@ export default function LoginPage() {
       console.log('전체 응답 데이터:', response.data);
 
       const isNewUser = response.data.isNewUser;
+      const hasDefaultNickname = response.data.nickname === "사용자";
       
       saveTokens(response.data.accessToken, response.data.refreshToken);
       setUserInfo(response.data.nickname, 1);
 
       localStorage.setItem("isNewUser", String(isNewUser));
       
-      if (isNewUser) {
+      if (isNewUser || hasDefaultNickname) {
         navigate("/onboarding/set-profile", { replace: true });
       } else {
         navigate("/home", { replace: true });
