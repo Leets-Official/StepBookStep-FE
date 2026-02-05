@@ -40,6 +40,7 @@ interface BookDetailProps {
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
+  
   const { data: routines } = useRoutines();
 
   const navigate = useNavigate();
@@ -276,7 +277,14 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           )}
 
           {!isBefore && resolvedActiveTab === "record" && currentGoal && (
+<<<<<<< HEAD
             <ReadingStateDetail goal={currentGoal} totalPage={bookInfo.totalPage} />
+=======
+            <ReadingStateDetail
+              goal={currentGoal}
+              totalPage={bookInfo.totalPage}
+            />
+>>>>>>> develop
           )}
 
           {!isBefore && resolvedActiveTab === "info" && (

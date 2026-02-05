@@ -23,14 +23,32 @@ export interface LoginResponse {
     message: string;
   }>;
 }
+export interface KakaoCallbackResponse {                                
+   success: boolean;                                                     
+   status: number;                                                       
+   code: string;                                                         
+   message: string;                                                      
+   data: {                                                               
+     accessToken: string;                                                
+     refreshToken: string;                                               
+     nickname: string;                                                   
+     newUser: boolean;                                                   
+   };                                                                    
+   error?: Array<{                                                       
+     field: string;                                                      
+     message: string;                                                     
+  }>;                                                                    
+ }  
 
 // ===== API 호출 함수 =====
+
+
 
 /**
  * 카카오 로그인 API 호출
  */
-export const kakaoLogin = async (
-  socialToken: string,
+export const kakaoLoginCallback = async (
+  token: string,
   fcmToken: string = ''
 ): Promise<LoginResponse> => {
   try {
@@ -42,7 +60,7 @@ export const kakaoLogin = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        socialToken,
+        socialToken: token,
         fcmToken,
       }),
     });
@@ -112,7 +130,7 @@ export const clearTokens = () => {
 };
 
 /**
- * 로그아웃 (토큰 삭제 + Zustand store 초기화)
+ * 로그아웃 (토큰 삭제 Zustand store 초기화)
  */
 export const logout = (resetUserStore?: () => void) => {
   clearTokens();

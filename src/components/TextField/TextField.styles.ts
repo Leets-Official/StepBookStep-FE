@@ -14,7 +14,7 @@ export const inputVariants = {
   default: "border border-gray-300 bg-gray-50",
   focus: "border border-gray-900 bg-gray-50",
   filled: "border border-gray-300 bg-gray-50",
-  disabled: "border border-gray-300 bg-gray-50",
+  disabled: "border border-gray-300 bg-gray-100",
   success: "border border-success bg-white focus:border-success",
   error: "border border-error bg-white focus:border-error",
 };
