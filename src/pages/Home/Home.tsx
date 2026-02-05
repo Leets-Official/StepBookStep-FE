@@ -9,6 +9,7 @@ import HorizontalBookSliderApp from "./HorizontalBookSlider.app";
 import * as S from "./Home.styles";
 import { cn } from "@/utils/cn";
 import SkeletonHome from "@/pages/Home/SkeletonHome";
+import { useNavigate } from "react-router-dom";
 
 const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
@@ -16,7 +17,7 @@ type RecommendFilter = "short" | "levelup" | "bestseller";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"home" | "search" | "routine" | "mypage">("home");
-
+  const navigate = useNavigate();
   const [selectedRecommend, setSelectedRecommend] = useState<RecommendFilter>("short");
   const isLoading = false;
   const nickname = "하늘";
@@ -77,12 +78,12 @@ export default function Home() {
           <Slider books={BOOKS_MOCK} />
 
           {/* 통계 */}
-          <div className={S.statsHeader}>
+          <button className={S.statsHeader} onClick={() => navigate("/setting")}>
             <h3 className={S.statsTitle}>얼마나 독서했나요?</h3>
             <span className={S.statsArrow}>
               <ChevronRightIcon />
             </span>
-          </div>
+          </button>
 
           <section className={S.statsCard}>
             <div className={S.statsSection}>

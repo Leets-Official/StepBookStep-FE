@@ -8,7 +8,7 @@ import * as S from "./Login.styles";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); 
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const processingRef = useRef(false);
   const { setUserInfo } = useUserStore();
@@ -21,10 +21,10 @@ export default function LoginPage() {
     const authCode = searchParams.get("code");
 
     if (authCode && !processingRef.current) {
-      processingRef.current = true; 
+      processingRef.current = true;
       handleBackendLogin(authCode);
-      
-      window.history.replaceState({}, '', window.location.pathname);
+
+      window.history.replaceState({}, "", window.location.pathname);
     }
   }, [searchParams]);
 
@@ -34,23 +34,28 @@ export default function LoginPage() {
   const handleBackendLogin = async (authCode: string) => {
     try {
       setIsLoading(true);
-      console.log('카카오 인증 코드로 백엔드 로그인 시도 중...');
       const socialToken = await exchangeCodeForToken(authCode);
-      
+
       // authService의 kakaoLogin 호출
       const response = await kakaoLogin(socialToken);
-      
+      console.log("전체 응답 데이터:", response.data);
+
+      const isNewUser = response.data.isNewUser;
+      const hasDefaultNickname = response.data.nickname === "사용자";
+
       saveTokens(response.data.accessToken, response.data.refreshToken);
       setUserInfo(response.data.nickname, 1);
-      
-      if (response.data.newUser) {
-        navigate("/onboarding/set-profile");
+
+      localStorage.setItem("isNewUser", String(isNewUser));
+
+      if (isNewUser || hasDefaultNickname) {
+        navigate("/onboarding/set-profile", { replace: true });
       } else {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }
     } catch (error: any) {
-      console.error('백엔드 로그인 실패:', error.message);
-      alert('로그인 처리 중 오류가 발생했습니다.');
+      console.error("백엔드 로그인 실패:", error.message);
+      alert("로그인 처리 중 오류가 발생했습니다.");
       // 에러 발생 시 URL의 파라미터를 지우기 위해 경로 초기화
       navigate("/login", { replace: true });
     } finally {
@@ -62,8 +67,8 @@ export default function LoginPage() {
    * [1단계] 카카오 로그인 버튼 클릭 (카카오 서버로 리다이렉트)
    */
   const handleKakaoLogin = () => {
-    console.log('카카오 인증 페이지로 이동...');
-    loginWithKakao(); 
+    console.log("카카오 인증 페이지로 이동...");
+    loginWithKakao();
   };
 
   return (
@@ -71,20 +76,16 @@ export default function LoginPage() {
       <div className={S.appFrame}>
         <main className="flex flex-col items-center justify-center flex-1 px-5">
           <div className="mb-12">
-            <img 
-              src="/images/Login.png" 
-              alt="Reading Character" 
-              className="w-80.75 h-80.75"
-            />
+            <img src="/images/Login.png" alt="Reading Character" className="w-80.75 h-80.75" />
           </div>
 
           <div className="text-center mb-10">
             <h1 className={S.loginTitle}>
-              만만한 책부터<br />탄탄한 습관까지
+              만만한 책부터
+              <br />
+              탄탄한 습관까지
             </h1>
-            <p className={S.loginSubTitle}>
-              한 단계씩 쌓아가는 나의 독서 습관
-            </p>
+            <p className={S.loginSubTitle}>한 단계씩 쌓아가는 나의 독서 습관</p>
           </div>
 
           <div className="mt-3">

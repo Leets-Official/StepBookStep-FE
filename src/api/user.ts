@@ -1,16 +1,13 @@
-import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_STEPBOOKSTEP_BASE_URL;
+import apiClient from "@/api/clients";
 
 export interface CheckNicknameResponse {
   nickname: string;
-  available: boolean;
+  isAvailable: boolean;
 }
 
 export const checkNickname = async (nickname: string): Promise<CheckNicknameResponse> => {
-  const res = await axios.get(`${BASE_URL}/users/check`, {
+  const res = await apiClient.get<CheckNicknameResponse>("/users/check", {
     params: { nickname },
-    withCredentials: true,
   });
 
   return res.data;

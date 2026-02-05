@@ -49,7 +49,7 @@ export const statsCard =
 
 export const statsSection = "flex-1 flex items-center justify-center";
 
-export const statsHeader = "mt-10 mx-5 flex items-center justify-between mb-3";
+export const statsHeader = "mt-10 mx-5 flex items-center justify-between mb-3 gap-42";
 
 export const statsTitle = "text-lg font-semibold text-gray-900";
 

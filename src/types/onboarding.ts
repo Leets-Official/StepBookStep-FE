@@ -1,5 +1,3 @@
-export type RoutineType = "DAY" | "WEEK" | "MONTH";
-
 export interface OnboardingPayload {
   nickname: string;
 
@@ -8,12 +6,13 @@ export interface OnboardingPayload {
     readingDuration: number | null;
     readingBurden: number | null;
   };
-
-  genres: string[];
+  categories: number[];
+  genres: number[];
 }
 
 export interface RoutineResult {
-  routineType: RoutineType;
-  pages: number;
   nickname: string;
+  routineType: "DAY" | "WEEK" | "MONTH";
+  pages: number;
+  basis: string;
 }

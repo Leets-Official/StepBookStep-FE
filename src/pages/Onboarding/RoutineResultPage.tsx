@@ -5,6 +5,11 @@ import { Button } from "@/components/Button/Button";
 import type { RoutineResult } from "@/types/onboarding";
 import { useOnboardingStore } from "@/stores/onboardingStore";
 import { postOnboarding } from "@/api/onboarding";
+import {
+  READING_FREQUENCY_MAP,
+  READING_DURATION_MAP,
+  READING_BURDEN_MAP,
+} from "@/utils/onboardingMapper";
 
 import {
   pageWrapper,
@@ -25,56 +30,68 @@ import {
 
 const ROUTINE_UI = {
   DAY: {
-    title: (pages: number) => ({
-      strong: `하루에 ${pages}쪽`,
+    title: (pages: number, basis?: string) => ({
+      strong: `하루에 ${pages}쪽${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-day.png",
   },
   WEEK: {
-    title: (pages: number) => ({
-      strong: `1주일에 ${pages}쪽`,
+    title: (pages: number, basis?: string) => ({
+      strong: `1주일에 ${pages}쪽${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-week.png",
   },
   MONTH: {
-    title: (pages: number) => ({
-      strong: `1개월에 ${pages}쪽`,
+    title: (pages: number, basis?: string) => ({
+      strong: `1개월에 ${pages}쪽${basis ? `${basis}` : ""}`,
       weak: "으로 시작해요!",
     }),
     image: "/images/routine-month.png",
   },
 } as const;
 
+const PERIOD_TO_ROUTINE_TYPE: Record<string, RoutineResult["routineType"]> = {
+  하루: "DAY",
+  일주일: "WEEK",
+  한달: "MONTH",
+};
+
 export default function RoutineResultPage() {
   const navigate = useNavigate();
   const { payload, reset } = useOnboardingStore();
-
   const [state, setState] = useState<RoutineResult | null>(null);
 
   useEffect(() => {
     const fetchResult = async () => {
+      const { readingFrequency, readingDuration, readingBurden } = payload.level;
+
+      if (readingFrequency === null || readingDuration === null || readingBurden === null) {
+        throw new Error("온보딩 레벨 답변이 누락되었습니다.");
+      }
+
       try {
         const res = await postOnboarding({
           nickname: payload.nickname,
           levelAnswers: {
-            readingFrequency: String(payload.level.readingFrequency),
-            readingDuration: String(payload.level.readingDuration),
-            difficultyPreference: String(payload.level.readingBurden),
+            readingFrequency: READING_FREQUENCY_MAP[readingFrequency],
+            readingDuration: READING_DURATION_MAP[readingDuration],
+            difficultyPreference: READING_BURDEN_MAP[readingBurden],
           },
           categoryIds: [],
-          genreIds: payload.genres.map(Number),
+          genreIds: [],
         });
 
-        const routineType = res.routineTokens.period === "하루" ? "DAY" : "WEEK";
+        const routineType = PERIOD_TO_ROUTINE_TYPE[res.routineTokens.period];
 
-        const pages = Number(res.routineTokens.amount.replace("쪽", ""));
+        const pages = Number(res.routineTokens.amount.replace(/[^0-9]/g, ""));
 
         setState({
           nickname: payload.nickname,
           routineType,
           pages,
+          basis: res.routineTokens.basis,
         });
       } catch (e) {
         console.error(e);
@@ -82,7 +99,7 @@ export default function RoutineResultPage() {
     };
 
     fetchResult();
-  }, []);
+  }, [payload]);
 
   if (!state) return null;
 
@@ -107,8 +124,8 @@ export default function RoutineResultPage() {
 
           <div className={card}>
             <div className={cardTitle}>
-              <span className={cardTitleStrong}>{ui.title(state.pages).strong}</span>
-              <span className={cardTitleWeak}>{ui.title(state.pages).weak}</span>
+              <div className={cardTitleStrong}>{ui.title(state.pages, state.basis).strong}</div>
+              <div className={cardTitleWeak}>{ui.title(state.pages).weak}</div>
             </div>
 
             <div className={illustrationWrapper}>

@@ -33,25 +33,22 @@ export default function SetProfile() {
     setError(null);
     setAvailable(null);
 
-    // 1️⃣ 형식 검사
     const errorMessage = getNicknameErrorMessage(nickname);
     if (errorMessage) {
       setError(errorMessage);
       return;
     }
 
-    // 2️⃣ 중복 확인
     try {
       setChecking(true);
       const res = await checkNickname(nickname);
 
-      if (!res.available) {
+      if (!res.isAvailable) {
         setError("이미 사용 중인 닉네임이에요.");
         setAvailable(false);
         return;
       }
 
-      // 3️⃣ 통과 → store 저장 + 이동
       setAvailable(true);
       saveNickname(nickname);
       navigate("/onboarding/level/step-1");
@@ -87,7 +84,7 @@ export default function SetProfile() {
                 <>
                   한글, 영문, 숫자만 사용할 수 있어요.
                   <br />
-                  특수문자(@#$%^&’*”+_,:)는 사용할 수 없어요.
+                  특수문자는 사용할 수 없어요.
                   {error && (
                     <>
                       <br />

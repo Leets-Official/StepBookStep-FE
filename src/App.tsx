@@ -87,11 +87,6 @@ function RootRedirect() {
   const accessToken = localStorage.getItem("accessToken");
   const isNewUser = localStorage.getItem("isNewUser") === "true";
 
-  if (!hasSeenTutorial) {
-    // 튜토리얼을 한 번도 안 본 유저
-    return <Navigate to="/tutorial" replace />;
-  }
-
   if (!accessToken) {
     // 튜토리얼은 봤지만 로그인이 안 된 유저
     return <Navigate to="/login" replace />;
@@ -99,6 +94,11 @@ function RootRedirect() {
 
   if (isNewUser) {
     return <Navigate to="/onboarding/set-profile" replace />;
+  }
+
+  if (!hasSeenTutorial) {
+    // 튜토리얼을 한 번도 안 본 유저
+    return <Navigate to="/tutorial" replace />;
   }
 
   // 둘 다 통과하면 홈으로!
