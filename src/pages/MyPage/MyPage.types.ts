@@ -23,6 +23,7 @@ export interface BookItem {
   rating: number;
   updatedAt: string;
   bookmarked: boolean;
+  isBookmarked?: boolean;
 }
 
 

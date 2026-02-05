@@ -65,7 +65,7 @@ const MyPage = () => {
 
     const filteredData =
       activeStatus === "BOOKMARKED"
-        ? books.filter((b) => !!b.bookmarked)
+        ? books.filter((b) => !!b.bookmarked || !!b.isBookmarked)
         : books.filter((b) => b.status === activeStatus);
 
     if (filteredData.length === 0) {

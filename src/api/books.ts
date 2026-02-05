@@ -44,3 +44,21 @@ export const filterBooks = async (params?: FilterBooksParams): Promise<FilterBoo
 
   return response.data.data;
 };
+
+/**
+ * 북마크 등록
+ * PUT /api/v1/books/{bookId}/bookmark
+ */
+export const addBookmark = async (bookId: number) => {
+  const response = await apiClient.put(`/books/${bookId}/bookmark`);
+  return response.data;
+};
+
+/**
+ * 북마크 해제
+ * DELETE /api/v1/books/{bookId}/bookmark
+ */
+export const removeBookmark = async (bookId: number) => {
+  const response = await apiClient.delete(`/books/${bookId}/bookmark`);
+  return response.data;
+};
