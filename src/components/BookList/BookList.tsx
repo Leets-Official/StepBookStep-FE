@@ -20,9 +20,12 @@ export function BookList({
   targetAmount,
   remainingAmount,
   coverImage, // 책 커버 이미지 가져올라고 사용
+  unit = "쪽",
   onClick,
 }: BookListProps) {
-  const percent = readingState === "reading" ? Math.round((currentPage / totalPages) * 100) : 0;
+  const percent = readingState === "reading" ? Math.round((currentPage / (totalPages || 1)) * 100) : 0;
+
+  const isDetailMode = readingState === "readingdetail";
 
   return (
     <div className={S.row} onClick={onClick}>
@@ -31,14 +34,17 @@ export function BookList({
           <img src={coverImage} alt={title} className="w-full h-full object-cover rounded-sm" />
         )}
       </div>
-
+      
       <div className={S.content}>
         <div className={S.info}>
           <h3 className={S.title}>{title}</h3>
-          <p className={S.author}>{author}</p>
-          <p className={S.meta}>
+           { !isDetailMode && ( <>
+            <p className={S.author}>{author}</p>
+            <p className={S.meta}>
             {publisher}/{publicYear}/{totalPages}쪽
-          </p>
+            </p>
+            </>
+           )}
         </div>
 
         <div className={S.extra}>
@@ -64,7 +70,7 @@ export function BookList({
                   {currentPage}쪽 ({percent}%)
                 </span>
               </div>
-              <LinearProgress total={totalPages} current={currentPage} />
+              <LinearProgress total={totalPages || 1} current={currentPage} />
             </div>
           )}
           {readingState === "readingdetail" && (
@@ -73,14 +79,14 @@ export function BookList({
                 <span className={S.highlight}>{targetPeriod}</span>
                 <span>에 </span>
                 <span className={S.highlight}>{targetAmount}</span>
-                <span>쪽</span>
+                <span>{unit}</span>
                 <span className="text-gray-500"> 독서해요!</span>
               </p>
 
               <p className={S.detailSubText}>
                 <span>목표 달성까지 </span>
                 <span className="text-purple-400">{remainingAmount}</span>
-                <span>쪽 남았어요!</span>
+                <span>{unit} 남았어요!</span>
               </p>
             </>
           )}

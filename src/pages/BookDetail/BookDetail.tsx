@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import { useParams } from "react-router-dom";
@@ -36,7 +36,7 @@ interface BookDetailProps {
   readingStatus: ReadingStatus;
 }
 
-export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams(); // URL에서 ID 가져오기
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   
@@ -335,4 +335,18 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       )}
     </div>
   );
+}
+
+export default function BookDetailPage() {
+  const [searchParams] = useSearchParams();
+  const statusParam = searchParams.get("status");
+  
+  // URL에서 ?from=routine 같은 값을 읽어옵니다.
+  const fromParam = searchParams.get("from") as EntrySource | null;
+
+  const readingStatus: ReadingStatus =
+    statusParam === "reading" || statusParam === "completed" ? statusParam : "before";
+
+  // entrySource에 고정값 "home" 대신 fromParam을 넣어줍니다.
+  return <BookDetail entrySource={fromParam || "home"} readingStatus={readingStatus} />;
 }

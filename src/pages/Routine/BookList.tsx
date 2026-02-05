@@ -76,10 +76,7 @@ export default function RoutinePage() {
                     <BookList 
                       key={routine.goalId}
                       title={routine.bookTitle}
-                      author={routine.bookAuthor}
-                      publisher={routine.bookPublisher}
-                      publicYear={String(routine.bookPublishYear)}
-                      totalPages={routine.bookTotalPages}
+                      coverImage={routine.bookCoverImage}
                       targetPeriod={
                         routine.period === "DAILY" ? "하루" : 
                         routine.period === "WEEKLY" ? "1주일" : "한 달"
@@ -87,9 +84,10 @@ export default function RoutinePage() {
                       targetAmount={routine.targetAmount}
                       remainingAmount={routine.remainingAmount}
                       isAchieved={routine.remainingAmount <= 0}
+                      unit={routine.metric === "TIME" ? "분" : "쪽"}
                       readingState="readingdetail"
 
-                      onClick={() => navigate(`/books/${routine.bookId}`)}
+                      onClick={() => navigate(`/books/${routine.bookId}?status=reading&from=routine`)}
                     />
                   ))
                 ) : (
