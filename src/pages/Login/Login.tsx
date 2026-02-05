@@ -5,6 +5,7 @@ import { initKakao, loginWithKakao, exchangeCodeForToken } from "@/utils/KakaoAu
 import { kakaoLogin, saveTokens } from "@/services/authService";
 import { useUserStore } from "@/stores/useUserStore";
 import * as S from "./Login.styles";
+import { is } from "date-fns/locale";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -34,19 +35,23 @@ export default function LoginPage() {
   const handleBackendLogin = async (authCode: string) => {
     try {
       setIsLoading(true);
-      console.log('카카오 인증 코드로 백엔드 로그인 시도 중...');
       const socialToken = await exchangeCodeForToken(authCode);
       
       // authService의 kakaoLogin 호출
       const response = await kakaoLogin(socialToken);
+      console.log('전체 응답 데이터:', response.data);
+
+      const isNewUser = response.data.isNewUser;
       
       saveTokens(response.data.accessToken, response.data.refreshToken);
       setUserInfo(response.data.nickname, 1);
+
+      localStorage.setItem("isNewUser", String(isNewUser));
       
-      if (response.data.newUser) {
-        navigate("/onboarding/set-profile");
+      if (isNewUser) {
+        navigate("/onboarding/set-profile", { replace: true });
       } else {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }
     } catch (error: any) {
       console.error('백엔드 로그인 실패:', error.message);

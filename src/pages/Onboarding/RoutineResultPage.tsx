@@ -80,7 +80,9 @@ export default function RoutineResultPage() {
         </div>
 
         <div className={bottomAction}>
-          <Button label="시작하기" fullWidth onClick={() => navigate("/")} />
+          <Button label="시작하기" fullWidth onClick={() => {
+            // localStorage.removeItem("isNewUser"); //이거 신규 유저 지우게 하는 코드입니당 (확인후 지워주세요)
+            navigate("/home")}} />
         </div>
       </div>
     </div>
