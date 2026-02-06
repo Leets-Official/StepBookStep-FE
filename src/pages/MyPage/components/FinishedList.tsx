@@ -18,6 +18,7 @@ export const FinishedList = ({ data, onBookClick }: Props) => (
         publisher={book.publisher}
         publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
         totalPages={book.itemPage}
+        coverImage={book.coverUrl}
         startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
         endDate={book.finishedAt?.split("T")[0].replace(/-/g, ". ")}
         rating={book.rating}

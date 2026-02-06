@@ -95,8 +95,7 @@ export default function Statistics() {
   const weightImage = getWeightImage(statsData.bookSummary.totalWeightKg);
 
   return (
-    <div className={S.pageWrapper}>
-      <div className={S.appFrame}>
+    <div className="flex flex-col gap-8 pb-8 w-full">
         <main className={S.content}>
           {/* 1. 얼마나 읽었나요? */}
           <section>
@@ -172,8 +171,8 @@ export default function Statistics() {
             <div className={S.statsCard}>
               <p className={S.bigValueText}>
                 {formatReadingTime(
-                  statsData.cumulativeTime.hours, 
-                  statsData.cumulativeTime.minutes
+                  Math.floor(statsData.cumulativeTime.totalMinutes / 60), // 시간 계산
+                  statsData.cumulativeTime.totalMinutes % 60            // 남은 분 계산
                 )}
               </p>
               <p className="text-sm font-['pretendard'] font-regular text-gray-500">
@@ -187,12 +186,13 @@ export default function Statistics() {
             <h2 className={S.sectionTitle}>누적 목표 달성 기록</h2>
             <div className={S.statsCard}>
               <p className={S.bigValueText}>
-                {statsData.goalAchievement.achievementRate}%
+                {statsData.goalAchievement?.achievementRate || 0}
+                <span className="text-lg font-normal ml-1">%</span>
               </p>
               <div className="mb-2 w-49.75 h-1.75 item-justify-center mx-auto">
                 <LinearProgress 
                   total={100} 
-                  current={statsData.goalAchievement.achievementRate} 
+                  current={statsData.goalAchievement?.achievementRate || 0} 
                 />
               </div>
               <p className="text-xs text-gray-400">
@@ -220,6 +220,8 @@ export default function Statistics() {
                         cy="50%" 
                         innerRadius={60} 
                         outerRadius={90}
+                        startAngle={90}
+                        endAngle={450}
                       >
                         {pieData.map((_entry, index) => (
                           <Cell 
@@ -264,6 +266,5 @@ export default function Statistics() {
           </section>
         </main>
       </div>
-    </div>
   );
 }

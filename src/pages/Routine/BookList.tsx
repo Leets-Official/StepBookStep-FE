@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "./BookList.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
@@ -13,7 +13,10 @@ import { useRoutines } from "@/hooks/useReadings";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"routine" | "statistics">("routine");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<"routine" | "statistics">(
+    (location.state as { targetTab?: "routine" | "statistics" })?.targetTab || "routine"
+  );
   const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
   const { data: routines, isLoading, isError, refetch } = useRoutines();
 
@@ -76,10 +79,7 @@ export default function RoutinePage() {
                     <BookList 
                       key={routine.goalId}
                       title={routine.bookTitle}
-                      author={routine.bookAuthor}
-                      publisher={routine.bookPublisher}
-                      publicYear={String(routine.bookPublishYear)}
-                      totalPages={routine.bookTotalPages}
+                      coverImage={routine.bookCoverImage}
                       targetPeriod={
                         routine.period === "DAILY" ? "하루" : 
                         routine.period === "WEEKLY" ? "1주일" : "한 달"
@@ -87,9 +87,10 @@ export default function RoutinePage() {
                       targetAmount={routine.targetAmount}
                       remainingAmount={routine.remainingAmount}
                       isAchieved={routine.remainingAmount <= 0}
+                      unit={routine.metric === "TIME" ? "분" : "쪽"}
                       readingState="readingdetail"
 
-                      onClick={() => navigate(`/books/${routine.bookId}`)}
+                      onClick={() => navigate(`/books/${routine.bookId}?status=reading&from=routine`)}
                     />
                   ))
                 ) : (

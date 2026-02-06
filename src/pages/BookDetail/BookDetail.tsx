@@ -29,7 +29,7 @@ import type { TabId } from "@/components/BottomBar/BottomBar.types";
 import * as S from "./BookDetail.styles";
 import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
 
-type EntrySource = "home" | "search" | "routine" | "mypage";
+export type EntrySource = "home" | "search" | "routine" | "mypage";
 type ContentTab = "record" | "info";
 
 interface BookDetailProps {
@@ -37,12 +37,12 @@ interface BookDetailProps {
   readingStatus: ReadingStatus;
 }
 
-export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   
   const { data: routines } = useRoutines();
-
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { updateBookStatus } = useBookStore();
@@ -100,7 +100,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     };
 
     const mappedStatus = statusMap[data.status] || "READING";
-    updateBookStatus(101, mappedStatus, data.rating);
+    updateBookStatus(Number(bookId), mappedStatus, data.rating);
 
     const isFinished = data.status === "AFTER";
 
@@ -186,7 +186,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          // title={BOOK_DETAIL_MOCK.title}
           onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
@@ -236,7 +235,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           </section>
 
           <div className={S.tagRow}>
-            {(bookInfo.tags || []).map((tag, idx) => (
+            {bookInfo.tags.map((tag, idx) => (
               <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
@@ -265,10 +264,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
               <h2 className={S.sectionTitle}>책 소개</h2>
               {bookInfo.description ? (
                 <FullView collapsedHeight={134}>
-                  <p
-                    className={S.description}
-                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
-                  />
+                  <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
               ) : (
                 <EmptyBookDescription />
@@ -318,6 +314,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
                 onClose={handleReportClose}
                 onSave={handleSaveRecord}
                 isTimerMode={false}
+                goalMetric={currentGoal?.metric}
                 initialData={{
                   status:
                     readingStatus === "reading"
@@ -334,12 +331,17 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
       {isGoalModalOpen && (
         <GoalModal
+          bookId={Number(bookId)}
           maxPages={bookInfo.totalPage}
-          title="목표 설정하기"
+          title={currentGoal ? "목표 수정하기" : "목표 설정하기"}
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {
             setIsGoalModalOpen(false);
-            setToastMessage("목표가 저장되었습니다!");
+            setToastMessage(
+              currentGoal 
+                ? "목표가 수정되었습니다!" 
+                : "목표가 저장되었습니다!"
+            ); 
             setShowToast(true);
           }}
           count={1}
@@ -358,3 +360,5 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     </div>
   );
 }
+
+export default BookDetail;

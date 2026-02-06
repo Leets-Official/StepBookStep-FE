@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Segment from "@/components/Segment/Segment";
 import type { SegmentValue } from "@/components/Segment/Segment";
 import Toggle from "@/components/Toggle/Toggle";
 import type { ToggleValue } from "@/components/Toggle/Toggle";
 import Button from "@/components/Button/Button";
 import { XIcon } from "@/assets/icons";
+import { useUpdateBookGoal } from "@/hooks/useReadings";
+import type { Goal, GoalPeriod, GoalMetric } from "@/api/types";
 
 import {
   modalContainer,
@@ -19,37 +21,84 @@ import {
 } from "./GoalModal.styles";
 
 interface GoalModalProps {
+  bookId: number; // ⭐ 추가
   maxPages: number;
   title: string;
   onClose: () => void;
   onSave: () => void;
-  count?: number; // 💡 설계도에 count를 추가했습니다
+  count?: number;
+  existingGoal?: Goal | null; // ⭐ 추가 (수정 모드)
 }
 
-// 💡 함수 인자에서 'count'를 명시적으로 꺼내줍니다 (구조 분해 할당)
 export default function GoalModal({ 
+  bookId,
   maxPages, 
   title, 
   onClose, 
   onSave, 
-  count 
+  count,
+  existingGoal,
 }: GoalModalProps) {
-  const [period, setPeriod] = useState<SegmentValue>("day");
-  const [type, setType] = useState<ToggleValue>("time");
+  // Segment 값 매핑 (API → UI)
+  const segmentFromPeriod = (period: GoalPeriod): SegmentValue => {
+    switch (period) {
+      case "DAILY": return "day";
+      case "WEEKLY": return "week";
+      case "MONTHLY": return "month";
+      default: return "day";
+    }
+  };
+
+  // Segment 값 매핑 (UI → API)
+  const periodFromSegment = (segment: SegmentValue): GoalPeriod => {
+    switch (segment) {
+      case "day": return "DAILY";
+      case "week": return "WEEKLY";
+      case "month": return "MONTHLY";
+      default: return "DAILY";
+    }
+  };
+
+  // Toggle 값 매핑
+  const toggleFromMetric = (metric: GoalMetric): ToggleValue => {
+    return metric === "TIME" ? "time" : "page";
+  };
+
+  const metricFromToggle = (toggle: ToggleValue): GoalMetric => {
+    return toggle === "time" ? "TIME" : "PAGE";
+  };
+
+  // 기존 목표가 있으면 초기값 설정, 없으면 기본값
+  const [period, setPeriod] = useState<SegmentValue>(
+    existingGoal ? segmentFromPeriod(existingGoal.period) : "day"
+  );
+  const [type, setType] = useState<ToggleValue>(
+    existingGoal ? toggleFromMetric(existingGoal.metric) : "time"
+  );
 
   const [hour, setHour] = useState(0);
   const [minute, setMinute] = useState(0);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(
+    existingGoal && existingGoal.metric === "PAGE" ? existingGoal.targetAmount : 0
+  );
+
+  // 기존 목표의 시간을 시/분으로 분리
+  useEffect(() => {
+    if (existingGoal && existingGoal.metric === "TIME") {
+      const totalMinutes = existingGoal.targetAmount;
+      setHour(Math.floor(totalMinutes / 60));
+      setMinute(totalMinutes % 60);
+    }
+  }, [existingGoal]);
+
+  const updateGoalMutation = useUpdateBookGoal();
 
   const periodText = (() => {
     switch (period) {
-      case "week":
-        return "일주일에";
-      case "month":
-        return "한 달에";
+      case "week": return "일주일에";
+      case "month": return "한 달에";
       case "day":
-      default:
-        return "하루에";
+      default: return "하루에";
     }
   })();
 
@@ -62,12 +111,33 @@ export default function GoalModal({
           : `${periodText} ${minute}분 독서해요!`
       : `${periodText} ${page}쪽 독서해요!`;
 
+  const handleSave = async () => {
+    try {
+      const targetAmount = type === "time" 
+        ? hour * 60 + minute // 분 단위로 변환
+        : page;
+
+      await updateGoalMutation.mutateAsync({
+        bookId,
+        data: {
+          period: periodFromSegment(period),
+          metric: metricFromToggle(type),
+          targetAmount,
+        },
+      });
+
+      onSave(); 
+      onClose(); 
+    } catch (error) {
+      console.error("목표 저장 실패:", error);
+    }
+  };
+
   return (
     <div className={overlay}>
       <div className={modalContainer}>
         <div className={header}>
           <div className="flex flex-col gap-1">
-            {/* 💡 count 값이 있을 때만 상단에 표시합니다 */}
             {count && (
               <span className="text-[12px] font-semibold text-purple-600">
                 {count}번째 목표 설정
@@ -103,7 +173,13 @@ export default function GoalModal({
         </div>
 
         <div className={footer}>
-          <Button label="저장하기" fullWidth size="large" onClick={onSave} />
+          <Button 
+            label={updateGoalMutation.isPending ? "저장 중..." : "저장하기"} 
+            fullWidth 
+            size="large" 
+            onClick={handleSave}
+            disabled={updateGoalMutation.isPending}
+          />
         </div>
       </div>
     </div>

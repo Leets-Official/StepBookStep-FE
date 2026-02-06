@@ -4,10 +4,10 @@ export interface BookListProps {
   readingState: ReadingState;
 
   title: string;
-  author: string;
-  publisher: string;
-  publicYear: string;
-  totalPages: number;
+  author?: string;
+  publisher?: string;
+  publicYear?: string;
+  totalPages?: number;
 
   tags?: string[];
 
@@ -21,8 +21,8 @@ export interface BookListProps {
   targetAmount?: number;   
   remainingAmount?: number;
   isAchieved?: boolean;    
+  unit?: string;
 
-  
   level?: number;    
   country?: string;  
   genre?: string;   

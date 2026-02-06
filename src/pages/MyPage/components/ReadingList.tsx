@@ -18,6 +18,7 @@ export const ReadingList = ({ data, onBookClick }: Props) => (
         publisher={book.publisher}
         publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
         totalPages={book.itemPage}
+        coverImage={book.coverUrl}
         currentPage={book.totalPagesRead || 0}
         startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
         onClick={() => onBookClick(book.bookId)}
