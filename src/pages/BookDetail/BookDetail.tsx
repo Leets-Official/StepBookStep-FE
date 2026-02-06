@@ -43,8 +43,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   
   const { data: routines } = useRoutines();
   
-  console.log("📚 [BookDetail] All Routines:", routines);
-
   const navigate = useNavigate();
   const location = useLocation();
   const { updateBookStatus } = useBookStore();
@@ -55,7 +53,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
 
   const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
-  console.log("🎯 [BookDetail] Current Goal:", currentGoal);
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
