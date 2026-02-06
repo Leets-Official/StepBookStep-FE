@@ -6,31 +6,35 @@ import Button from "@/components/Button/Button";
 import { Toast } from "@/components/Toast/Toast";
 
 import * as S from "./Setting.styles";
+import { patchNickname } from "@/api/settings";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function ChangeNickname() {
-  // 현재(기존) 닉네임
-  const [currentNickname, setCurrentNickname] = useState("기존 닉네임");
+  const nickname = useUserStore((state) => state.nickname);
+  const level = useUserStore((state) => state.level);
+  const setUserInfo = useUserStore((state) => state.setUserInfo);
 
-  // 새 닉네임 입력값
   const [newNickname, setNewNickname] = useState("");
-
-  // 토스트 노출 여부
   const [showToast, setShowToast] = useState(false);
 
-  // 버튼 활성화 조건
   const isDisabled = newNickname.trim().length === 0;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isDisabled) return;
 
-    // 1️⃣ 기존 닉네임을 새 닉네임으로 갱신
-    setCurrentNickname(newNickname);
+    try {
+      await patchNickname(0, newNickname);
+      setUserInfo(newNickname, level);
 
-    // 2️⃣ 새 닉네임 입력 초기화 → 버튼 다시 disabled
-    setNewNickname("");
+      setNewNickname("");
+      setShowToast(true);
 
-    // 3️⃣ 토스트 표시
-    setShowToast(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
+    } catch (error) {
+      console.error("닉네임 변경 실패", error);
+    }
   };
 
   return (
@@ -40,11 +44,9 @@ export default function ChangeNickname() {
 
         <main className={S.content}>
           <section className={S.section}>
-            {/* 기존 닉네임 */}
             <p className={S.inputLabel}>기존 닉네임</p>
-            <TextField value={currentNickname} disabled icon={false} />
+            <TextField value={nickname ?? ""} disabled icon={false} />
 
-            {/* 새 닉네임 */}
             <p className={S.inputLabel}>새 닉네임</p>
             <TextField
               value={newNickname}
@@ -54,7 +56,6 @@ export default function ChangeNickname() {
               icon={false}
             />
 
-            {/* 안내 문구 */}
             <p className={S.helperText}>
               한글, 영문, 숫자만 사용할 수 있어요.
               <br />
@@ -66,14 +67,13 @@ export default function ChangeNickname() {
         {showToast && (
           <div className={S.toastWrapper}>
             <Toast
-              isVisible={true}
+              isVisible
               message="닉네임이 변경되었습니다."
               onClose={() => setShowToast(false)}
             />
           </div>
         )}
 
-        {/* 하단 버튼 */}
         <Button
           label="수정하기"
           variant="primary"
