@@ -5,6 +5,7 @@ import { Button } from "@/components/Button/Button";
 import type { RoutineResult } from "@/types/onboarding";
 import { useOnboardingStore } from "@/stores/onboardingStore";
 import { postOnboarding } from "@/api/onboarding";
+import { useUserStore } from "@/stores/useUserStore";
 import {
   READING_FREQUENCY_MAP,
   READING_DURATION_MAP,
@@ -61,6 +62,8 @@ const PERIOD_TO_ROUTINE_TYPE: Record<string, RoutineResult["routineType"]> = {
 export default function RoutineResultPage() {
   const navigate = useNavigate();
   const { payload } = useOnboardingStore();
+  const { setUserInfo } = useUserStore();
+
   const [state, setState] = useState<RoutineResult | null>(null);
 
   useEffect(() => {
@@ -82,6 +85,8 @@ export default function RoutineResultPage() {
           categoryIds: [],
           genreIds: [],
         });
+
+        setUserInfo(payload.nickname, res.level);
 
         const routineType = PERIOD_TO_ROUTINE_TYPE[res.routineTokens.period];
 

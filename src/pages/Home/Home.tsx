@@ -1,33 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
 import { BookIcon, ClockIcon, TrophyIcon, LikeIcon, ChevronRightIcon } from "@/assets/icons";
 
-import { BOOKS_MOCK } from "@/mocks/books.mock";
 import HorizontalBookSliderWeb from "./HorizontalBookSlider.web";
 import HorizontalBookSliderApp from "./HorizontalBookSlider.app";
+import SkeletonHome from "./SkeletonHome";
+
+import { getHome } from "@/api/home";
+import type { HomeResponse, HomeBook } from "@/types/home";
+import type { SliderBook } from "@/types/sliderBook";
+import { useUserStore } from "@/stores/useUserStore";
+
 import * as S from "./Home.styles";
 import { cn } from "@/utils/cn";
-import SkeletonHome from "@/pages/Home/SkeletonHome";
-import { useNavigate } from "react-router-dom";
 
 const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
 type RecommendFilter = "short" | "levelup" | "bestseller";
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<"home" | "search" | "routine" | "mypage">("home");
-  const navigate = useNavigate();
-  const [selectedRecommend, setSelectedRecommend] = useState<RecommendFilter>("short");
-  const isLoading = false;
-  const nickname = "하늘";
-  const category = "예술/대중문화";
+const toSliderBooks = (books: HomeBook[]): SliderBook[] =>
+  books.map((b) => ({
+    bookId: b.bookId,
+    title: b.title,
+    coverUrl: b.coverImage,
+  }));
 
+export default function Home() {
+  const navigate = useNavigate();
   const Slider = isTouch ? HorizontalBookSliderApp : HorizontalBookSliderWeb;
 
-  if (isLoading) {
+  const { nickname } = useUserStore();
+
+  const [activeTab, setActiveTab] = useState<"home" | "search" | "routine" | "mypage">("home");
+  const [selectedRecommend, setSelectedRecommend] = useState<RecommendFilter>("short");
+  const [data, setData] = useState<HomeResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getHome()
+      .then(setData)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading || !data) {
     return <SkeletonHome />;
   }
+
+  const { readingStatistics, genreBooks, recommendations } = data;
+
+  const recommendMap: Record<RecommendFilter, HomeBook[]> = {
+    short: recommendations.lightReads,
+    levelup: recommendations.levelUp,
+    bestseller: recommendations.bestseller,
+  };
 
   return (
     <div className={S.pageWrapper}>
@@ -35,16 +63,15 @@ export default function Home() {
         <AppBar mode="logo" onSettingClick={() => {}} />
 
         <main className={S.content}>
-          {/* 헤더 */}
           <section className={S.headerSection}>
             <p className={S.headerSubtitle}>{nickname}님을 위한</p>
             <h2 className={S.headerTitle}>
-              <span className={S.headerHighlight}>{category}</span>
+              <span className={S.headerHighlight}>{genreBooks.name}</span>
               <span> 도서예요</span>
             </h2>
           </section>
 
-          <Slider books={BOOKS_MOCK} />
+          <Slider books={toSliderBooks(genreBooks.books)} />
 
           <section className={S.recommendSection}>
             <h3 className={S.recommendTitle}>
@@ -75,30 +102,48 @@ export default function Home() {
             </div>
           </section>
 
-          <Slider books={BOOKS_MOCK} />
+          <Slider books={toSliderBooks(recommendMap[selectedRecommend])} />
 
-          {/* 통계 */}
-          <button className={S.statsHeader} onClick={() => navigate("/routine/booklist", { state: { targetTab: "statistics" } })}>
+          <button
+            className={S.statsHeader}
+            onClick={() =>
+              navigate("/routine/booklist", {
+                state: { targetTab: "statistics" },
+              })
+            }
+          >
             <h3 className={S.statsTitle}>얼마나 독서했나요?</h3>
-            <span className={S.statsArrow}>
-              <ChevronRightIcon />
-            </span>
+            <ChevronRightIcon />
           </button>
 
           <section className={S.statsCard}>
             <div className={S.statsSection}>
               <div className={S.statsGrid}>
-                <Stat icon={BookIcon} label="누적 독서량" value="8권" />
-                <Stat icon={ClockIcon} label="누적 독서 시간" value="92시간" />
+                <Stat
+                  icon={BookIcon}
+                  label="누적 독서량"
+                  value={`${readingStatistics.finishedBookCount}권`}
+                />
+                <Stat
+                  icon={ClockIcon}
+                  label="누적 독서 시간"
+                  value={`${readingStatistics.cumulativeHours}시간`}
+                />
               </div>
             </div>
 
-            <div className={S.divider} />
-
             <div className={S.statsSection}>
               <div className={S.statsGrid}>
-                <Stat icon={TrophyIcon} label="목표 달성률" value="91%" />
-                <Stat icon={LikeIcon} label="가장 좋아하는 분야" value="소설" />
+                <Stat
+                  icon={TrophyIcon}
+                  label="목표 달성률"
+                  value={`${readingStatistics.achievementRate}%`}
+                />
+                <Stat
+                  icon={LikeIcon}
+                  label="가장 좋아하는 분야"
+                  value={readingStatistics.favoriteCategory}
+                />
               </div>
             </div>
           </section>
