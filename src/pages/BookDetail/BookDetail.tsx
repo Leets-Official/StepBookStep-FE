@@ -63,12 +63,13 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
-    if (bookData) {
-      // bookData is BookDetailResponse
-      const initialStatus = bookData.bookmarked ?? false;
-      setIsBookmarked(initialStatus);
+    // location.state?.isBookmarked가 있으면 우선 적용
+    if (location.state && typeof location.state.isBookmarked === 'boolean') {
+      setIsBookmarked(location.state.isBookmarked);
+    } else if (bookData) {
+      setIsBookmarked(bookData.bookmarked ?? false);
     }
-  }, [bookData]);
+  }, [bookData, location.state]);
 
   useEffect(() => {
     if (location.state?.showToast && location.state?.toastMessage) {

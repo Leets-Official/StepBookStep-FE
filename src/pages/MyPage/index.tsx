@@ -52,7 +52,10 @@ const MyPage = () => {
   }, [activeStatus]);
 
   const handleBookClick = (bookId: number, status: "reading" | "completed" | "before") => {
-    navigate(`/books/${bookId}?status=${status}`);
+    const book = books.find((b) => b.bookId === bookId);
+    navigate(`/books/${bookId}?status=${status}&entrySource=mypage`, {
+      state: { isBookmarked: book?.isBookmarked ?? book?.bookmarked ?? false },
+    });
   };
 
   const renderContent = () => {
