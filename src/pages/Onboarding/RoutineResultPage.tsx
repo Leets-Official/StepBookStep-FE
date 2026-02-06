@@ -86,7 +86,10 @@ export default function RoutineResultPage() {
           genreIds: [],
         });
 
-        setUserInfo(payload.nickname, res.level);
+        setUserInfo({
+          nickname: payload.nickname,
+          level: res.level,
+        });
 
         const routineType = PERIOD_TO_ROUTINE_TYPE[res.routineTokens.period];
 
