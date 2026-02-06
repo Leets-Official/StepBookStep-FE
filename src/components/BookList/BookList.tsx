@@ -97,6 +97,7 @@ export function BookList({
                   </span>
                 ) : (
                   <>
+                    <span>목표 달성까지 </span>
                     <span className="text-purple-500 font-bold">{remainingAmount}</span>
                     <span>{unit} 남았어요</span>
                   </>
