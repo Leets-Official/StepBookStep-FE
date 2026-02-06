@@ -22,7 +22,7 @@ export const weightMainText = "text-xl font-['pretendard'] font-medium text-blac
 // 독서 그래프
 export const chartCard = `${baseCard} p-5 flex flex-col`; // 기본 카드 스타일 재사용
 export const chartContainer = "w-full min-h-[150px] relative mt-4";
-export const yearSelector = "flex items-center justify-between mb-6";
+export const yearSelector = "flex items-center justify-center gap-6 mb-6";
 export const yearButton = "w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors";
 
 // 누적 독서 시간 & 목표 달성

@@ -95,8 +95,7 @@ export default function Statistics() {
   const weightImage = getWeightImage(statsData.bookSummary.totalWeightKg);
 
   return (
-    <div className={S.pageWrapper}>
-      <div className={S.appFrame}>
+    <div className="flex flex-col gap-8 pb-8 w-full">
         <main className={S.content}>
           {/* 1. 얼마나 읽었나요? */}
           <section>
@@ -221,6 +220,8 @@ export default function Statistics() {
                         cy="50%" 
                         innerRadius={60} 
                         outerRadius={90}
+                        startAngle={90}
+                        endAngle={450}
                       >
                         {pieData.map((_entry, index) => (
                           <Cell 
@@ -265,6 +266,5 @@ export default function Statistics() {
           </section>
         </main>
       </div>
-    </div>
   );
 }
