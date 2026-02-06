@@ -38,7 +38,7 @@ export const BookReport: React.FC<BookReportProps> = ({
   goalMetric,
 }) => {
   const [status, setStatus] = useState<ReadingStatus>(initialData?.status || "READING");
-  const [date, setDate] = useState<Date | null>(initialData?.date || null);
+  const [date, setDate] = useState<Date | null>(initialData?.date || new Date());
   const [pages, setPages] = useState<string>(initialData?.pages || "");
   const [duration, setDuration] = useState<string>(initialData?.duration || "");
   const [rating, setRating] = useState<number>(initialData?.rating || 0);
