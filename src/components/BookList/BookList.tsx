@@ -19,6 +19,7 @@ export function BookList({
   targetPeriod,
   targetAmount,
   remainingAmount,
+  isAchieved,
   coverImage, // 책 커버 이미지 가져올라고 사용
   unit = "쪽",
   onClick,
@@ -84,9 +85,22 @@ export function BookList({
               </p>
 
               <p className={S.detailSubText}>
-                <span>목표 달성까지 </span>
-                <span className="text-purple-400">{remainingAmount}</span>
-                <span>{unit} 남았어요!</span>
+                {isAchieved ? (
+                  <span className="text-purple-500 font-bold">
+                    {targetPeriod === "하루"
+                      ? "오늘 목표를 달성했어요!"
+                      : targetPeriod === "1주일"
+                        ? "이번 주 목표를 달성했어요!"
+                        : targetPeriod === "한 달"
+                          ? "이번 달 목표를 달성했어요!"
+                          : "목표를 달성했어요!"}
+                  </span>
+                ) : (
+                  <>
+                    <span className="text-purple-500 font-bold">{remainingAmount}</span>
+                    <span>{unit} 남았어요</span>
+                  </>
+                )}
               </p>
             </>
           )}
