@@ -1,10 +1,10 @@
-import { BookList } from "@/components/BookList/BookList"; // BookList 컴포넌트 불러오기
+import { BookList } from "@/components/BookList/BookList";
 import * as S from "@/pages/MyPage/MyPage.styles";
-import type { BookItem } from "@/pages/MyPage/MyPage.types"; // BookItem 타입 불러오기
+import type { BookItem } from "@/pages/MyPage/MyPage.types";
 
 interface Props {
   data: BookItem[];
-  onBookClick: () => void;
+  onBookClick: (bookId: number) => void;
 }
 
 export const FinishedList = ({ data, onBookClick }: Props) => (
@@ -16,13 +16,12 @@ export const FinishedList = ({ data, onBookClick }: Props) => (
         title={book.title || "제목 없음"}
         author={book.author}
         publisher={book.publisher}
-        publicYear={book.pubDate.split('-')[0]}
+        publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
         totalPages={book.itemPage}
-        // 날짜 포맷팅 로직
-        startDate={book.createdAt.split('T')[0].replace(/-/g, '. ')}
-        endDate={book.finishedAt?.split('T')[0].replace(/-/g, '. ')}
+        startDate={book.createdAt ? book.createdAt.split("T")[0].replace(/-/g, ". ") : ""}
+        endDate={book.finishedAt?.split("T")[0].replace(/-/g, ". ")}
         rating={book.rating}
-        onClick={onBookClick}
+        onClick={() => onBookClick(book.bookId)}
       />
     ))}
   </div>

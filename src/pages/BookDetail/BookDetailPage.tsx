@@ -1,4 +1,5 @@
-import { useSearchParams } from "react-router-dom";
+
+import { useSearchParams, useLocation } from "react-router-dom";
 import BookDetail from "./BookDetail";
 import type { EntrySource } from "./BookDetail";
 import type { ReadingStatus } from "@/mocks/bookDetail.mock";

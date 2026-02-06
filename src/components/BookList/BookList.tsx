@@ -120,10 +120,10 @@ export function BookList({
                 </span>
               </div>
 
-              {rating !== undefined && (
+              {rating !== undefined && rating !== null && (
                 <div className={`flex items-center gap-1`}>
                   <StarFilledIcon className="w-4 h-4 text-purple-500" />
-                  <span className={S.Label}>{rating.toFixed(1)}</span>
+                  <span className={S.Label}>{(rating ?? 0).toFixed(1)}</span>
                 </div>
               )}
             </>

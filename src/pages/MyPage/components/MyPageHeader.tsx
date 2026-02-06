@@ -12,7 +12,7 @@ export const MyPageHeader = ({ activeStatus, onTabChange }: Props) => {
     { label: "읽는 중", status: "READING" },
     { label: "완독한", status: "FINISHED" },
     { label: "읽고 싶은", status: "BOOKMARKED" },
-    { label: "중단한", status: "PAUSED" },
+    { label: "중단한", status: "STOPPED" },
   ];
 
   return (
