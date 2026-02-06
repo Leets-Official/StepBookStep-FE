@@ -7,6 +7,7 @@ export interface BookReportProps {
   initialData?: Partial<BookReportData>;
   isTimerMode?: boolean;
   totalPages?: number;
+  goalMetric?: "TIME" | "PAGE";
 }
 
 export interface BookReportData {

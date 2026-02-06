@@ -94,7 +94,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
     };
 
     const mappedStatus = statusMap[data.status] || "READING";
-    updateBookStatus(101, mappedStatus, data.rating);
+    updateBookStatus(Number(bookId), mappedStatus, data.rating);
 
     const isFinished = data.status === "AFTER";
     console.log("완독 여부:", isFinished);
@@ -291,6 +291,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 onClose={handleReportClose}
                 onSave={handleSaveRecord}
                 isTimerMode={false}
+                goalMetric={currentGoal?.metric}
                 initialData={{
                   status:
                     readingStatus === "reading"

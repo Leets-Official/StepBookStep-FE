@@ -35,6 +35,7 @@ export const BookReport: React.FC<BookReportProps> = ({
   initialData,
   isTimerMode = false,
   totalPages = 0,
+  goalMetric,
 }) => {
   const [status, setStatus] = useState<ReadingStatus>(initialData?.status || "READING");
   const [date, setDate] = useState<Date | null>(initialData?.date || null);
@@ -67,6 +68,9 @@ export const BookReport: React.FC<BookReportProps> = ({
         totalSeconds = 
           parseInt(timeMatch[0]) * 60 + 
           parseInt(timeMatch[1]);
+      } else if (timeMatch.length === 1) {
+        // 숫자만 있는 경우 (예: "30분") -> 분 단위로 처리
+        totalSeconds = parseInt(timeMatch[0]) * 60;
       }
     }
 
@@ -93,7 +97,7 @@ export const BookReport: React.FC<BookReportProps> = ({
         bookStatus: statusMap[status],
         recordDate: date ? format(date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
         
-        durationSeconds: totalSeconds, 
+        durationSeconds: totalSeconds > 0 ? totalSeconds : undefined,
         
         readQuantity: finalReadQuantity,
         rating: (status === "AFTER" || status === "STOP") ? rating : undefined,
@@ -114,6 +118,7 @@ export const BookReport: React.FC<BookReportProps> = ({
       onClose?.();
     } catch (error) {
       console.error("독서 기록 생성 실패:", error);
+      alert("독서 기록 저장에 실패했습니다.");
     }
   };
 
@@ -165,14 +170,14 @@ export const BookReport: React.FC<BookReportProps> = ({
                 inputMode="numeric"
                 icon={false}
               />
-              {isTimerMode && (
+              {(isTimerMode || goalMetric === "TIME") && (
                 <TextField
                   title="얼마나 걸렸나요?"
-                  placeholder="시간을 입력해 주세요"
+                  placeholder="예: 30분"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
                   icon={false}
-                  disabled
+                  disabled={isTimerMode}
                 />
               )}
             </>
