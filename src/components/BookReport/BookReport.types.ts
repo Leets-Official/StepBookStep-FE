@@ -6,6 +6,7 @@ export interface BookReportProps {
   onSave?: (data: BookReportData) => void;
   initialData?: Partial<BookReportData>;
   isTimerMode?: boolean;
+  totalPages?: number;
 }
 
 export interface BookReportData {

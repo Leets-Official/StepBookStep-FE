@@ -7,13 +7,20 @@ import { PlayIcon, PauseIcon } from '@/assets/icons';
 import { BookReport } from "@/components/BookReport/BookReport";
 import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import { useParams } from "react-router-dom";
-import { useBookDetail } from "@/hooks/useReadings";
+import { useBookDetail, useRoutines } from "@/hooks/useReadings";
 
 export type TimerStatus = "ready" | "running" | "paused" | "finished";
 
 export default function TimerPage() {
   const { bookId } = useParams();
   const { data: bookData } = useBookDetail(Number(bookId));
+  const { data: routines } = useRoutines();
+
+  const currentRoutine = routines?.find(r => r.bookId === Number(bookId));
+
+  const targetSeconds = currentRoutine?.metric === "TIME" 
+    ? currentRoutine.targetAmount * 60 
+    : 1800;
 
   const [status, setStatus] = useState<TimerStatus>("ready");
   const [seconds, setSeconds] = useState(0);
@@ -21,8 +28,6 @@ export default function TimerPage() {
   const timerRef = useRef<number | null>(null);
   const navigate = useNavigate();
   
-  const targetSeconds = 5; 
-
   const formatTime = (totalSeconds: number) => {
     const h = Math.floor(totalSeconds / 3600).toString().padStart(2, "0");
     const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, "0");

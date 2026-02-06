@@ -14,10 +14,7 @@ import type { CreateReadingLogRequest } from "@/api/types";
 type StarState = "FULL" | "HALF" | "EMPTY";
 
 const StarIcon = ({ state }: { state: StarState }) => {
-  if (state === "FULL") {
-    return <StarFilledIcon className={Styles.starBase} />;
-  }
-
+  if (state === "FULL") return <StarFilledIcon className={Styles.starBase} />;
   if (state === "HALF") {
     return (
       <div className={Styles.starWrapper}>
@@ -28,7 +25,6 @@ const StarIcon = ({ state }: { state: StarState }) => {
       </div>
     );
   }
-
   return <StarEmptyIcon className={Styles.starBase} />;
 };
 
@@ -38,13 +34,13 @@ export const BookReport: React.FC<BookReportProps> = ({
   onSave,
   initialData,
   isTimerMode = false,
+  totalPages = 0,
 }) => {
   const [status, setStatus] = useState<ReadingStatus>(initialData?.status || "READING");
   const [date, setDate] = useState<Date | null>(initialData?.date || null);
   const [pages, setPages] = useState<string>(initialData?.pages || "");
   const [duration, setDuration] = useState<string>(initialData?.duration || "");
   const [rating, setRating] = useState<number>(initialData?.rating || 0);
-
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const createReadingLogMutation = useCreateReadingLog();
@@ -54,78 +50,68 @@ export const BookReport: React.FC<BookReportProps> = ({
     setIsDatePickerOpen(false);
   };
 
-  // duration을 초 단위로 변환하는 함수 (HH:MM:SS 형식 → 초)
-  const convertDurationToSeconds = (timeString: string): number => {
-    if (!timeString) return 0;
-
-    const match = timeString.match(/(\d+)분\s*(\d+)초/);
-    if (match) {
-      const [_, mins, secs] = match;
-      return parseInt(mins, 10) * 60 + parseInt(secs, 10);
-    }
-    
-    const parts = timeString.split(':');
-    if (parts.length === 3) {
-      const [hours, minutes, seconds] = parts.map(Number);
-      return hours * 3600 + minutes * 60 + seconds;
-    }
-    return 0;
-  };
-
   const handleSaveClick = async () => {
-    if (!bookId) {
-      console.error("bookId가 없습니다.");
-      return;
+    // 1. duration(문자열)에서 '분' 수치 추출
+    const timeMatch = duration.match(/\d+/g);
+    let totalSeconds = 0;
+
+    if (timeMatch) {
+      if (timeMatch.length === 3) {
+        // 포맷: "01시간 02분 13초"
+        totalSeconds = 
+          parseInt(timeMatch[0]) * 3600 + 
+          parseInt(timeMatch[1]) * 60 + 
+          parseInt(timeMatch[2]);
+      } else if (timeMatch.length === 2) {
+        // 포맷: "02분 13초"
+        totalSeconds = 
+          parseInt(timeMatch[0]) * 60 + 
+          parseInt(timeMatch[1]);
+      }
     }
 
-    // ReadingStatus → API bookStatus 매핑
+    // 2. ReadingStatus → API bookStatus 매핑
     const statusMap: Record<ReadingStatus, "READING" | "FINISHED" | "STOPPED"> = {
-      BEFORE: "READING", // 읽고 싶은 → 읽는 중으로 처리
+      BEFORE: "READING",
       READING: "READING",
       AFTER: "FINISHED",
       STOP: "STOPPED",
     };
 
-    const bookStatus = statusMap[status];
-
     try {
+      let finalReadQuantity = parseInt(pages, 10) || 0;
+      
+      // 완독인데 페이지가 0이면 전체 페이지로 채움
+      if (statusMap[status] === "FINISHED" && finalReadQuantity === 0 && totalPages > 0) {
+        finalReadQuantity = totalPages;
+      }
+      // 최소 1페이지 보장
+      if (finalReadQuantity < 1) finalReadQuantity = 1;
+      
+      // 3. 서버 전송 데이터 구성 (숫자 타입 변환)
       const requestData: CreateReadingLogRequest = {
-        bookStatus,
-        recordDate: date ? format(date, "yyyy-MM-dd") : undefined,
+        bookStatus: statusMap[status],
+        recordDate: date ? format(date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+        
+        durationSeconds: totalSeconds, 
+        
+        readQuantity: finalReadQuantity,
+        rating: (status === "AFTER" || status === "STOP") ? rating : undefined,
       };
 
-      // 타이머 모드라면 시간 포함 로직
-      if (isTimerMode && duration) {
-        requestData.durationSeconds = convertDurationToSeconds(duration);
-      }
+      console.log("전송 데이터 확인:", requestData);
 
-      // READING 상태일 때
-      if (bookStatus === "READING" && pages) {
-        requestData.readQuantity = parseInt(pages, 10);
-      }
-
-      // FINISHED/STOPPED 상태일 때
-      if (bookStatus === "FINISHED" || bookStatus === "STOPPED") {
-        requestData.rating = rating;
-      }
-
-      const result = await createReadingLogMutation.mutateAsync({
-        bookId,
+      await createReadingLogMutation.mutateAsync({
+        bookId : Number(bookId),
         data: requestData,
       });
 
-      console.log("독서 기록 생성 성공:", result);
+      console.log("독서 기록 생성 성공!");
 
-      // 성공 후 onSave 콜백 호출
       if (onSave) {
-        onSave({
-          status,
-          date,
-          pages,
-          duration,
-          rating,
-        });
+        onSave({ status, date, pages, duration, rating });
       }
+      onClose?.();
     } catch (error) {
       console.error("독서 기록 생성 실패:", error);
     }
@@ -137,7 +123,6 @@ export const BookReport: React.FC<BookReportProps> = ({
   return (
     <div className={Styles.wrapper}>
       <div className={Styles.mainContainer}>
-        {/* Header */}
         <div className={Styles.header}>
           <h2 className={Styles.headerTitle}>독서 기록하기</h2>
           <button type="button" onClick={onClose} className={Styles.closeButton} aria-label="닫기">
@@ -145,7 +130,6 @@ export const BookReport: React.FC<BookReportProps> = ({
           </button>
         </div>
 
-        {/* Form Fields */}
         <div className={Styles.formGroup}>
           <div className={Styles.inputBlock}>
             <span className={Styles.label}>독서 상태</span>
