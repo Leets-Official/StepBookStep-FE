@@ -64,9 +64,8 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
   useEffect(() => {
     if (bookData) {
-      const serverData = bookData as any;
-
-      const initialStatus = serverData.isBookmarked ?? serverData.bookmarked ?? false;
+      // bookData is BookDetailResponse
+      const initialStatus = bookData.bookmarked ?? false;
       setIsBookmarked(initialStatus);
     }
   }, [bookData]);
