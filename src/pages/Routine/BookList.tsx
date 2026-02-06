@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "./BookList.styles";
 import AppBar from "@/components/AppBar/AppBar";
 import { Tab } from "@/components/Tab/Tab";
@@ -13,7 +13,10 @@ import { useRoutines } from "@/hooks/useReadings";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"routine" | "statistics">("routine");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<"routine" | "statistics">(
+    (location.state as { targetTab?: "routine" | "statistics" })?.targetTab || "routine"
+  );
   const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
   const { data: routines, isLoading, isError, refetch } = useRoutines();
 

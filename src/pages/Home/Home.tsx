@@ -78,7 +78,7 @@ export default function Home() {
           <Slider books={BOOKS_MOCK} />
 
           {/* 통계 */}
-          <button className={S.statsHeader} onClick={() => navigate("/setting")}>
+          <button className={S.statsHeader} onClick={() => navigate("/routine/booklist", { state: { targetTab: "statistics" } })}>
             <h3 className={S.statsTitle}>얼마나 독서했나요?</h3>
             <span className={S.statsArrow}>
               <ChevronRightIcon />
