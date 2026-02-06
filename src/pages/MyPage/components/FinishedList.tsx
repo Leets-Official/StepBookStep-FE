@@ -56,8 +56,8 @@ export const FinishedList = ({ data, onBookClick }: Props) => {
           totalPages={book.itemPage}
           coverImage={book.coverUrl}
           startDate={goalDates[book.bookId] || formatKSTDate(book.createdAt)}
-          endDate={formatKSTDate(book.finishedAt)}
-          rating={book.rating}
+          endDate={formatKSTDate(book.finishedAt ?? undefined)}
+          rating={book.rating ?? 0}
           onClick={() => onBookClick(book.bookId)}
         />
       ))}
