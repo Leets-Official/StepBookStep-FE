@@ -1,6 +1,4 @@
-// src/stores/useBookStore.ts
 import { create } from "zustand";
-import { MOCK_BOOKS } from "@/pages/MyPage/MyPage.mookDate";
 import type { BookItem, ReadStatus } from "@/pages/MyPage/MyPage.types";
 
 interface BookStore {
@@ -9,7 +7,7 @@ interface BookStore {
 }
 
 export const useBookStore = create<BookStore>((set) => ({
-  books: MOCK_BOOKS,
+  books: [],
 
   updateBookStatus: (userBookId, status, rating) =>
     set((state) => ({

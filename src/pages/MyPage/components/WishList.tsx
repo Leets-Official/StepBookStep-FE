@@ -1,30 +1,33 @@
 import { BookList } from "@/components/BookList/BookList";
-import * as S from "../MyPage.styles";
-import type { BookItem } from "../MyPage.types";
-
+import * as S from "@/pages/MyPage/MyPage.styles";
+import type { BookItem } from "@/pages/MyPage/MyPage.types";
 
 interface Props {
   data: BookItem[];
-  onBookClick: () => void;
+  onBookClick: (bookId: number) => void;
 }
 
-export const WishList = ({ data, onBookClick }: Props) => {
-  return (
-    <div className={S.listWrapper}>
-      {data.map((book) => (
+export const WishList = ({ data, onBookClick }: Props) => (
+  <div className={S.listWrapper}>
+    {data.length === 0 ? (
+      <div style={{ padding: "20px", textAlign: "center", color: "#888" }}>
+        아직 찜한 도서가 없어요.
+      </div>
+    ) : (
+      data.map((book) => (
         <BookList
           key={book.userBookId}
-          readingState="before" //
-          title={book.title || ""}
+          readingState="before"
+          title={book.title || "제목 없음"}
           author={book.author}
           publisher={book.publisher}
-          publicYear={book.pubDate.split('-')[0]} // 연도 추출
+          publicYear={book.pubDate ? book.pubDate.split("-")[0] : ""}
+          coverImage={book.coverUrl}
           totalPages={book.itemPage}
-          // Swagger 데이터 구조에 따라 태그가 있으면 연결, 없으면 기본값 표시
-          tags={["태그 키워드", "태그 키워드", "태그 키워드"]} 
-          onClick={onBookClick}
+          tags={[]}
+          onClick={() => onBookClick(book.bookId)}
         />
-      ))}
-    </div>
-  );
-};
+      ))
+    )}
+  </div>
+);

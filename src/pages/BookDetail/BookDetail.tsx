@@ -1,3 +1,4 @@
+import { addBookmark, removeBookmark } from "@/api/books";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
@@ -37,7 +38,7 @@ interface BookDetailProps {
 }
 
 export default function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
-  const { bookId } = useParams(); // URL에서 ID 가져오기
+  const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   
   const { data: routines } = useRoutines();
@@ -50,7 +51,6 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const isLoading = isBookLoading;
 
   const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
-  console.log("🔍 현재 서버에서 넘어온 데이터:", bookData);
 
   const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
 
@@ -61,6 +61,15 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+    // location.state?.isBookmarked가 있으면 우선 적용
+    if (location.state && typeof location.state.isBookmarked === 'boolean') {
+      setIsBookmarked(location.state.isBookmarked);
+    } else if (bookData) {
+      setIsBookmarked(bookData.bookmarked ?? false);
+    }
+  }, [bookData, location.state]);
 
   useEffect(() => {
     if (location.state?.showToast && location.state?.toastMessage) {
@@ -82,27 +91,22 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
   const bottomBar = bottomBarConfig[entrySource];
 
   const handleSaveRecord = (data: BookReportData) => {
-    console.log("전달받은 데이터:", data);
-    console.log("전달받은 상태:", data.status);
-
     const statusMap: Record<string, ReadStatus> = {
       READING: "READING",
       AFTER: "FINISHED",
       FINISHED: "FINISHED",
       BEFORE: "BOOKMARKED",
-      STOP: "PAUSED",
+      STOP: "STOPPED",
     };
 
     const mappedStatus = statusMap[data.status] || "READING";
     updateBookStatus(101, mappedStatus, data.rating);
 
     const isFinished = data.status === "AFTER";
-    console.log("완독 여부:", isFinished);
 
     setIsReportOpen(false);
 
     if (isFinished) {
-      console.log("축하 모달을 띄웁니다!");
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
@@ -114,8 +118,26 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
     }
   };
 
-  const handleBookmarkClick = () => {
-    setIsBookmarked((prev) => !prev);
+  const handleBookmarkClick = async () => {
+    const newStatus = !isBookmarked;
+    setIsBookmarked(newStatus);
+
+    try {
+      if (newStatus) {
+        await addBookmark(Number(bookId));
+        setToastMessage("북마크에 저장되었습니다.");
+      } else {
+        await removeBookmark(Number(bookId));
+        setToastMessage("북마크가 해제되었습니다.");
+      }
+      setShowToast(true);
+    } catch (error) {
+      console.error("북마크 변경 실패:", error);
+
+      setIsBookmarked(!newStatus);
+      setToastMessage("오류가 발생했습니다. 다시 시도해 주세요.");
+      setShowToast(true);
+    }
   };
 
   const handlePenClick = () => {
@@ -177,11 +199,12 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
         <main className={S.content}>
           <div className={S.coverWrapper}>
-            <div className={S.coverImage} 
-                style={{ 
-                  backgroundImage: `url(${bookData?.bookInfo?.coverImage})`, 
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
+            <div
+              className={S.coverImage}
+              style={{
+                backgroundImage: `url(${bookData?.bookInfo?.coverImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
             />
           </div>
@@ -195,11 +218,12 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
             <h1 className={S.title}>{bookInfo.title}</h1>
             <p className={S.author}>{bookInfo.author}</p>
             <p className={S.meta}>
-              {bookInfo.publisher} | {bookData?.bookInfo?.pubDate} | {bookInfo.totalPage}
-              쪽
+              {bookInfo.publisher} | {bookData?.bookInfo?.pubDate} | {bookInfo.totalPage}쪽
             </p>
             <p className={S.priceRow}>
-              <span className={S.priceText}>{bookData?.bookInfo?.priceStandard?.toLocaleString()}원</span>
+              <span className={S.priceText}>
+                {bookData?.bookInfo?.priceStandard?.toLocaleString()}원
+              </span>
               <a
                 href={bookData?.bookInfo?.link}
                 target="_blank"
@@ -212,7 +236,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           </section>
 
           <div className={S.tagRow}>
-            {BOOK_DETAIL_MOCK.tags.map((tag, idx) => (
+            {(bookInfo.tags || []).map((tag, idx) => (
               <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
@@ -239,9 +263,12 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {isBefore && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {BOOK_DETAIL_MOCK.description ? (
+              {bookInfo.description ? (
                 <FullView collapsedHeight={134}>
-                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                  <p
+                    className={S.description}
+                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
+                  />
                 </FullView>
               ) : (
                 <EmptyBookDescription />
@@ -259,9 +286,9 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {BOOK_DETAIL_MOCK.description ? (
+              {bookInfo.description ? (
                 <FullView collapsedHeight={72}>
-                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                  <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
               ) : (
                 <EmptyBookDescription />
@@ -307,7 +334,7 @@ export default function BookDetail({ entrySource, readingStatus }: BookDetailPro
 
       {isGoalModalOpen && (
         <GoalModal
-          maxPages={BOOK_DETAIL_MOCK.totalPage}
+          maxPages={bookInfo.totalPage}
           title="목표 설정하기"
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {

@@ -14,7 +14,13 @@ export const content = "py-3 flex-1 space-y-2.5";
 
 export const info = "space-y-0.5";
 export const title = "text-lg font-semibold text-black line-clamp-1";
-export const author = "text-sm font-semibold text-gray-900";
+export const author = `
+  text-sm font-semibold text-gray-900 
+  overflow-hidden text-ellipsis 
+  [display:-webkit-box] 
+  [-webkit-line-clamp:1] 
+  [-webkit-box-orient:vertical]
+`;
 export const meta = "text-sm font-light text-gray-600";
 
 export const extra = "space-y-1";
