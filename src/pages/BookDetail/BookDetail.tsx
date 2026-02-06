@@ -18,6 +18,7 @@ import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import GoalModal from "@/components/GoalModal/GoalModal";
 import { Toast } from "@/components/Toast/Toast";
 import { FinishedModal } from "./components/FinishedModal/FinishedModal";
+import { useFinishedBookCount } from "@/hooks/useFinishedBookCount";
 
 import { useBookStore } from "@/stores/useBookStore";
 import type { ReadStatus } from "../MyPage/MyPage.types";
@@ -38,6 +39,7 @@ interface BookDetailProps {
 }
 
 export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+  const finishedBookCount = useFinishedBookCount();
   const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   
@@ -354,7 +356,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             setIsFinishedModalOpen(false);
             navigate("/mypage");
           }}
-          count={1}
+          count={finishedBookCount}
         />
       )}
     </div>
