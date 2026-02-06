@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import { useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ import type { TabId } from "@/components/BottomBar/BottomBar.types";
 import * as S from "./BookDetail.styles";
 import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
 
-type EntrySource = "home" | "search" | "routine" | "mypage";
+export type EntrySource = "home" | "search" | "routine" | "mypage";
 type ContentTab = "record" | "info";
 
 interface BookDetailProps {
@@ -36,7 +36,7 @@ interface BookDetailProps {
   readingStatus: ReadingStatus;
 }
 
-export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
+export const BookDetail = ({ entrySource, readingStatus }: BookDetailProps) => {
   const { bookId } = useParams(); // URL에서 ID 가져오기
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
   
@@ -167,7 +167,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
       <div className={S.appFrame}>
         <AppBar
           mode="title"
-          // title={BOOK_DETAIL_MOCK.title}
           onBackClick={() => navigate(-1)}
           isBookmarked={isBookmarked}
           onBookmarkClick={handleBookmarkClick}
@@ -341,16 +340,4 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   );
 }
 
-export default function BookDetailPage() {
-  const [searchParams] = useSearchParams();
-  const statusParam = searchParams.get("status");
-  
-  // URL에서 ?from=routine 같은 값을 읽어옵니다.
-  const fromParam = searchParams.get("from") as EntrySource | null;
-
-  const readingStatus: ReadingStatus =
-    statusParam === "reading" || statusParam === "completed" ? statusParam : "before";
-
-  // entrySource에 고정값 "home" 대신 fromParam을 넣어줍니다.
-  return <BookDetail entrySource={fromParam || "home"} readingStatus={readingStatus} />;
-}
+export default BookDetail;
