@@ -11,7 +11,6 @@ import { useUserStore } from "@/stores/useUserStore";
 
 export default function ChangeNickname() {
   const nickname = useUserStore((state) => state.nickname);
-  const level = useUserStore((state) => state.level);
   const setUserInfo = useUserStore((state) => state.setUserInfo);
 
   const [newNickname, setNewNickname] = useState("");
@@ -24,7 +23,9 @@ export default function ChangeNickname() {
 
     try {
       await patchNickname(0, newNickname);
-      setUserInfo(newNickname, level);
+      setUserInfo({
+        nickname: newNickname,
+      });
 
       setNewNickname("");
       setShowToast(true);
