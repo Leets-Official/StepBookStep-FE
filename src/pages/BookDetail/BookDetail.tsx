@@ -212,7 +212,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           </section>
 
           <div className={S.tagRow}>
-            {BOOK_DETAIL_MOCK.tags.map((tag, idx) => (
+            {bookInfo.tags.map((tag, idx) => (
               <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
@@ -239,9 +239,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           {isBefore && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {BOOK_DETAIL_MOCK.description ? (
+              {bookInfo.description ? (
                 <FullView collapsedHeight={134}>
-                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                  <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
               ) : (
                 <EmptyBookDescription />
@@ -259,9 +259,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {BOOK_DETAIL_MOCK.description ? (
+              {bookInfo.description ? (
                 <FullView collapsedHeight={72}>
-                  <p className={S.description}>{BOOK_DETAIL_MOCK.description}</p>
+                  <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
               ) : (
                 <EmptyBookDescription />
