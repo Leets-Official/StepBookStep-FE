@@ -12,13 +12,11 @@ interface ReadingStateDetailProps {
 export function ReadingStateDetail({ goal, totalPage }: ReadingStateDetailProps) {
   if (!goal) return null;
 
-  // routines API에서 이미 제공하는 달성량 사용
-  const currentPage = goal.achievedAmount || 0;  // ⭐ 이미 계산된 값 사용
+  const currentReadPage = goal.metric === "PAGE" ? (goal.achievedAmount || 0) : 0;  
   
   const isCompleted = goal.bookStatus === "COMPLETED";
-  const percent = totalPage > 0 ? Math.floor((currentPage / totalPage) * 100) : 0;
+  const percent = totalPage > 0 ? Math.floor((currentReadPage / totalPage) * 100) : 0;
   
-  // 시작일은 목표 생성일이 아니라 첫 독서 기록일이어야 하지만, 현재는 없으므로 createdAt 사용
   const startDate = new Date().toISOString().split('T')[0].replace(/-/g, '.'); // 임시
   const endDate = isCompleted ? new Date().toISOString().split('T')[0].replace(/-/g, '.') : "-";
 
@@ -53,12 +51,12 @@ export function ReadingStateDetail({ goal, totalPage }: ReadingStateDetailProps)
         ) : (
           <>
             <p className={S.progressSub}>
-              <span className={S.progressHighlight}>{currentPage}</span>
+              <span className={S.progressHighlight}>{currentReadPage}</span>
               <span className="text-md font-semibold text-black">쪽</span>
               <span className={S.progressHighlight}> ({percent}%)</span>
               <span className="text-md font-semibold text-black"> 읽었어요!</span>
             </p>
-            <LinearProgress total={totalPage} current={currentPage} />
+            <LinearProgress total={totalPage} current={currentReadPage} />
           </>
         )}
       </div>
