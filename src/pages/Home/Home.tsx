@@ -60,7 +60,12 @@ export default function Home() {
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        <AppBar mode="logo" onSettingClick={() => {}} />
+        <AppBar
+          mode="logo"
+          onSettingClick={() => {
+            navigate("/setting", { state: { from: "/home" } });
+          }}
+        />
 
         <main className={S.content}>
           <section className={S.headerSection}>
