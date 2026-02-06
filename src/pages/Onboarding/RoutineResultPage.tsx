@@ -60,7 +60,7 @@ const PERIOD_TO_ROUTINE_TYPE: Record<string, RoutineResult["routineType"]> = {
 
 export default function RoutineResultPage() {
   const navigate = useNavigate();
-  const { payload, reset } = useOnboardingStore();
+  const { payload } = useOnboardingStore();
   const [state, setState] = useState<RoutineResult | null>(null);
 
   useEffect(() => {
@@ -141,7 +141,6 @@ export default function RoutineResultPage() {
             label="시작하기"
             fullWidth
             onClick={() => {
-              reset();
               navigate("/home");
             }}
           />
