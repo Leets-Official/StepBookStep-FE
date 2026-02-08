@@ -14,7 +14,7 @@ export default function Setting() {
   const location = useLocation();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
-  const { resetUserInfo } = useUserStore();
+  const { resetUserInfo, email } = useUserStore();
 
   const from = location.state?.from ?? "/home";
 
@@ -38,7 +38,7 @@ export default function Setting() {
 
               <div className={S.kakaoRight}>
                 <KakaoIcon className={S.kakaoIcon} />
-                <span className={S.value}>gbo@gmail.com</span>
+                <span className={S.value}>{email}</span>
               </div>
             </div>
 

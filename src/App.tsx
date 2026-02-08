@@ -88,7 +88,6 @@ function RootRedirect() {
   const isNewUser = localStorage.getItem("isNewUser") === "true";
 
   if (!accessToken) {
-    // 튜토리얼은 봤지만 로그인이 안 된 유저
     return <Navigate to="/login" replace />;
   }
 
