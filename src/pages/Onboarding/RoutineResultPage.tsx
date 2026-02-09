@@ -5,6 +5,7 @@ import { Button } from "@/components/Button/Button";
 import type { RoutineResult } from "@/types/onboarding";
 import { useOnboardingStore } from "@/stores/onboardingStore";
 import { postOnboarding } from "@/api/onboarding";
+import { useUserStore } from "@/stores/useUserStore";
 import {
   READING_FREQUENCY_MAP,
   READING_DURATION_MAP,
@@ -60,7 +61,9 @@ const PERIOD_TO_ROUTINE_TYPE: Record<string, RoutineResult["routineType"]> = {
 
 export default function RoutineResultPage() {
   const navigate = useNavigate();
-  const { payload, reset } = useOnboardingStore();
+  const { payload } = useOnboardingStore();
+  const { setUserInfo } = useUserStore();
+
   const [state, setState] = useState<RoutineResult | null>(null);
 
   useEffect(() => {
@@ -81,6 +84,11 @@ export default function RoutineResultPage() {
           },
           categoryIds: [],
           genreIds: [],
+        });
+
+        setUserInfo({
+          nickname: payload.nickname,
+          level: res.level,
         });
 
         const routineType = PERIOD_TO_ROUTINE_TYPE[res.routineTokens.period];
@@ -141,7 +149,6 @@ export default function RoutineResultPage() {
             label="시작하기"
             fullWidth
             onClick={() => {
-              reset();
               navigate("/home");
             }}
           />

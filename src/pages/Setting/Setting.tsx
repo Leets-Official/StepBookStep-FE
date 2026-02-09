@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { deleteMyProfile } from "@/api/settings";
+import { useUserStore } from "@/stores/useUserStore";
 
 import AppBar from "@/components/AppBar/AppBar";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
@@ -9,13 +11,23 @@ import * as S from "./Setting.styles";
 
 export default function Setting() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const { resetUserInfo, email } = useUserStore();
+
+  const from = location.state?.from ?? "/home";
 
   return (
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
-        <AppBar mode="none" title="설정" onBackClick={() => history.back()} />
+        <AppBar
+          mode="none"
+          title="설정"
+          onBackClick={() => {
+            navigate(from, { replace: true });
+          }}
+        />
 
         <main className={S.content}>
           <section className={S.section}>
@@ -26,16 +38,22 @@ export default function Setting() {
 
               <div className={S.kakaoRight}>
                 <KakaoIcon className={S.kakaoIcon} />
-                <span className={S.value}>gbo@gmail.com</span>
+                <span className={S.value}>{email}</span>
               </div>
             </div>
 
-            <button className={S.rowButton} onClick={() => navigate("/setting/nickname")}>
+            <button
+              className={S.rowButton}
+              onClick={() => navigate("/setting/nickname", { state: location.state })}
+            >
               <span className={S.label}>닉네임 수정</span>
               <span className={S.chevron}>›</span>
             </button>
 
-            <button className={S.rowButton} onClick={() => navigate("/setting/preference-edit")}>
+            <button
+              className={S.rowButton}
+              onClick={() => navigate("/setting/preference-edit", { state: location.state })}
+            >
               <span className={S.label}>선호 레벨/분야 수정</span>
               <span className={S.chevron}>›</span>
             </button>
@@ -62,24 +80,30 @@ export default function Setting() {
         </main>
       </div>
 
-      {/* 로그아웃 확인 모달 */}
       <ConfirmModal
         open={isLogoutOpen}
         title="로그아웃 하시겠습니까?"
         onCancel={() => setIsLogoutOpen(false)}
         onConfirm={() => {
-          // TODO: 로그아웃 API 연동
+          localStorage.removeItem("accessToken");
+          resetUserInfo();
+          navigate("/login");
         }}
       />
 
-      {/* 탈퇴 확인 모달 */}
       <ConfirmModal
         open={isWithdrawOpen}
         title="정말 탈퇴하시겠어요?"
         description={`회원 탈퇴 시 독서 기록 및 계정 정보가 삭제되며 복구할 수 없습니다.`}
         onCancel={() => setIsWithdrawOpen(false)}
-        onConfirm={() => {
-          // TODO: 회원 탈퇴 API 연동
+        onConfirm={async () => {
+          try {
+            await deleteMyProfile(0);
+            resetUserInfo();
+            navigate("/login");
+          } catch (e) {
+            console.error("회원 탈퇴 실패", e);
+          }
         }}
       />
     </div>

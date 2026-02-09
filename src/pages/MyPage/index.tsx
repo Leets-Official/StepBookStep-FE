@@ -61,7 +61,6 @@ const MyPage = () => {
   const renderContent = () => {
     if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
-    // 데이터 없음 처리 (API 응답 자체가 비어있을 때)
     if (books.length === 0) {
       return (
         <EmptyView
@@ -81,7 +80,6 @@ const MyPage = () => {
       );
     }
 
-    // 탭별 필터링 로직
     let filteredData = books;
 
     if (activeStatus === "BOOKMARKED") {
@@ -92,7 +90,6 @@ const MyPage = () => {
       filteredData = books.filter((b) => b.status === activeStatus);
     }
 
-    // 필터링 후 데이터 없음 처리
     if (filteredData.length === 0) {
       return (
         <EmptyView
@@ -100,7 +97,6 @@ const MyPage = () => {
           title="아직 도서가 없어요."
           description={
             <>
-              {/* 👇 [수정] 실제 닉네임 적용 */}
               {displayNickname}님이 좋아하실 도서를 <br /> 고르러 가볼까요?
             </>
           }
@@ -140,7 +136,12 @@ const MyPage = () => {
     <div className={S.pageWrapper}>
       <div className={S.appFrame}>
         <div className={S.statusBar} />
-        <AppBar mode="logo" />
+        <AppBar
+          mode="logo"
+          onSettingClick={() => {
+            navigate("/setting", { state: { from: "/mypage" } });
+          }}
+        />
         <MyPageHeader activeStatus={activeStatus} onTabChange={setActiveStatus} />
         <main className={`${S.content} flex flex-col`}>{renderContent()}</main>
         <div className={S.bottomBarFixed}>
