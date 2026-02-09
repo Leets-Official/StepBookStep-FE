@@ -23,7 +23,7 @@ export const STATE_CONFIGS: Record<ReadingStatus, StateConfig> = {
   },
 };
 
-export const CAROUSEL_ORDER: ReadingStatus[] = ["BEFORE", "READING", "AFTER", "STOP"];
+export const CAROUSEL_ORDER: ReadingStatus[] = ["READING", "AFTER", "STOP"];
 
 // 공통 스타일
 export const styles = {

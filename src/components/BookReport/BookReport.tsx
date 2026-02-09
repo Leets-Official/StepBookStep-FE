@@ -37,7 +37,10 @@ export const BookReport: React.FC<BookReportProps> = ({
   totalPages = 0,
   goalMetric,
 }) => {
-  const [status, setStatus] = useState<ReadingStatus>(initialData?.status || "READING");
+  const [status, setStatus] = useState<ReadingStatus>(() => {
+    const initial = initialData?.status || "READING";
+    return initial === "BEFORE" ? "READING" : initial;
+  });
   const [date, setDate] = useState<Date | null>(initialData?.date || new Date());
   const [pages, setPages] = useState<string>(initialData?.pages || "");
   const [duration, setDuration] = useState<string>(initialData?.duration || "");
@@ -122,7 +125,7 @@ export const BookReport: React.FC<BookReportProps> = ({
     }
   };
 
-  const isInputMode = status === "BEFORE" || status === "READING";
+  const isInputMode = status === "READING";
   const isRatingMode = status === "AFTER" || status === "STOP";
 
   return (

@@ -332,12 +332,8 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 isTimerMode={false}
                 goalMetric={currentGoal?.metric}
                 initialData={{
-                  status:
-                    readingStatus === "reading"
-                      ? "READING"
-                      : readingStatus === "completed"
-                        ? "AFTER"
-                        : "BEFORE",
+                  // '완독' 상태면 AFTER, 그 외(읽는 중, 읽고 싶은 등)면 무조건 READING으로 시작
+                  status: readingStatus === "completed" ? "AFTER" : "READING",
                 }}
               />
             </div>
