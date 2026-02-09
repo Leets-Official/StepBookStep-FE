@@ -1,22 +1,26 @@
+import { useNavigate } from "react-router-dom";
 import { BookThumbnail } from "@/components/BookThumbnail/BookThumbnail";
-import { BOOKS_MOCK } from "@/mocks/books.mock";
 import { useHorizontalDragScroll } from "@/hooks/useHorizontalDragScroll";
+import type { SliderBook } from "@/types/sliderBook";
 import * as S from "./Home.styles";
 
-export default function HorizontalBookSliderApp({ books }: { books: typeof BOOKS_MOCK }) {
+interface Props {
+  books: SliderBook[];
+}
+
+export default function HorizontalBookSliderApp({ books }: Props) {
+  const navigate = useNavigate();
   const { containerRef, dragged, handlers } = useHorizontalDragScroll();
 
   return (
     <div ref={containerRef} className={S.horizontalBookList} {...handlers}>
       {books.map((book) => (
         <div
-          key={book.id}
+          key={book.bookId}
           className={S.bookItem}
-          onClick={(e) => {
-            if (dragged) {
-              e.preventDefault();
-              return;
-            }
+          onClick={() => {
+            if (dragged) return;
+            navigate(`/books/${book.bookId}`);
           }}
         >
           <BookThumbnail title={book.title} coverUrl={book.coverUrl} />

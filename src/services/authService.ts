@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_STEPBOOKSTEP_BASE_URL ;
+import apiClient from "@/api/clients";
 
 // ===== 타입 정의 =====
 
@@ -16,6 +16,7 @@ export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
     nickname: string;
+    email: string;
     isNewUser: boolean;
   };
   error?: Array<{
@@ -23,118 +24,57 @@ export interface LoginResponse {
     message: string;
   }>;
 }
-export interface KakaoCallbackResponse {                                
-   success: boolean;                                                     
-   status: number;                                                       
-   code: string;                                                         
-   message: string;                                                      
-   data: {                                                               
-     accessToken: string;                                                
-     refreshToken: string;                                               
-     nickname: string;                                                   
-     newUser: boolean;                                                   
-   };                                                                    
-   error?: Array<{                                                       
-     field: string;                                                      
-     message: string;                                                     
-  }>;                                                                    
- }  
 
-// ===== API 호출 함수 =====
+// ===== API 호출 =====
 
-
-
-/**
- * 카카오 로그인 API 호출
- */
 export const kakaoLoginCallback = async (
   token: string,
-  fcmToken: string = ''
+  fcmToken: string = "",
 ): Promise<LoginResponse> => {
-  try {
-    console.log('백엔드 로그인 API 호출 시작...');
-    
-    const response = await fetch(`${API_BASE_URL}/auth/login/kakao`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        socialToken: token,
-        fcmToken,
-      }),
-    });
+  console.log("백엔드 카카오 로그인 API 호출");
 
-    const data: LoginResponse = await response.json();
+  const { data } = await apiClient.post<LoginResponse>("/auth/login/kakao", {
+    socialToken: token,
+    fcmToken,
+  } satisfies LoginRequest);
 
-    if (!response.ok) {
-      console.error('API 응답 에러:', response.status, data);
-      throw new Error(data.message || `로그인 실패: ${response.status}`);
-    }
-
-    if (!data.success) {
-      console.error('로그인 실패:', data.message);
-      throw new Error(data.message || '로그인에 실패했습니다.');
-    }
-
-    console.log('로그인 성공!');
-    console.log('닉네임:', data.data.nickname);
-    console.log('신규 유저:', data.data.isNewUser);
-    
-    return data;
-  } catch (error) {
-    console.error('로그인 API 호출 중 에러:', error);
-    throw error;
+  if (!data.success) {
+    throw new Error(data.message || "로그인에 실패했습니다.");
   }
+
+  return data;
 };
 
-// ===== 토큰 관리 함수 =====
+// ===== 토큰 관리 =====
 
-/**
- * 토큰을 localStorage에 저장
- */
 export const saveTokens = (accessToken: string, refreshToken: string) => {
-  localStorage.setItem('accessToken', accessToken);
-  localStorage.setItem('refreshToken', refreshToken);
-  console.log('토큰 저장 완료');
+  localStorage.setItem("accessToken", accessToken);
+  localStorage.setItem("refreshToken", refreshToken);
+  console.log("토큰 저장 완료");
 };
 
-/**
- * accessToken 가져오기
- */
-export const getAccessToken = (): string | null => {
-  return localStorage.getItem('accessToken');
-};
+export const getAccessToken = () => localStorage.getItem("accessToken");
+export const getRefreshToken = () => localStorage.getItem("refreshToken");
+export const isAuthenticated = () => !!getAccessToken();
 
-/**
- * refreshToken 가져오기
- */
-export const getRefreshToken = (): string | null => {
-  return localStorage.getItem('refreshToken');
-};
-
-/**
- * 로그인 상태 확인
- */
-export const isAuthenticated = (): boolean => {
-  return !!getAccessToken();
-};
-
-/**
- * 토큰 삭제 (로그아웃)
- */
 export const clearTokens = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  console.log('토큰 삭제 완료');
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 };
 
-/**
- * 로그아웃 (토큰 삭제 Zustand store 초기화)
- */
-export const logout = (resetUserStore?: () => void) => {
-  clearTokens();
-  if (resetUserStore) {
-    resetUserStore();
+export const logout = async (resetUserStore?: () => void) => {
+  try {
+    const refreshToken = getRefreshToken();
+
+    if (refreshToken) {
+      await apiClient.post("/auth/logout", {
+        refreshToken,
+      });
+    }
+  } catch (error) {
+    console.error("로그아웃 API 호출 실패:", error);
+  } finally {
+    clearTokens();
+    resetUserStore?.();
   }
 };

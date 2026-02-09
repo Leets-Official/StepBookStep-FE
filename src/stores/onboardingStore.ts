@@ -24,8 +24,6 @@ interface OnboardingStore {
 
   setGenres: (genres: number[]) => void;
   setCategories: (categories: number[]) => void;
-
-  reset: () => void;
 }
 
 const initialState: OnboardingPayload = {
@@ -80,6 +78,4 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((state) => ({
       payload: { ...state.payload, categories },
     })),
-
-  reset: () => set({ payload: initialState }),
 }));
