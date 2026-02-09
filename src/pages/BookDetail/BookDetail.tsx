@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import { useParams } from "react-router-dom";
-import { useBookDetail } from "@/hooks/useReadings";
-import { useRoutines } from "@/hooks/useReadings";
+import { useBookDetail, useRoutines, useBookGoal } from "@/hooks/useReadings";
 
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -50,9 +49,27 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const isBefore = readingStatus === "before";
   const isLoading = isBookLoading;
 
+  const { data : bookGoal } = useBookGoal(Number(bookId), !isBefore);
+
   const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
 
-  const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
+  const currentGoal = routines?.find((r) => r.bookId === Number(bookId)) || 
+  (bookGoal && bookData?.bookInfo ? {
+    goalId: bookGoal.goalId,
+    bookId: bookGoal.bookId,
+    bookTitle: bookData.bookInfo.title,
+    bookAuthor: bookData.bookInfo.author,
+    bookCoverImage: bookData.bookInfo.coverImage,
+    bookPublisher: bookData.bookInfo.publisher,
+    bookPublishYear: parseInt(bookData.bookInfo.pubDate?.substring(0, 4) || "2024"),
+    bookTotalPages: bookData.bookInfo.totalPage,
+    bookStatus: (readingStatus === "completed" ? "COMPLETED" : "READING") as "READING" | "COMPLETED",
+    period: bookGoal.period,
+    metric: bookGoal.metric,
+    targetAmount: bookGoal.targetAmount,
+    achievedAmount: bookGoal.achievedAmount,
+    remainingAmount: bookGoal.targetAmount - bookGoal.achievedAmount,
+  } : undefined);
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -272,10 +289,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </section>
           )}
 
-          {!isBefore && resolvedActiveTab === "record" && currentGoal && (
+          {!isBefore && resolvedActiveTab === "record" && (
             <ReadingStateDetail
-              goal={currentGoal}
-              totalPage={bookInfo.totalPage}
+              bookId={Number(bookId)} 
             />
           )}
 
