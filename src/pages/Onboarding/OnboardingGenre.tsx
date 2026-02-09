@@ -69,7 +69,8 @@ export default function OnboardingGenre() {
       return;
     }
 
-    if (selected.length >= MAX_SELECT) return;
+    const totalSelected = selectedGenres.length + selectedCategories.length;
+    if (totalSelected >= MAX_SELECT) return;
 
     setter([...selected, item.id]);
   };
