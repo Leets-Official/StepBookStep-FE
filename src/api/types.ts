@@ -137,6 +137,7 @@ export interface CreateReadingLogRequest {
 
 export interface CreateReadingLogResponse {
   recordId: number;
+  finishedCount: number | null;
 }
 
 export interface ReadingLog {
