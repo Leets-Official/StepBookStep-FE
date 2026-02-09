@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, Cell, ResponsiveContainer, PieChart, Pie } from "recharts";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
 import { useStatistics } from "@/hooks/useStatistics";
 import * as S from "./Statistics.styles";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
+import { ChevronLeftIcon, ChevronRightIcon, GlassesOnBooksGif } from "@/assets/icons";
 import type { MonthlyDataItem, CategoryItem } from "@/api/types";
+import EmptyView from "@/components/EmptyView/EmptyView";
 
 const PIE_COLORS = [
   "var(--color-purple-500)",
@@ -24,6 +26,7 @@ const getWeightImage = (kg: number) => {
 };
 
 export default function Statistics() {
+  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
@@ -51,10 +54,19 @@ export default function Statistics() {
     );
   }
 
-  if (!statsData) {
+  if (!statsData || statsData.bookSummary.finishedBookCount === 0) {
     return (
       <div className={S.centerBox}>
-        <div className={S.loadingText}>데이터가 없습니다.</div>
+        <EmptyView
+          icon={GlassesOnBooksGif}
+          title="아직 도서가 없어요."
+          description="좋아하실 도서를 고르러 가볼까요?(멘트?)"
+          actionButton={{
+            label: "독서 시작하기",
+            onClick: () => navigate("/search"), 
+          }}
+          className="pt-10" 
+        />
       </div>
     );
   }
