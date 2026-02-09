@@ -11,7 +11,7 @@ export const sectionSubtitle = "text-sm font-['pretendard'] font-regular text-gr
 
 // 카드 공통 스타일 (하얀 배경 + 라운드 + 테두리)
 const baseCard = "bg-gray-50 rounded-xl p-6 border border-purple-100";
-
+export const preferenceContainer = `flex flex-col items-center justify-between gap-2`;
 
 // 얼마나 읽었나요? (회색 배경 카드)
 export const weightCard = "bg-gray-50 rounded-xl p-5 border border-purple-100 flex items-center gap-4";
@@ -32,7 +32,7 @@ export const bigValueText = "text-[28px] font-['pretendard'] font-semibold text-
 // 선호 분야 (Pie Chart)
 export const genreCard = baseCard;
 export const chartLayout = "flex justify-center mb-6";
-export const chartWrapper = "relative w-48 h-48";
+export const chartWrapper = "relative w-[200px] h-[200px]";
 export const chartCenterText = "absolute inset-0 flex items-center justify-center flex-col pointer-events-none";
 export const genreList = "space-y-3";
 export const genreItem = "flex items-center gap-3";
