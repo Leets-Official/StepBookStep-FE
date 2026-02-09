@@ -124,9 +124,12 @@ export default function Statistics() {
             </div>
             <div className={S.weightInfo}>
               <p className={S.weightMainText}>
-                {statsData.bookSummary.finishedBookCount}권 읽었어요!
+                <span className="font-bold">{statsData.bookSummary.finishedBookCount}</span>
+                권 읽었어요!
               </p>
-              <p className={S.weightMainText}>총 {statsData.bookSummary.totalWeightKg}kg이에요.</p>
+              <p className={S.weightMainText}>총 
+                <span className="font-bold">{statsData.bookSummary.totalWeightKg}kg</span>
+                이에요.</p>
               <p className="text-xs font-medium text-gray-500">
                 독서기록을 추가하면 업데이트돼요
               </p>
@@ -186,7 +189,7 @@ export default function Statistics() {
               )}
             </p>
             <p className="text-sm font-['pretendard'] font-regular text-gray-500">
-              {Math.floor(statsData.cumulativeTime.totalMinutes / 1440)}일 동안 쉬지 않고 읽었어요.
+              <span className="text-purple-400">{Math.floor(statsData.cumulativeTime.totalMinutes / 1440)}</span>일 동안 쉬지 않고 읽었어요.
             </p>
           </div>
         </section>
