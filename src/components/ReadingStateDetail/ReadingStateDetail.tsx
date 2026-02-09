@@ -12,7 +12,7 @@ interface ReadingStateDetailProps {
 export function ReadingStateDetail({ goal, totalPage }: ReadingStateDetailProps) {
   if (!goal) return null;
 
-  const currentReadPage = goal.metric === "PAGE" ? (goal.achievedAmount || 0) : 0;  
+  const currentReadPage = goal.achievedAmount || 0; 
   
   const isCompleted = goal.bookStatus === "COMPLETED";
   const percent = totalPage > 0 ? Math.floor((currentReadPage / totalPage) * 100) : 0;

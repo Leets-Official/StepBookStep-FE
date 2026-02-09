@@ -104,7 +104,7 @@ export default function Statistics() {
               </p>
               <p className={S.weightMainText}>총 {statsData.bookSummary.totalWeightKg}kg이에요.</p>
               <p className="text-xs font-medium text-gray-500">
-                누적 기준은 매일 00시에 반영됩니다.
+                독서기록을 추가하면 업데이트돼요
               </p>
             </div>
           </div>
