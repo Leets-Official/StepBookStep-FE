@@ -78,6 +78,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [toastAction, setToastAction] = useState<{ label: string; onClick: () => void } | null>(null);
 
   useEffect(() => {
     // location.state?.isBookmarked가 있으면 우선 적용
@@ -316,6 +317,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           isVisible={showToast}
           onClose={() => setShowToast(false)}
           className="bottom-20 top-auto"
+          action={toastAction}
         />
 
         {isReportOpen && (
@@ -349,11 +351,20 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {
             setIsGoalModalOpen(false);
-            setToastMessage(
-              currentGoal 
-                ? "목표가 수정되었습니다!" 
-                : "목표가 저장되었습니다!"
-            ); 
+            
+            if (currentGoal) {
+                setToastMessage("목표가 수정되었습니다!");
+                setToastAction(null);
+              } else {
+                setToastMessage("독서 목표가 저장되었습니다!");
+                setToastAction({
+                    label: "독서 기록하러 가기",
+                    onClick: () => {
+                      navigate(`/books/${bookId}?status=reading&from=routine`, { replace: true });
+                    }
+                });
+              }
+
             setShowToast(true);
           }}
           count={1}
