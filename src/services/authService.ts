@@ -1,6 +1,6 @@
 import apiClient from "@/api/clients";
 
-// ===== 타입 정의 =====
+export type SignupType = "NEW" | "REJOIN" | "EXISTING";
 
 export interface LoginRequest {
   socialToken: string;
@@ -17,7 +17,7 @@ export interface LoginResponse {
     refreshToken: string;
     nickname: string;
     email: string;
-    isNewUser: boolean;
+    signupType: SignupType;
   };
   error?: Array<{
     field: string;
