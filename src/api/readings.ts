@@ -7,6 +7,7 @@ import type {
   CreateReadingLogRequest,
   CreateReadingLogResponse,
   UpdateGoalRequest,
+  ReadingDetailData,
 } from "./types";
 import type { ReadingLog } from "@/mocks/readingState.mock.ts";
 
@@ -65,5 +66,17 @@ export const getReadingLogs = async (bookId: number): Promise<ReadingLog[]> => {
 export const updateBookGoal = async (bookId: number, data: UpdateGoalRequest): Promise<Goal> => {
   const response = await apiClient.patch<ApiResponse<Goal>>(`/books/${bookId}/goals`, data);
 
+  return response.data.data;
+};
+
+/**
+ * [NEW] 독서 기록 상세 조회
+ * GET /api/v1/books/{bookId}/reading-detail
+ */
+
+export const getReadingDetail = async (bookId: number): Promise<ReadingDetailData> => {
+  const response = await apiClient.get<ApiResponse<ReadingDetailData>>(
+    `/books/${bookId}/reading-detail`
+  );
   return response.data.data;
 };

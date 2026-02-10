@@ -1,19 +1,39 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, Cell, ResponsiveContainer, PieChart, Pie } from "recharts";
 import { LinearProgress } from "@/components/Progress/LinearProgress";
 import { useStatistics } from "@/hooks/useStatistics";
 import * as S from "./Statistics.styles";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
+import { ChevronLeftIcon, ChevronRightIcon, GlassesOnBooksGif } from "@/assets/icons";
 import type { MonthlyDataItem, CategoryItem } from "@/api/types";
+import EmptyView from "@/components/EmptyView/EmptyView";
 
-const PIE_COLORS = [
-  "var(--color-purple-500)",
-  "var(--color-purple-200)",
-  "var(--color-lime-500)",
-  "var(--color-lime-400)",
-  "var(--color-purple-300)",
-  "var(--color-lime-300)",
-];
+const GENRE_COLORS: Record<string, string> = {
+  "중국소설": "#D2D5FE",
+  "일본소설": "#A9AAFB",
+  "영미소설": "#787AEE",
+  "한국소설": "#4931D4",
+  
+  "프랑스소설": "#E6C2FF",
+  "역사소설": "#E8A4FF",
+  "희곡": "#E66EE4",
+  "로맨스": "#D300AC",
+  
+  "과학소설(SF)": "#FFD8FF",
+  "판타지/환상문학": "#FFAECE",
+  "추리/미스터리": "#FF84B4",
+  "독일소설": "#FF277B",
+  
+  "라이트노벨": "#DFFBBE",
+  "액션/스릴러": "#BBEF80",
+  "무협소설": "#91D654",
+  "호러/공포소설": "#67B22A",
+};
+
+// 색상 조회 헬퍼 함수 (매핑되지 않은 장르는 회색 처리)
+const getGenreColor = (genreName: string) => {
+  return GENRE_COLORS[genreName] || "#E8E9ED";
+};
 
 const getWeightImage = (kg: number) => {
   if (kg < 0.4) return { name: "컵라면", src: "/images/300g.png" };
@@ -24,16 +44,11 @@ const getWeightImage = (kg: number) => {
 };
 
 export default function Statistics() {
+  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
   const { data: statsData, isLoading, error } = useStatistics(selectedYear);
-
-  console.log("=== Statistics Debug ===");
-  console.log("statsData:", JSON.stringify(statsData, null, 2));
-  console.log("isLoading:", isLoading);
-  console.log("error:", error);
-  console.log("=====================");
 
   if (isLoading) {
     return (
@@ -51,10 +66,19 @@ export default function Statistics() {
     );
   }
 
-  if (!statsData) {
+  if (!statsData || statsData.bookSummary.finishedBookCount === 0) {
     return (
       <div className={S.centerBox}>
-        <div className={S.loadingText}>데이터가 없습니다.</div>
+        <EmptyView
+          icon={GlassesOnBooksGif}
+          title="아직 도서가 없어요."
+          description="좋아하실 도서를 고르러 가볼까요?(멘트?)"
+          actionButton={{
+            label: "독서 시작하기",
+            onClick: () => navigate("/search"), 
+          }}
+          className="pt-10" 
+        />
       </div>
     );
   }
@@ -100,11 +124,14 @@ export default function Statistics() {
             </div>
             <div className={S.weightInfo}>
               <p className={S.weightMainText}>
-                {statsData.bookSummary.finishedBookCount}권 읽었어요!
+                <span className="font-bold">{statsData.bookSummary.finishedBookCount}</span>
+                권 읽었어요!
               </p>
-              <p className={S.weightMainText}>총 {statsData.bookSummary.totalWeightKg}kg이에요.</p>
+              <p className={S.weightMainText}>총 
+                <span className="font-bold">{statsData.bookSummary.totalWeightKg}kg</span>
+                이에요.</p>
               <p className="text-xs font-medium text-gray-500">
-                누적 기준은 매일 00시에 반영됩니다.
+                독서기록을 추가하면 업데이트돼요
               </p>
             </div>
           </div>
@@ -162,7 +189,7 @@ export default function Statistics() {
               )}
             </p>
             <p className="text-sm font-['pretendard'] font-regular text-gray-500">
-              {Math.floor(statsData.cumulativeTime.totalMinutes / 1440)}일 동안 쉬지 않고 읽었어요.
+              <span className="text-purple-400">{Math.floor(statsData.cumulativeTime.totalMinutes / 1440)}</span>일 동안 쉬지 않고 읽었어요.
             </p>
           </div>
         </section>
@@ -190,7 +217,7 @@ export default function Statistics() {
 
         <section>
           <h2 className={S.sectionTitle}>나의 선호 분야</h2>
-          <div className={S.genreCard}>
+          <div className={S.preferenceContainer}>
             <div className={S.chartLayout}>
               <div className={S.chartWrapper}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -200,13 +227,14 @@ export default function Statistics() {
                       dataKey="count"
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={90}
+                      innerRadius={70}
+                      outerRadius={100}
                       startAngle={90}
                       endAngle={450}
+                      stroke="none"
                     >
-                      {pieData.map((_entry, index) => (
-                        <Cell key={index} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      {pieData.map((entry, index) => (
+                        <Cell key={index} fill={getGenreColor(entry.name)} />
                       ))}
                     </Pie>
                   </PieChart>
@@ -225,7 +253,7 @@ export default function Statistics() {
               <p className="text-xs text-gray-500 mb-2">선호 분야 TOP3</p>
               {pieData.slice(0, 3).map((genre, index) => (
                 <div key={index} className={S.genreItem}>
-                  <div className={S.genreDot} style={{ backgroundColor: PIE_COLORS[index] }} />
+                  <div className={S.genreDot} style={{ backgroundColor: getGenreColor(genre.name) }} />
                   <span className="text-sm font-semibold text-black w-4">
                     {genre.rank || index + 1}
                   </span>

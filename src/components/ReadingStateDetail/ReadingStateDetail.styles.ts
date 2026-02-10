@@ -11,10 +11,10 @@ export const progressHighlight = "text-md font-bd text-purple-500";
 export const progressSub = "text-md text-black";
 
 // 날짜 정보 영역 (시작일, 종료일)
-export const dateInfoContainer = "flex justify-between mt-4";
-export const dateItem = "flex gap-1";
-export const dateLabel = "text-md font-semibold text-gray-900 ";
-export const dateValue = "text-md font-regular text-gray-700 w-[90px] text-left";
+export const dateInfoContainer = "flex justify-between mt-4 w-full";
+export const dateItem = "flex gap-2 items-center";
+export const dateLabel = "text-md font-semibold text-gray-900 whitespace-nowrap";
+export const dateValue = "text-md font-regular text-gray-700 text-left whitespace-nowrap w-[100px]";
 
 // 하단 독서 기록 리스트 영역
 export const recordListContainer = "flex flex-col gap-3 p-4 mt-2 bg-gray-50 rounded-lg";
