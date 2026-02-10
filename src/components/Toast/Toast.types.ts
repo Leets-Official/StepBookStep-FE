@@ -4,4 +4,8 @@ export interface ToastProps {
     onClose: () => void;
     duration?: number;
     className?: string;
+    action?: {
+        label: string;
+        onClick: () => void;
+    } | null;
 }

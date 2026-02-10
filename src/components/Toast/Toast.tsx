@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { CheckIcon } from "@/assets/icons"; 
 import { cn } from "@/utils/cn";
-import { toastBase, toastText } from "@/components/Toast/Toast.styles";
+import { toastBase, toastText, toastAction } from "@/components/Toast/Toast.styles";
 import type { ToastProps } from "@/components/Toast/Toast.types";
 
-export const Toast = ({ message, isVisible, onClose, duration = 3000, className }: ToastProps) => {
+export const Toast = ({ message, isVisible, onClose, duration = 3000, className, action }: ToastProps) => {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
@@ -23,6 +23,18 @@ export const Toast = ({ message, isVisible, onClose, duration = 3000, className 
       </div>
 
       <span className={toastText}>{message}</span>
+      {action && (
+        <button 
+          className={toastAction}
+          onClick={(e) => {
+            e.stopPropagation();
+            action.onClick();
+            onClose(); 
+          }}
+        >
+          {action.label}
+        </button>
+      )}
     </div>
   );
 };

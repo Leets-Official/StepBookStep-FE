@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SkeletonBookDetailBefore, SkeletonBookDetailReading } from "@/components/skeleton";
 
 import { useParams } from "react-router-dom";
-import { useBookDetail } from "@/hooks/useReadings";
-import { useRoutines } from "@/hooks/useReadings";
+import { useBookDetail, useRoutines, useBookGoal } from "@/hooks/useReadings";
 
 import AppBar from "@/components/AppBar/AppBar";
 import BottomBar from "@/components/BottomBar/BottomBar";
@@ -50,9 +49,27 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const isBefore = readingStatus === "before";
   const isLoading = isBookLoading;
 
+  const { data : bookGoal } = useBookGoal(Number(bookId), !isBefore);
+
   const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
 
-  const currentGoal = routines?.find((r) => r.bookId === Number(bookId));
+  const currentGoal = routines?.find((r) => r.bookId === Number(bookId)) || 
+  (bookGoal && bookData?.bookInfo ? {
+    goalId: bookGoal.goalId,
+    bookId: bookGoal.bookId,
+    bookTitle: bookData.bookInfo.title,
+    bookAuthor: bookData.bookInfo.author,
+    bookCoverImage: bookData.bookInfo.coverImage,
+    bookPublisher: bookData.bookInfo.publisher,
+    bookPublishYear: parseInt(bookData.bookInfo.pubDate?.substring(0, 4) || "2024"),
+    bookTotalPages: bookData.bookInfo.totalPage,
+    bookStatus: (readingStatus === "completed" ? "COMPLETED" : "READING") as "READING" | "COMPLETED",
+    period: bookGoal.period,
+    metric: bookGoal.metric,
+    targetAmount: bookGoal.targetAmount,
+    achievedAmount: bookGoal.achievedAmount,
+    remainingAmount: bookGoal.targetAmount - bookGoal.achievedAmount,
+  } : undefined);
 
   const [activeTab, setActiveTab] = useState<ContentTab>("record");
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -61,6 +78,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [toastAction, setToastAction] = useState<{ label: string; onClick: () => void } | null>(null);
 
   useEffect(() => {
     // location.state?.isBookmarked가 있으면 우선 적용
@@ -272,10 +290,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </section>
           )}
 
-          {!isBefore && resolvedActiveTab === "record" && currentGoal && (
+          {!isBefore && resolvedActiveTab === "record" && (
             <ReadingStateDetail
-              goal={currentGoal}
-              totalPage={bookInfo.totalPage}
+              bookId={Number(bookId)} 
             />
           )}
 
@@ -300,6 +317,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           isVisible={showToast}
           onClose={() => setShowToast(false)}
           className="bottom-20 top-auto"
+          action={toastAction}
         />
 
         {isReportOpen && (
@@ -316,12 +334,8 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 isTimerMode={false}
                 goalMetric={currentGoal?.metric}
                 initialData={{
-                  status:
-                    readingStatus === "reading"
-                      ? "READING"
-                      : readingStatus === "completed"
-                        ? "AFTER"
-                        : "BEFORE",
+                  // '완독' 상태면 AFTER, 그 외(읽는 중, 읽고 싶은 등)면 무조건 READING으로 시작
+                  status: readingStatus === "completed" ? "AFTER" : "READING",
                 }}
               />
             </div>
@@ -337,11 +351,20 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {
             setIsGoalModalOpen(false);
-            setToastMessage(
-              currentGoal 
-                ? "목표가 수정되었습니다!" 
-                : "목표가 저장되었습니다!"
-            ); 
+            
+            if (currentGoal) {
+                setToastMessage("목표가 수정되었습니다!");
+                setToastAction(null);
+              } else {
+                setToastMessage("독서 목표가 저장되었습니다!");
+                setToastAction({
+                    label: "독서 기록하러 가기",
+                    onClick: () => {
+                      navigate(`/books/${bookId}?status=reading&from=routine`, { replace: true });
+                    }
+                });
+              }
+
             setShowToast(true);
           }}
           count={1}

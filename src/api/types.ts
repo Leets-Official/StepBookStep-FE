@@ -246,3 +246,33 @@ export const mapGoalPeriodToKorean = (period: GoalPeriod): string => {
       return "하루";
   }
 };
+
+// ============================================
+// 독서 기록 상세 조회 응답 타입
+// ============================================
+export interface ReadingDetailLog {
+  logId: number;
+  recordDate: string;      // 기록 날짜 (YYYY-MM-DD)
+  pagesRead: number;       // 해당 기록의 읽은 쪽수 (증분)
+  durationSeconds: number; // 해당 기록의 읽은 시간 (초)
+}
+
+export interface ReadingDetailGoal {
+  goalId: number;
+  period: "DAILY" | "WEEKLY" | "MONTHLY";
+  metric: "TIME" | "PAGE";
+  targetAmount: number;
+  active: boolean;
+}
+
+export interface ReadingDetailData {
+  bookStatus: "READING" | "FINISHED" | "STOPPED";
+  goal: ReadingDetailGoal;
+  currentPage: number;     // 현재 누적 페이지
+  totalPages: number;      // 전체 페이지
+  progressPercent: number; // 현재 퍼센트
+  startDate: string;
+  endDate: string | null;  // null일 수도 있음
+  rating: number;
+  readingLogs: ReadingDetailLog[]; // 하단 리스트용 데이터
+}

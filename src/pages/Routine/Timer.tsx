@@ -20,7 +20,7 @@ export default function TimerPage() {
 
   const targetSeconds = currentRoutine?.metric === "TIME" 
     ? currentRoutine.targetAmount * 60 
-    : 1800;
+    : 0;
 
   const [status, setStatus] = useState<TimerStatus>("ready");
   const [seconds, setSeconds] = useState(0);
@@ -85,7 +85,9 @@ export default function TimerPage() {
   const hasReachedTarget = seconds >= targetSeconds;
   const hasReachedDouble = seconds >= targetSeconds * 2;
 
-  const baseCircleColor = hasReachedTarget ? "#91D654" : "#A9AAFB";
+  const baseCircleColor = currentRoutine?.metric === "PAGE" 
+  ? "#A9AAFB"
+  : hasReachedTarget ? "#91D654" : "#A9AAFB";
 
   const progressColor = hasReachedTarget ? "#4931D4" : "#91D654";
   const radius = 155; 
@@ -116,7 +118,7 @@ export default function TimerPage() {
               <svg className={S.svgContainer} viewBox="0 0 335 335">
                 <circle cx="167.5" cy="167.5" r={radius} fill="none" stroke={baseCircleColor} strokeWidth="8" />
                 
-                {status !== "ready" && (
+                {status !== "ready" && currentRoutine?.metric === "TIME" && (
                   <circle 
                     cx="167.5" cy="167.5" r={radius} fill="none" 
                     stroke={progressColor} strokeWidth="8"
@@ -132,7 +134,7 @@ export default function TimerPage() {
   
               <div className={S.timerTextContent}>
                 <span className={S.statusLabel}>
-                  {hasReachedTarget && status !== "finished" && "목표를 달성했어요!"}
+                  {currentRoutine?.metric === "TIME" && hasReachedTarget && status !== "finished" && "목표를 달성했어요!"}
                   {status === "finished" && "끝났어요!"}
                 </span>
                 

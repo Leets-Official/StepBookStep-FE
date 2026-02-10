@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getBookGoal, getRoutines } from "@/api/readings";
 import { getBookDetail } from "@/api/books";
-import { createReadingLog, getReadingLogs, updateBookGoal } from "@/api/readings";
+import { createReadingLog, getReadingLogs, updateBookGoal, getReadingDetail } from "@/api/readings";
 import type { CreateReadingLogRequest, UpdateGoalRequest } from "@/api/types";
 
 /** 1. 도서 상세 정보 조회 훅 */
@@ -72,5 +72,14 @@ export const useUpdateBookGoal = () => {
       queryClient.invalidateQueries({ queryKey: ['goal', variables.bookId] });
       queryClient.invalidateQueries({ queryKey: ['routines'] });
     },
+  });
+};
+
+/** [NEW] 7. 독서 기록 상세 조회 훅 */
+export const useReadingDetail = (bookId: number) => {
+  return useQuery({
+    queryKey: ['readingDetail', bookId],
+    queryFn: () => getReadingDetail(bookId),
+    enabled: !!bookId, // bookId가 있을 때만 실행
   });
 };
