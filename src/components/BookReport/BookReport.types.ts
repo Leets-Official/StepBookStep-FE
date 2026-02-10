@@ -16,4 +16,5 @@ export interface BookReportData {
   pages: string;
   duration: string;
   rating: number;
+  finishedCount?: number | null;
 }

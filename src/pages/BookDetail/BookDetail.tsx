@@ -39,13 +39,10 @@ interface BookDetailProps {
 export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const { bookId } = useParams();
   const { data: bookData, isLoading: isBookLoading } = useBookDetail(Number(bookId));
-  
   const { data: routines } = useRoutines();
-  
   const navigate = useNavigate();
   const location = useLocation();
   const { updateBookStatus } = useBookStore();
-
   const isBefore = readingStatus === "before";
   const isLoading = isBookLoading;
 
@@ -78,11 +75,11 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const [isFinishedModalOpen, setIsFinishedModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [finishedCount, setFinishedCount] = useState<number>(1);
   const [toastAction, setToastAction] = useState<{ label: string; onClick: () => void } | null>(null);
 
   useEffect(() => {
-    // location.state?.isBookmarked가 있으면 우선 적용
-    if (location.state && typeof location.state.isBookmarked === 'boolean') {
+    if (location.state && typeof location.state.isBookmarked === "boolean") {
       setIsBookmarked(location.state.isBookmarked);
     } else if (bookData) {
       setIsBookmarked(bookData.bookmarked ?? false);
@@ -122,13 +119,17 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
 
     const isFinished = data.status === "AFTER";
 
-    setIsReportOpen(false);
-
     if (isFinished) {
+      const actualCount = data.finishedCount ?? 1;
+      setFinishedCount(actualCount);
+
+      setIsReportOpen(false);
+      // 의도적인 지연 후 모달을 띄워 상태 반영 시간을 확보함
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
     } else {
+      setIsReportOpen(false);
       setTimeout(() => {
         setToastMessage("독서 기록이 저장되었습니다!");
         setShowToast(true);
@@ -139,7 +140,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   const handleBookmarkClick = async () => {
     const newStatus = !isBookmarked;
     setIsBookmarked(newStatus);
-
     try {
       if (newStatus) {
         await addBookmark(Number(bookId));
@@ -150,8 +150,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
       }
       setShowToast(true);
     } catch (error) {
-      console.error("북마크 변경 실패:", error);
-
       setIsBookmarked(!newStatus);
       setToastMessage("오류가 발생했습니다. 다시 시도해 주세요.");
       setShowToast(true);
@@ -159,22 +157,11 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
   };
 
   const handlePenClick = () => {
-    if (isBefore) {
-      setIsGoalModalOpen(true);
-    }
+    if (isBefore) setIsGoalModalOpen(true);
   };
-
-  const handleTimerClick = () => {
-    navigate(`/routine/timer/${bookId}`);
-  };
-
-  const handleDirectClick = () => {
-    setIsReportOpen(true);
-  };
-
-  const handleReportClose = () => {
-    setIsReportOpen(false);
-  };
+  const handleTimerClick = () => navigate(`/routine/timer/${bookId}`);
+  const handleDirectClick = () => setIsReportOpen(true);
+  const handleReportClose = () => setIsReportOpen(false);
 
   if (isLoading) {
     return (
@@ -213,7 +200,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           onDirectClick={handleDirectClick}
           onGoalClick={() => setIsGoalModalOpen(true)}
         />
-
         <main className={S.content}>
           <div className={S.coverWrapper}>
             <div
@@ -225,7 +211,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               }}
             />
           </div>
-
           <section className={S.infoSection}>
             <Badge
               label={`Lv. ${bookInfo.level}`}
@@ -251,15 +236,12 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               </a>
             </p>
           </section>
-
           <div className={S.tagRow}>
             {bookInfo.tags.map((tag, idx) => (
               <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
-
           <div className={S.divider} />
-
           {!isBefore && (
             <div className={S.tabRow}>
               <Tab
@@ -276,7 +258,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               />
             </div>
           )}
-
           {isBefore && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
@@ -295,7 +276,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               bookId={Number(bookId)} 
             />
           )}
-
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
@@ -309,9 +289,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </section>
           )}
         </main>
-
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
-
         <Toast
           message={toastMessage}
           isVisible={showToast}
@@ -319,7 +297,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           className="bottom-20 top-auto"
           action={toastAction}
         />
-
         {isReportOpen && (
           <>
             <div
@@ -333,6 +310,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 onSave={handleSaveRecord}
                 isTimerMode={false}
                 goalMetric={currentGoal?.metric}
+                totalPages={bookInfo.totalPage}
                 initialData={{
                   // '완독' 상태면 AFTER, 그 외(읽는 중, 읽고 싶은 등)면 무조건 READING으로 시작
                   status: readingStatus === "completed" ? "AFTER" : "READING",
@@ -342,7 +320,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           </>
         )}
       </div>
-
       {isGoalModalOpen && (
         <GoalModal
           bookId={Number(bookId)}
@@ -370,14 +347,14 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           count={1}
         />
       )}
-
       {isFinishedModalOpen && (
         <FinishedModal
           onClose={() => {
             setIsFinishedModalOpen(false);
             navigate("/mypage");
           }}
-          count={1}
+          // 서버에서 실시간으로 계산해 내려준 완독 횟수를 전달함
+          count={finishedCount}
         />
       )}
     </div>

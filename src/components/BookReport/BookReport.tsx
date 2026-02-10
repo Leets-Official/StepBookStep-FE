@@ -55,29 +55,20 @@ export const BookReport: React.FC<BookReportProps> = ({
   };
 
   const handleSaveClick = async () => {
-    // 1. duration(문자열)에서 '분' 수치 추출
     const timeMatch = duration.match(/\d+/g);
     let totalSeconds = 0;
 
     if (timeMatch) {
       if (timeMatch.length === 3) {
-        // 포맷: "01시간 02분 13초"
-        totalSeconds = 
-          parseInt(timeMatch[0]) * 3600 + 
-          parseInt(timeMatch[1]) * 60 + 
-          parseInt(timeMatch[2]);
+        totalSeconds =
+          parseInt(timeMatch[0]) * 3600 + parseInt(timeMatch[1]) * 60 + parseInt(timeMatch[2]);
       } else if (timeMatch.length === 2) {
-        // 포맷: "02분 13초"
-        totalSeconds = 
-          parseInt(timeMatch[0]) * 60 + 
-          parseInt(timeMatch[1]);
+        totalSeconds = parseInt(timeMatch[0]) * 60 + parseInt(timeMatch[1]);
       } else if (timeMatch.length === 1) {
-        // 숫자만 있는 경우 (예: "30분") -> 분 단위로 처리
         totalSeconds = parseInt(timeMatch[0]) * 60;
       }
     }
 
-    // 2. ReadingStatus → API bookStatus 매핑
     const statusMap: Record<ReadingStatus, "READING" | "FINISHED" | "STOPPED"> = {
       BEFORE: "READING",
       READING: "READING",
@@ -87,36 +78,34 @@ export const BookReport: React.FC<BookReportProps> = ({
 
     try {
       let finalReadQuantity = parseInt(pages, 10) || 0;
-      
-      // 완독인데 페이지가 0이면 전체 페이지로 채움
       if (statusMap[status] === "FINISHED" && finalReadQuantity === 0 && totalPages > 0) {
         finalReadQuantity = totalPages;
       }
-      // 최소 1페이지 보장
       if (finalReadQuantity < 1) finalReadQuantity = 1;
-      
-      // 3. 서버 전송 데이터 구성 (숫자 타입 변환)
+
       const requestData: CreateReadingLogRequest = {
         bookStatus: statusMap[status],
         recordDate: date ? format(date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
-        
         durationSeconds: totalSeconds > 0 ? totalSeconds : undefined,
-        
         readQuantity: finalReadQuantity,
-        rating: (status === "AFTER" || status === "STOP") ? rating : undefined,
+        rating: status === "AFTER" || status === "STOP" ? rating : undefined,
       };
-
-      console.log("전송 데이터 확인:", requestData);
-
-      await createReadingLogMutation.mutateAsync({
-        bookId : Number(bookId),
+      const response = await createReadingLogMutation.mutateAsync({
+        bookId: Number(bookId),
         data: requestData,
       });
 
-      console.log("독서 기록 생성 성공!");
+      console.log("독서 기록 생성 성공!", response);
 
       if (onSave) {
-        onSave({ status, date, pages, duration, rating });
+        onSave({
+          status,
+          date,
+          pages,
+          duration,
+          rating,
+          finishedCount: response.finishedCount,
+        });
       }
       onClose?.();
     } catch (error) {
@@ -194,7 +183,6 @@ export const BookReport: React.FC<BookReportProps> = ({
                   let starState: StarState = "EMPTY";
                   if (rating >= index) starState = "FULL";
                   else if (rating === index - 0.5) starState = "HALF";
-
                   return (
                     <div key={index} className={Styles.starInteractiveContainer}>
                       <StarIcon state={starState} />
@@ -218,9 +206,9 @@ export const BookReport: React.FC<BookReportProps> = ({
       </div>
 
       <div className={Styles.saveButtonContainer}>
-        <button 
-          type="button" 
-          onClick={handleSaveClick} 
+        <button
+          type="button"
+          onClick={handleSaveClick}
           className={Styles.saveButton}
           disabled={createReadingLogMutation.isPending}
         >
