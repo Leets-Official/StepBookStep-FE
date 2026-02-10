@@ -62,7 +62,19 @@ export const clearTokens = () => {
   localStorage.removeItem("refreshToken");
 };
 
-export const logout = (resetUserStore?: () => void) => {
-  clearTokens();
-  resetUserStore?.();
+export const logout = async (resetUserStore?: () => void) => {
+  try {
+    const refreshToken = getRefreshToken();
+
+    if (refreshToken) {
+      await apiClient.post("/auth/logout", {
+        refreshToken,
+      });
+    }
+  } catch (error) {
+    console.error("로그아웃 API 호출 실패:", error);
+  } finally {
+    clearTokens();
+    resetUserStore?.();
+  }
 };

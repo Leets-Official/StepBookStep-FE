@@ -8,6 +8,7 @@ import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { KakaoIcon } from "@/assets/icons";
 
 import * as S from "./Setting.styles";
+import { logout } from "@/services/authService.ts";
 
 export default function Setting() {
   const navigate = useNavigate();
@@ -84,9 +85,8 @@ export default function Setting() {
         open={isLogoutOpen}
         title="로그아웃 하시겠습니까?"
         onCancel={() => setIsLogoutOpen(false)}
-        onConfirm={() => {
-          localStorage.removeItem("accessToken");
-          resetUserInfo();
+        onConfirm={async () => {
+          await logout(resetUserInfo);
           navigate("/login");
         }}
       />
