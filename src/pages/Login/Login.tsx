@@ -60,7 +60,7 @@ export default function LoginPage() {
   const handleBackendLogin = async (kakaoAccessToken: string) => {
     const res = await kakaoLoginCallback(kakaoAccessToken);
 
-    const { accessToken, refreshToken, nickname, isNewUser, email } = res.data;
+    const { accessToken, refreshToken, nickname, signupType, email } = res.data;
 
     saveTokens(accessToken, refreshToken);
 
@@ -70,7 +70,7 @@ export default function LoginPage() {
       level: 1,
     });
 
-    if (isNewUser) {
+    if (signupType) {
       navigate("/onboarding/set-profile", { replace: true });
     } else {
       navigate("/home", { replace: true });

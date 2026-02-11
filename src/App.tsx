@@ -85,7 +85,7 @@ function App() {
 function RootRedirect() {
   const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
   const accessToken = localStorage.getItem("accessToken");
-  const isNewUser = localStorage.getItem("isNewUser") === "true";
+  const isNewUser = localStorage.getItem("signupType") != "EXISTING";
 
   if (!accessToken) {
     return <Navigate to="/login" replace />;
@@ -96,7 +96,6 @@ function RootRedirect() {
   }
 
   if (!hasSeenTutorial) {
-    // 튜토리얼을 한 번도 안 본 유저
     return <Navigate to="/tutorial" replace />;
   }
 
