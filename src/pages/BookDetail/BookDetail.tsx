@@ -130,7 +130,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
       setFinishedCount(actualCount);
 
       setIsReportOpen(false);
-      // 의도적인 지연 후 모달을 띄워 상태 반영 시간을 확보함
       setTimeout(() => {
         setIsFinishedModalOpen(true);
       }, 300);
@@ -264,37 +263,44 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               />
             </div>
           )}
-          {isBefore && (
-            <section className="px-5">
-              <h2 className={S.sectionTitle}>책 소개</h2>
-              {bookInfo?.description ? (
-                <FullView collapsedHeight={134}>
-                  <p className={S.description}>{bookInfo.description}</p>
-                </FullView>
-              ) : (
-                <EmptyBookDescription />
-              )}
-            </section>
-          )}
-          <div className={S.tagRow}>
-          {!isBefore && resolvedActiveTab === "record" && (
-            <ReadingStateDetail bookId={Number(bookId)} />
-          )}
-          {!isBefore && resolvedActiveTab === "info" && (
-            <section className="px-5">
-              <h2 className={S.sectionTitle}>책 소개</h2>
-              {bookInfo?.description ? (
-                <FullView collapsedHeight={72}>
-                  <p className={S.description}>{bookInfo.description}</p>
-                </FullView>
-              ) : (
-                <EmptyBookDescription />
-              )}
-            </section>
-          )}
+
+          {/* 컨텐츠 렌더링 영역: tagRow 스타일 영향을 받지 않도록 별도 div 처리 가능 */}
+          <div className="flex flex-col w-full">
+            {isBefore && (
+              <section className="px-5 w-full">
+                <h2 className={S.sectionTitle}>책 소개</h2>
+                {bookInfo?.description ? (
+                  <FullView collapsedHeight={134}>
+                    <p className={S.description}>{bookInfo.description}</p>
+                  </FullView>
+                ) : (
+                  <div className="flex justify-center w-full py-10">
+                    <EmptyBookDescription />
+                  </div>
+                )}
+              </section>
+            )}
+
+            {!isBefore && resolvedActiveTab === "record" && (
+              <ReadingStateDetail bookId={Number(bookId)} />
+            )}
+            {!isBefore && resolvedActiveTab === "info" && (
+              <section className="px-5 w-full">
+                <h2 className={S.sectionTitle}>책 소개</h2>
+                {bookInfo?.description ? (
+                  <FullView collapsedHeight={72}>
+                    <p className={S.description}>{bookInfo.description}</p>
+                  </FullView>
+                ) : (
+                  <div className="flex justify-center w-full py-10">
+                    <EmptyBookDescription />
+                  </div>
+                )}
+              </section>
+            )}
           </div>
         </main>
-        
+
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
         <Toast
           message={toastMessage}
@@ -318,7 +324,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 goalMetric={currentGoal?.metric}
                 totalPages={bookInfo?.totalPage}
                 initialData={{
-                  // '완독' 상태면 AFTER, 그 외(읽는 중, 읽고 싶은 등)면 무조건 READING으로 시작
                   status: readingStatus === "completed" ? "AFTER" : "READING",
                 }}
               />
@@ -359,7 +364,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             setIsFinishedModalOpen(false);
             navigate("/mypage");
           }}
-          // 서버에서 실시간으로 계산해 내려준 완독 횟수를 전달함
           count={finishedCount}
         />
       )}
