@@ -11,14 +11,15 @@ import { GlassesOnBooksGif } from "@/assets/icons";
 import { useRoutines } from "@/hooks/useReadings";
 import { useUserStore } from "@/stores/useUserStore";
 import { SkeletonBookList } from "@/components/skeleton";
+import type { RoutineTab, NavTab, BookListState } from "./BookList.types";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<"routine" | "statistics">(
-    (location.state as { targetTab?: "routine" | "statistics" })?.targetTab || "routine",
+  const [activeTab, setActiveTab] = useState<RoutineTab>(
+    (location.state as BookListState)?.targetTab || "routine",
   );
-  const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
+  const [navTab, setNavTab] = useState<NavTab>("routine");
   const { data: routines, isLoading, isError, refetch } = useRoutines();
 
   const { nickname } = useUserStore();
