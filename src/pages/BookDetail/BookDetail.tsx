@@ -20,12 +20,12 @@ import { FinishedModal } from "./components/FinishedModal/FinishedModal";
 import { useBookStore } from "@/stores/useBookStore";
 import type { ReadStatus } from "../MyPage/MyPage.types";
 
-import { BOOK_DETAIL_MOCK } from "@/mocks/bookDetail.mock";
-import type { ReadingStatus } from "@/mocks/bookDetail.mock";
 import type { TabId } from "@/components/BottomBar/BottomBar.types";
 
 import * as S from "./BookDetail.styles";
 import EmptyBookDescription from "@/components/EmptyView/EmptyBookDescription";
+
+export type ReadingStatus = "before" | "reading" | "completed";
 
 export type EntrySource = "home" | "search" | "routine" | "mypage";
 type ContentTab = "record" | "info";
@@ -47,7 +47,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
 
   const { data: bookGoal } = useBookGoal(Number(bookId), !isBefore);
 
-  const bookInfo = bookData?.bookInfo || BOOK_DETAIL_MOCK;
+  const bookInfo = bookData?.bookInfo;
 
   const currentGoal =
     routines?.find((r) => r.bookId === Number(bookId)) ||
@@ -219,14 +219,14 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           </div>
           <section className={S.infoSection}>
             <Badge
-              label={`Lv. ${bookInfo.level}`}
+              label={`Lv. ${bookInfo?.level}`}
               type="level"
-              className={S.getLevelBadgeClass(bookInfo.level)}
+              className={S.getLevelBadgeClass(bookInfo?.level ?? 1)}
             />
-            <h1 className={S.title}>{bookInfo.title}</h1>
-            <p className={S.author}>{bookInfo.author}</p>
+            <h1 className={S.title}>{bookInfo?.title}</h1>
+            <p className={S.author}>{bookInfo?.author}</p>
             <p className={S.meta}>
-              {bookInfo.publisher} | {bookData?.bookInfo?.pubDate} | {bookInfo.totalPage}쪽
+              {bookInfo?.publisher} | {bookData?.bookInfo?.pubDate} | {bookInfo?.totalPage}쪽
             </p>
             <p className={S.priceRow}>
               <span className={S.priceText}>
@@ -243,7 +243,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </p>
           </section>
           <div className={S.tagRow}>
-            {bookInfo.tags.map((tag, idx) => (
+            {(bookInfo?.tags || []).map((tag, idx) => (
               <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
             ))}
           </div>
@@ -264,10 +264,11 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               />
             </div>
           )}
+          <div className={S.tagRow}>
           {isBefore && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {bookInfo.description ? (
+              {bookInfo?.description ? (
                 <FullView collapsedHeight={134}>
                   <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
@@ -283,7 +284,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           {!isBefore && resolvedActiveTab === "info" && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
-              {bookInfo.description ? (
+              {bookInfo?.description ? (
                 <FullView collapsedHeight={72}>
                   <p className={S.description}>{bookInfo.description}</p>
                 </FullView>
@@ -292,7 +293,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               )}
             </section>
           )}
+          </div>
         </main>
+        
         {bottomBar.visible && <BottomBar activeTab={bottomBar.activeTab} onTabSelect={() => {}} />}
         <Toast
           message={toastMessage}
@@ -314,7 +317,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 onSave={handleSaveRecord}
                 isTimerMode={false}
                 goalMetric={currentGoal?.metric}
-                totalPages={bookInfo.totalPage}
+                totalPages={bookInfo?.totalPage}
                 initialData={{
                   // '완독' 상태면 AFTER, 그 외(읽는 중, 읽고 싶은 등)면 무조건 READING으로 시작
                   status: readingStatus === "completed" ? "AFTER" : "READING",
@@ -327,7 +330,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
       {isGoalModalOpen && (
         <GoalModal
           bookId={Number(bookId)}
-          maxPages={bookInfo.totalPage}
+          maxPages={bookInfo?.totalPage ?? 0}
           title={currentGoal ? "목표 수정하기" : "목표 설정하기"}
           onClose={() => setIsGoalModalOpen(false)}
           onSave={() => {

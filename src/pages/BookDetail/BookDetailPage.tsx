@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import BookDetail from "./BookDetail";
 import type { EntrySource } from "./BookDetail";
-import type { ReadingStatus } from "@/mocks/bookDetail.mock";
+import type { ReadingStatus } from "./BookDetail";
 
 export default function BookDetailPage() {
   const [searchParams] = useSearchParams();

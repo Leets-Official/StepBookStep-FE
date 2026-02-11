@@ -5,11 +5,11 @@ import AppBar from "@/components/AppBar/AppBar";
 import Button from "@/components/Button/Button";
 import { PlayIcon, PauseIcon } from '@/assets/icons';
 import { BookReport } from "@/components/BookReport/BookReport";
-import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import { useParams } from "react-router-dom";
 import { useBookDetail, useRoutines } from "@/hooks/useReadings";
 
-export type TimerStatus = "ready" | "running" | "paused" | "finished";
+import { formatTime, formatKoreanTime } from "@/utils/Timer";
+import type { TimerStatus } from "./Timer.types";
 
 export default function TimerPage() {
   const { bookId } = useParams();
@@ -27,20 +27,6 @@ export default function TimerPage() {
   const [isReportOpen, setIsReportOpen] = useState(false);
   const timerRef = useRef<number | null>(null);
   const navigate = useNavigate();
-  
-  const formatTime = (totalSeconds: number) => {
-    const h = Math.floor(totalSeconds / 3600).toString().padStart(2, "0");
-    const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, "0");
-    const s = (totalSeconds % 60).toString().padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  };
-
-  // 1. 한국어 포맷 함수 
-  const formatKoreanTime = (totalSeconds: number) => {
-  const m = Math.floor(totalSeconds / 60);
-  const s = totalSeconds % 60;
-  return `${m.toString().padStart(2, "0")}분 ${s.toString().padStart(2, "0")}초`;
-};
 
   const bookInfo = bookData?.bookInfo || {
     title: "로딩 중...",
@@ -55,7 +41,7 @@ export default function TimerPage() {
     setIsReportOpen(false);
   };
 
-  const handleReportSave = (data: BookReportData) => {
+  const handleReportSave = () => {
     setIsReportOpen(false);
     navigate("/routine/booklist", { 
       state: { 
@@ -172,10 +158,10 @@ export default function TimerPage() {
           {isReportOpen && (
             <>
               <div 
-                className="fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300"
+                className="fixed inset-0 bg-black/30 z-100 transition-opacity duration-300"
                 onClick={handleReportClose}
               />
-              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] animate-[slideUp_0.3s_ease-out]">
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-101 animate-[slideUp_0.3s_ease-out]">
                 <BookReport
                   bookId={Number(bookId)}
                   onClose={handleReportClose}

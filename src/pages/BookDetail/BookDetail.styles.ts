@@ -1,10 +1,10 @@
 /* 전체 프레임 */
-export const pageWrapper = "min-h-screen bg-white flex justify-center items-center";
+export const pageWrapper = "min-h-screen bg-gray-200 flex justify-center items-center";
 
 export const appFrame = "w-full max-w-[375px] h-[812px] flex flex-col self-center bg-gray-050";
 
 /* 콘텐츠 영역 */
-export const content = "flex-1 overflow-y-auto pb-2 no-scrollbar";
+export const content = "flex-1 overflow-y-auto pb-2 no-scrollbar bg-gray-50";
 
 /* 책 커버 */
 export const coverWrapper = "flex justify-center mb-5 bg-gray-100 py-5";
@@ -13,7 +13,7 @@ export const coverImage =
   "w-[110px] h-[160px] bg-gray-200 shadow-[0_4px_6px_color-mix(in_srgb,var(--color-purple-500)_15%,transparent)]";
 
 /* 책 기본 정보 */
-export const infoSection = "mb-4 px-5";
+export const infoSection = "mb-4 px-5 bg-gray-50";
 
 export function getLevelBadgeClass(level: number) {
   switch (level) {

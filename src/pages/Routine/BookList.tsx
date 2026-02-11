@@ -9,15 +9,21 @@ import Statistics from "./Statistics";
 import EmptyView from "@/components/EmptyView/EmptyView";
 import { GlassesOnBooksGif } from "@/assets/icons";
 import { useRoutines } from "@/hooks/useReadings";
+import { useUserStore } from "@/stores/useUserStore";
+import { SkeletonBookList } from "@/components/skeleton";
+import type { RoutineTab, NavTab, BookListState } from "./BookList.types";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<"routine" | "statistics">(
-    (location.state as { targetTab?: "routine" | "statistics" })?.targetTab || "routine",
+  const [activeTab, setActiveTab] = useState<RoutineTab>(
+    (location.state as BookListState)?.targetTab || "routine",
   );
-  const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
+  const [navTab, setNavTab] = useState<NavTab>("routine");
   const { data: routines, isLoading, isError, refetch } = useRoutines();
+
+  const { nickname } = useUserStore();
+  const displayName = nickname || "회원";
 
   return (
     <div className={S.pageWrapper}>
@@ -56,11 +62,10 @@ export default function RoutinePage() {
             <>
               <h2 className={S.sectionTitle}>지금 읽고 있어요</h2>
 
-              {/* 3. 로딩 및 에러 상태 처리 */}
               {isLoading && (
                 <div className="flex flex-col gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-full h-24 bg-gray-100 rounded-lg animate-pulse" />
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <SkeletonBookList key={i} />
                   ))}
                 </div>
               )}
@@ -106,7 +111,7 @@ export default function RoutinePage() {
                     <EmptyView
                       icon={GlassesOnBooksGif}
                       title="아직 도서가 없어요."
-                      description={<>00님이 즐겨하는 도서를 고르려 가능해요?(멘토?)</>}
+                      description={`${displayName}님이 좋아하실 도서를 고르러 가볼까요?`}
                       actionButton={{
                         label: "도서 탐색하기",
                         onClick: () => navigate("/search"),

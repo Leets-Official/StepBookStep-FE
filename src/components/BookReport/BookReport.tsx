@@ -55,17 +55,27 @@ export const BookReport: React.FC<BookReportProps> = ({
   };
 
   const handleSaveClick = async () => {
-    const timeMatch = duration.match(/\d+/g);
     let totalSeconds = 0;
+    
+    const hourMatch = duration.match(/(\d+)\s*시간/);
+    const minuteMatch = duration.match(/(\d+)\s*분/);
+    const secondMatch = duration.match(/(\d+)\s*초/);
 
-    if (timeMatch) {
-      if (timeMatch.length === 3) {
-        totalSeconds =
-          parseInt(timeMatch[0]) * 3600 + parseInt(timeMatch[1]) * 60 + parseInt(timeMatch[2]);
-      } else if (timeMatch.length === 2) {
-        totalSeconds = parseInt(timeMatch[0]) * 60 + parseInt(timeMatch[1]);
-      } else if (timeMatch.length === 1) {
-        totalSeconds = parseInt(timeMatch[0]) * 60;
+    if (hourMatch || minuteMatch || secondMatch) {
+      if (hourMatch) totalSeconds += parseInt(hourMatch[1]) * 3600;
+      if (minuteMatch) totalSeconds += parseInt(minuteMatch[1]) * 60;
+      if (secondMatch) totalSeconds += parseInt(secondMatch[1]);
+    } else {
+      const timeMatch = duration.match(/\d+/g);
+      if (timeMatch) {
+        if (timeMatch.length === 3) {
+          totalSeconds =
+            parseInt(timeMatch[0]) * 3600 + parseInt(timeMatch[1]) * 60 + parseInt(timeMatch[2]);
+        } else if (timeMatch.length === 2) {
+          totalSeconds = parseInt(timeMatch[0]) * 60 + parseInt(timeMatch[1]);
+        } else if (timeMatch.length === 1) {
+          totalSeconds = parseInt(timeMatch[0]) * 60;
+        }
       }
     }
 
@@ -95,7 +105,6 @@ export const BookReport: React.FC<BookReportProps> = ({
         data: requestData,
       });
 
-
       if (onSave) {
         onSave({
           status,
@@ -108,7 +117,6 @@ export const BookReport: React.FC<BookReportProps> = ({
       }
       onClose?.();
     } catch (error) {
-      console.error("독서 기록 생성 실패:", error);
       alert("독서 기록 저장에 실패했습니다.");
     }
   };

@@ -7,41 +7,10 @@ import * as S from "./Statistics.styles";
 import { ChevronLeftIcon, ChevronRightIcon, GlassesOnBooksGif } from "@/assets/icons";
 import type { MonthlyDataItem, CategoryItem } from "@/api/types";
 import EmptyView from "@/components/EmptyView/EmptyView";
+import { useUserStore } from "@/stores/useUserStore";
+import { SkeletonBase } from "@/components/skeleton";
 
-const GENRE_COLORS: Record<string, string> = {
-  "중국소설": "#D2D5FE",
-  "일본소설": "#A9AAFB",
-  "영미소설": "#787AEE",
-  "한국소설": "#4931D4",
-  
-  "프랑스소설": "#E6C2FF",
-  "역사소설": "#E8A4FF",
-  "희곡": "#E66EE4",
-  "로맨스": "#D300AC",
-  
-  "과학소설(SF)": "#FFD8FF",
-  "판타지/환상문학": "#FFAECE",
-  "추리/미스터리": "#FF84B4",
-  "독일소설": "#FF277B",
-  
-  "라이트노벨": "#DFFBBE",
-  "액션/스릴러": "#BBEF80",
-  "무협소설": "#91D654",
-  "호러/공포소설": "#67B22A",
-};
-
-// 색상 조회 헬퍼 함수 (매핑되지 않은 장르는 회색 처리)
-const getGenreColor = (genreName: string) => {
-  return GENRE_COLORS[genreName] || "#E8E9ED";
-};
-
-const getWeightImage = (kg: number) => {
-  if (kg < 0.4) return { name: "컵라면", src: "/images/300g.png" };
-  if (0.4 <= kg && kg < 0.7) return { name: "햄버거", src: "/images/400g.png" };
-  if (0.7 <= kg && kg < 1.3) return { name: "소형 노트북", src: "/images/700g.png" };
-  if (1.3 <= kg && kg < 1.5) return { name: "전공책", src: "/images/1.3kg.png" };
-  return { name: "아령", src: "/images/1.5kg.png" };
-};
+import { getGenreColor, getWeightImage, formatReadingTime } from "@/utils/Statistics";
 
 export default function Statistics() {
   const navigate = useNavigate();
@@ -50,10 +19,34 @@ export default function Statistics() {
 
   const { data: statsData, isLoading, error } = useStatistics(selectedYear);
 
+  const { nickname } = useUserStore();
+
   if (isLoading) {
     return (
-      <div className={S.centerBox}>
-        <div className={S.loadingText}>로딩 중...</div>
+      <div className="flex flex-col gap-8 pb-8 w-full px-5 pt-4">
+        <div className="space-y-3">
+           <SkeletonBase className="w-32 h-6" /> 
+           <SkeletonBase className="w-full h-45 rounded-2xl" /> 
+        </div>
+
+        <div className="space-y-3">
+           <SkeletonBase className="w-24 h-6" /> 
+           <div className="flex justify-center my-2">
+             <SkeletonBase className="w-20 h-6" /> 
+           </div>
+           <SkeletonBase className="w-full h-37.5 rounded-xl" />
+        </div>
+
+        <div className="space-y-8">
+           <div className="space-y-3">
+             <SkeletonBase className="w-32 h-6" />
+             <SkeletonBase className="w-full h-25 rounded-2xl" />
+           </div>
+           <div className="space-y-3">
+             <SkeletonBase className="w-32 h-6" />
+             <SkeletonBase className="w-full h-25 rounded-2xl" />
+           </div>
+        </div>
       </div>
     );
   }
@@ -67,12 +60,15 @@ export default function Statistics() {
   }
 
   if (!statsData || statsData.bookSummary.finishedBookCount === 0) {
+
+    const displayName = nickname || "회원";
+
     return (
       <div className={S.centerBox}>
         <EmptyView
           icon={GlassesOnBooksGif}
           title="아직 도서가 없어요."
-          description="좋아하실 도서를 고르러 가볼까요?(멘트?)"
+          description={`${displayName}좋아하실 도서를 고르러 가볼까요?`}
           actionButton={{
             label: "독서 시작하기",
             onClick: () => navigate("/search"), 
@@ -82,10 +78,6 @@ export default function Statistics() {
       </div>
     );
   }
-
-  const formatReadingTime = (hours: number, minutes: number) => {
-    return `${hours}시간 ${minutes}분`;
-  };
 
   const chartData = statsData.monthlyGraph.monthlyData.map((item: MonthlyDataItem) => ({
     month: item.month,
