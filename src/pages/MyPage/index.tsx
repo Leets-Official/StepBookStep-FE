@@ -9,6 +9,7 @@ import type { ReadStatus, BookItem } from "./MyPage.types";
 import { ReadingList, FinishedList, WishList, PausedList, MyPageHeader } from "./components";
 import { getMyBooks } from "@/api/myPage";
 import { useUserStore } from "@/stores/useUserStore";
+import { SkeletonBookList } from "@/components/skeleton"; 
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const MyPage = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      setIsLoading(true);
+      setIsLoading(true); // 로딩 시작
       try {
         const data = await getMyBooks({
           readStatus: activeStatus,
@@ -32,9 +33,7 @@ const MyPage = () => {
 
         const mappedItems = (data.items || []).map((item) => ({
           ...item,
-
           coverImage: item.coverUrl,
-
           isBookmarked: item.isBookmarked ?? item.bookmarked,
           bookmarked: item.isBookmarked ?? item.bookmarked,
         }));
@@ -44,7 +43,7 @@ const MyPage = () => {
         console.error("내 서재 불러오기 실패:", error);
         setBooks([]);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // 로딩 종료
       }
     };
 
@@ -59,8 +58,18 @@ const MyPage = () => {
   };
 
   const renderContent = () => {
-    if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
+    // 1. 데이터 로딩 중일 때 스켈레톤 표시
+    if (isLoading) {
+      return (
+        <div className={S.listWrapper}>
+          {[...Array(6)].map((_, i) => (
+            <SkeletonBookList key={i} />
+          ))}
+        </div>
+      );
+    }
 
+    // 2. 전체 데이터가 하나도 없을 때
     if (books.length === 0) {
       return (
         <EmptyView
@@ -80,6 +89,7 @@ const MyPage = () => {
       );
     }
 
+    // 3. 상태별 필터링 로직
     let filteredData = books;
 
     if (activeStatus === "BOOKMARKED") {
@@ -90,6 +100,7 @@ const MyPage = () => {
       filteredData = books.filter((b) => b.status === activeStatus);
     }
 
+    // 4. 필터링된 데이터가 없을 때
     if (filteredData.length === 0) {
       return (
         <EmptyView
@@ -109,6 +120,7 @@ const MyPage = () => {
       );
     }
 
+    // 5. 각 탭 상태에 맞는 리스트 렌더링
     switch (activeStatus) {
       case "READING":
         return (
