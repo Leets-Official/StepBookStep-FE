@@ -4,6 +4,7 @@ import { SegmentedProgress } from "@/components/Progress/SegmentedProgress";
 import { Button } from "@/components/Button/Button";
 import { ChevronLeftIcon } from "@/assets/icons";
 import { useOnboardingStore } from "@/stores/onboardingStore";
+import { useUserStore } from "@/stores/useUserStore";
 
 import {
   pageWrapper,
@@ -53,6 +54,7 @@ const UNKNOWN_LABEL = "잘 모르겠어요";
 export default function OnboardingGenre() {
   const navigate = useNavigate();
   const { setGenres, setCategories } = useOnboardingStore();
+  const setUserInfo = useUserStore((state) => state.setUserInfo);
 
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -141,6 +143,12 @@ export default function OnboardingGenre() {
             onClick={() => {
               setGenres(selectedGenres);
               setCategories(selectedCategories);
+
+              setUserInfo({
+                genreIds: selectedGenres,
+                categoryIds: selectedCategories,
+              });
+
               navigate("/onboarding/result");
             }}
           />

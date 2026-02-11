@@ -9,76 +9,99 @@ import { patchPreferences } from "@/api/settings";
 import { useUserStore } from "@/stores/useUserStore";
 
 const LEVELS = ["Lv.1", "Lv.2", "Lv.3"] as const;
-const GENRES = [
-  "한국소설",
-  "영미소설",
-  "중국소설",
-  "일본소설",
-  "프랑스소설",
-  "독일소설",
-  "로맨스",
-  "역사소설",
-  "무협소설",
-  "판타지/환상문학",
-  "추리/미스터리",
-  "희곡",
-  "라이트노벨",
-  "과학소설(SF)",
-  "액션/스릴러",
-  "호러/공포소설",
+
+type GenreItem = {
+  id: number;
+  label: string;
+  type: "CATEGORY" | "GENRE";
+};
+
+const GENRES: readonly GenreItem[] = [
+  { id: 50993, label: "한국소설", type: "CATEGORY" },
+  { id: 50919, label: "영미소설", type: "CATEGORY" },
+  { id: 50998, label: "일본소설", type: "CATEGORY" },
+  { id: 50923, label: "중국소설", type: "CATEGORY" },
+  { id: 50921, label: "프랑스소설", type: "CATEGORY" },
+  { id: 50922, label: "독일소설", type: "CATEGORY" },
+
+  { id: 50928, label: "판타지/환상문학", type: "GENRE" },
+  { id: 50930, label: "과학소설(SF)", type: "GENRE" },
+  { id: 50926, label: "추리/미스터리", type: "GENRE" },
+  { id: 50933, label: "액션/스릴러", type: "GENRE" },
+  { id: 50935, label: "로맨스", type: "GENRE" },
+  { id: 50932, label: "무협소설", type: "GENRE" },
+  { id: 50927, label: "라이트노벨", type: "GENRE" },
+  { id: 50948, label: "희곡", type: "GENRE" },
+  { id: 50929, label: "역사소설", type: "GENRE" },
+  { id: 50931, label: "호러/공포소설", type: "GENRE" },
 ];
 
+const MAX_SELECT = 3;
 const UNKNOWN = "잘 모르겠어요";
 
 export default function PreferenceEditPage() {
   const navigate = useNavigate();
 
   const storedLevel = useUserStore((state) => state.level);
-  const storedGenres = useUserStore((state) => state.genres);
+  const storedGenreIds = useUserStore((state) => state.genreIds);
+  const storedCategoryIds = useUserStore((state) => state.categoryIds);
   const nickname = useUserStore((state) => state.nickname);
   const setUserInfo = useUserStore((state) => state.setUserInfo);
 
   const [level, setLevel] = useState<(typeof LEVELS)[number] | null>(null);
-  const [genres, setGenres] = useState<string[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
+  /* ================= 초기 세팅 ================= */
   useEffect(() => {
     if (storedLevel) {
       const lv = storedLevel === 1 ? "Lv.1" : storedLevel === 2 ? "Lv.2" : "Lv.3";
       setLevel(lv);
     }
 
-    if (storedGenres.length > 0) {
-      setGenres(storedGenres);
-    }
-  }, [storedLevel, storedGenres]);
+    setSelectedGenres(storedGenreIds);
+    setSelectedCategories(storedCategoryIds);
+  }, [storedLevel, storedGenreIds, storedCategoryIds]);
 
-  const hasUnknown = genres.includes(UNKNOWN);
-  const hasOther = genres.some((g) => g !== UNKNOWN);
+  const totalSelected = selectedGenres.length + selectedCategories.length;
+  const isUnknownSelected = totalSelected === 0;
 
-  const toggleGenre = (genre: string) => {
-    if (genre === UNKNOWN) {
-      setGenres(hasUnknown ? [] : [UNKNOWN]);
+  const toggleItem = (item: GenreItem) => {
+    const isGenre = item.type === "GENRE";
+    const selected = isGenre ? selectedGenres : selectedCategories;
+    const setter = isGenre ? setSelectedGenres : setSelectedCategories;
+
+    if (selected.includes(item.id)) {
+      setter(selected.filter((id) => id !== item.id));
       return;
     }
 
-    if (hasUnknown) return;
+    if (totalSelected >= MAX_SELECT) return;
 
-    setGenres((prev) => {
-      if (prev.includes(genre)) return prev.filter((g) => g !== genre);
-      if (prev.length >= 3) return prev;
-      return [...prev, genre];
-    });
+    setter([...selected, item.id]);
+  };
+
+  const selectUnknown = () => {
+    setSelectedGenres([]);
+    setSelectedCategories([]);
   };
 
   const initialLevel = storedLevel === 1 ? "Lv.1" : storedLevel === 2 ? "Lv.2" : "Lv.3";
-  const initialGenres = storedGenres;
 
   const isLevelChanged = level !== initialLevel;
 
   const isGenresChanged = useMemo(() => {
-    if (initialGenres.length !== genres.length) return true;
-    return initialGenres.some((g) => !genres.includes(g));
-  }, [genres, initialGenres]);
+    if (
+      storedGenreIds.length !== selectedGenres.length ||
+      storedCategoryIds.length !== selectedCategories.length
+    )
+      return true;
+
+    return (
+      storedGenreIds.some((id) => !selectedGenres.includes(id)) ||
+      storedCategoryIds.some((id) => !selectedCategories.includes(id))
+    );
+  }, [selectedGenres, selectedCategories, storedGenreIds, storedCategoryIds]);
 
   const hasChanged = isLevelChanged || isGenresChanged;
 
@@ -92,14 +115,15 @@ export default function PreferenceEditPage() {
     try {
       await patchPreferences(0, {
         level: Number(level.replace("Lv.", "")),
-        categoryIds: [],
-        genreIds: [],
+        categoryIds: selectedCategories,
+        genreIds: selectedGenres,
       });
 
       setUserInfo({
         nickname,
         level: Number(level.replace("Lv.", "")),
-        genres,
+        genreIds: selectedGenres,
+        categoryIds: selectedCategories,
       });
 
       navigate("/setting");
@@ -135,16 +159,19 @@ export default function PreferenceEditPage() {
             <p className={S.preferenceSectionTitle}>분류</p>
 
             <div className="flex flex-wrap gap-2 mt-4">
-              {GENRES.map((genre) => {
-                const active = genres.includes(genre);
+              {GENRES.map((item) => {
+                const active =
+                  item.type === "GENRE"
+                    ? selectedGenres.includes(item.id)
+                    : selectedCategories.includes(item.id);
 
                 return (
                   <button
-                    key={genre}
+                    key={item.id}
                     className={cn(S.preferenceGenreChip, active && S.preferenceGenreChipActive)}
-                    onClick={() => toggleGenre(genre)}
+                    onClick={() => toggleItem(item)}
                   >
-                    {genre}
+                    {item.label}
                   </button>
                 );
               })}
@@ -152,12 +179,12 @@ export default function PreferenceEditPage() {
               <Button
                 label={UNKNOWN}
                 size="small"
-                variant={hasUnknown ? "ghost" : "secondaryOutline"}
-                disabled={!hasUnknown && hasOther}
-                onClick={() => toggleGenre(UNKNOWN)}
+                variant={isUnknownSelected ? "ghost" : "secondaryOutline"}
+                disabled={!isUnknownSelected && totalSelected > 0}
+                onClick={selectUnknown}
                 className={cn(
                   "rounded-full text-sm border border-lime-600",
-                  hasUnknown ? "bg-lime-400/60 text-purple-800" : "bg-white text-gray-700",
+                  isUnknownSelected ? "bg-lime-400/60 text-purple-800" : "bg-white text-gray-700",
                 )}
               />
             </div>
