@@ -1,43 +1,69 @@
 import type { AppBarProps } from "@/components/AppBar/AppBar.types";
 import { appBarStyles } from "@/components/AppBar/AppBar.styles";
-import { 
-  ChevronLeftIcon as IconChevronLeft, 
-  BookmarkEmptyIcon as IconBookmarkEmpty,
-  PenIcon as IconPen,
-  SettingIcon as IconSetting,
-  LogoIcon as IconLogo
-} from '@/assets/icons';
+import { menu as dropDownMenu, item as dropDownItem } from "@/components/DropDown/DropDown.styles";
+
+import {
+  ChevronLeftIcon,
+  BookmarkEmptyIcon,
+  PenIcon,
+  SettingIcon,
+  LogoIcon,
+  BookmarkFilledIcon,
+} from "@/assets/icons";
 import TextField from "@/components/TextField/TextField";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AppBar = ({
   mode,
   title,
+  isBookmarked,
   onBackClick,
-  onSettingClick,
   onBookmarkClick,
   onPenClick,
+  onTimerClick,
+  onDirectClick,
+  onGoalClick,
+  showPenDropdown = false,
   searchText,
   onSearchTextChange,
   searchPlaceholder = "Placeholder",
 }: AppBarProps) => {
+  const [isPenMenuOpen, setIsPenMenuOpen] = useState(false);
+  const penRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // 탐색탭일 때 별도의 레이아웃 반환
+  const handleMenuClick = (action?: () => void) => {
+    if (action) action();
+    setIsPenMenuOpen(false);
+  };
+
+  // 메뉴 바깥 클릭 시 닫기
+  useEffect(() => {
+    if (!showPenDropdown) return;
+
+    const handler = (e: MouseEvent) => {
+      if (penRef.current && !penRef.current.contains(e.target as Node)) {
+        setIsPenMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showPenDropdown]);
+
+  // 탐색탭 전용
   if (mode === "search") {
     return (
       <header className={appBarStyles.searchContainer}>
-        <button 
-          type="button" 
-          onClick={onBackClick} 
-          className={appBarStyles.backButton}
-        >
-          <IconChevronLeft className={appBarStyles.icon} />
+        <button type="button" onClick={onBackClick} className={appBarStyles.backButton}>
+          <ChevronLeftIcon className={appBarStyles.icon} />
         </button>
-        <TextField 
+        <TextField
           value={searchText}
           onChange={onSearchTextChange}
           placeholder={searchPlaceholder}
-          icon={true} 
-          state="default" 
+          icon={true}
+          state="default"
           className={appBarStyles.searchInputHelper}
         />
       </header>
@@ -54,29 +80,69 @@ const AppBar = ({
         {mode === "logo" ? (
           /* 로고 있는 버전 */
           <>
-            <IconLogo className={appBarStyles.logoImage} />
-            
-            <button type="button" onClick={onSettingClick}>
-              <IconSetting className={appBarStyles.icon} />
+            <LogoIcon className={appBarStyles.logoImage} />
+            <button type="button" onClick={() => navigate("/setting")}>
+              <SettingIcon className={appBarStyles.icon} />
             </button>
           </>
         ) : (
-          /* 로고 없는 버전 */
+          /* 로고 없는 버전 (title / none 공통) */
           <>
-            <button type="button" onClick={onBackClick}>
-              <IconChevronLeft className={appBarStyles.icon} />
-            </button>
+            {/* 왼쪽 영역: 뒤로가기 + 타이틀 */}
+            <div className="flex items-center gap-2 flex-1">
+              <button type="button" onClick={onBackClick}>
+                <ChevronLeftIcon className={appBarStyles.icon} />
+              </button>
 
-            <div className="flex-1 flex items-center">
-              <span className={appBarStyles.titleText}>{title}</span>
+              {(mode === "title" || mode === "none") && title && (
+                <span className={appBarStyles.title}>{title}</span>
+              )}
             </div>
 
-            <button type="button" onClick={onBookmarkClick}>
-              <IconBookmarkEmpty className={appBarStyles.icon} />
-            </button>
-            <button type="button" onClick={onPenClick}>
-              <IconPen className={appBarStyles.icon} />
-            </button>
+            {/* 우측 아이콘: mode === none 이면 숨김 */}
+            {mode !== "none" && (
+              <>
+                <button type="button" onClick={onBookmarkClick}>
+                  {isBookmarked ? (
+                    <BookmarkFilledIcon className={appBarStyles.icon} />
+                  ) : (
+                    <BookmarkEmptyIcon className={appBarStyles.icon} />
+                  )}
+                </button>
+
+                <div className="relative" ref={penRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (showPenDropdown) {
+                        setIsPenMenuOpen((prev) => !prev);
+                      } else {
+                        onPenClick?.();
+                      }
+                    }}
+                  >
+                    <PenIcon className={appBarStyles.icon} />
+                  </button>
+
+                  {showPenDropdown && isPenMenuOpen && (
+                    <ul
+                      className={dropDownMenu}
+                      style={{ width: "155px", right: 0, top: "100%", marginTop: "8px" }}
+                    >
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onTimerClick)}>
+                        타이머로 기록하기
+                      </li>
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onDirectClick)}>
+                        직접 기록하기
+                      </li>
+                      <li className={dropDownItem} onClick={() => handleMenuClick(onGoalClick)}>
+                        목표 수정하기
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>

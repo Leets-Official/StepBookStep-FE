@@ -38,6 +38,11 @@
     --color-purple-800: #0E0C67;
     --color-purple-900: #04043B;
 
+    /* Status Colors */
+    --color-success: #0530EE;
+    --color-error: #EF1313;
+    --color-error-dark: #D82727;
+
     /* ===== Font ===== */
     /* Font Size */
     --font-xs: 10px;

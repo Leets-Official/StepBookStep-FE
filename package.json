@@ -10,15 +10,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.13.2",
+    "@tanstack/react-query": "^5.90.20",
+    "axios": "^1.13.4",
     "clsx": "^2.1.1",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "date-fns": "^4.1.0",
+    "query": "^0.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-router-dom": "^7.11.0",
-    "tailwind-merge": "^3.4.0"
+    "rechart": "^0.0.1",
+    "recharts": "^3.7.0",
+    "swiper": "^12.1.0",
+    "tailwind-merge": "^3.4.0",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@rollup/rollup-win32-x64-msvc": "^4.57.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
@@ -32,6 +40,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.26",
     "globals": "^16.5.0",
+    "lightningcss": "^1.31.1",
     "postcss": "^8.5.6",
     "prettier": "3.7.4",
     "tailwindcss": "^4.1.18",

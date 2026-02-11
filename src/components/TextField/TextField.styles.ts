@@ -1,28 +1,22 @@
-export const wrapper = "flex flex-col gap-2 w-[315px]";
+export const wrapper = "flex flex-col gap-2 w-full";
 
-export const title = "text-xs font-semibold leading-4 tracking-normal text-gray-900";
+export const title =
+  "font-['Pretendard'] text-[12px] font-semibold leading-[16px] tracking-[0%] text-gray-900";
 
 export const inputContainer = "relative w-full";
 
 export const inputBase =
-  "w-full h-12 px-6 rounded-full text-base transition-all duration-200 focus:outline-none placeholder:text-gray-300 disabled:cursor-not-allowed";
+  "w-full h-12 px-6 rounded-full transition-all duration-200 focus:outline-none disabled:cursor-not-allowed " +
+  "font-['Pretendard'] text-[14px] font-normal leading-[20px] tracking-[0%] " +
+  "text-gray-900 placeholder:text-gray-300";
 
 export const inputVariants = {
-  // 기본 상태(active=false, focus=false)
-  default: "border border-gray-300 bg-gray-50 text-gray-300",
-  
-  // 포커스 상태(active=false, focus=true) 
-  focus: "border border-gray-900 bg-gray-50 text-gray-900",
-  
-  // 값 입력 상태(active=true, focus=true)
-  filled: "border border-gray-300 bg-gray-50 text-gray-900",
-  
-  // active=true, focus=false
-  disabled: "border border-gray-300 bg-gray-50 text-gray-900",
-
-  success: "border border-[#0530EE] bg-white text-gray-900 focus:border-[#0530EE]",
-
-  error: "border border-[#EF1313] bg-white text-gray-900 focus:border-[#EF1313]",
+  default: "border border-gray-300 bg-gray-50",
+  focus: "border border-gray-900 bg-gray-50",
+  filled: "border border-gray-300 bg-gray-50",
+  disabled: "border border-gray-300 bg-gray-100",
+  success: "border border-success bg-white focus:border-success",
+  error: "border border-error bg-white focus:border-error",
 };
 
 export const withIconPadding = "pr-14";
@@ -30,11 +24,10 @@ export const withIconPadding = "pr-14";
 export const iconButton =
   "absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center cursor-pointer";
 
-
-export const helpTextBase = "text-xs font-medium leading-4 tracking-normal";
+export const helpTextBase = "text-xs font-normal leading-4 tracking-normal whitespace-pre-line";
 
 export const helpTextVariants = {
-  default: "text-gray-300",
-  error: "text-[#EF1313]",
-  success: "text-[#0530EE]",
+  default: "text-gray-500",
+  error: "text-error",
+  success: "text-success",
 };

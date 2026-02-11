@@ -45,10 +45,10 @@ export const TextField: React.FC<TextFieldProps> = ({
       return <CheckIcon className="text-[#0530EE]" />;
     }
     if (state === "error") {
-      return <AlertCircleIcon className="text-[#EF1313]" />;
+      return <AlertCircleIcon className="text-error" />;
     }
-    
-    return <SearchIcon />;
+
+    return <SearchIcon className="text-gray-500" />;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +67,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.currentTarget.blur();
     }
     props.onKeyDown?.(e);
@@ -80,11 +80,7 @@ export const TextField: React.FC<TextFieldProps> = ({
       <div className={inputContainer}>
         <input
           {...props}
-          className={cn(
-            inputBase,
-            getInputVariant(),
-            icon && withIconPadding
-          )}
+          className={cn(inputBase, getInputVariant(), icon && withIconPadding)}
           value={inputValue}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -107,9 +103,7 @@ export const TextField: React.FC<TextFieldProps> = ({
       </div>
 
       {helpTextContent && (
-        <span className={cn(helpTextBase, helpTextVariants[state])}>
-          {helpTextContent}
-        </span>
+        <span className={cn(helpTextBase, helpTextVariants[state])}>{helpTextContent}</span>
       )}
     </div>
   );

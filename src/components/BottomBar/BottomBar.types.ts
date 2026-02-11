@@ -9,6 +9,6 @@ export interface NavItem {
 }
 
 export interface BottomBarProps {
-  defaultTab?: TabId;
-  onTabSelect?: (id: TabId) => void;
+  activeTab: TabId;
+  onTabSelect: (id: TabId) => void;
 }
