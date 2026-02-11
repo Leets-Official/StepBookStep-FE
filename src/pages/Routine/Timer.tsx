@@ -173,10 +173,10 @@ export default function TimerPage() {
           {isReportOpen && (
             <>
               <div 
-                className="fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300"
+                className="fixed inset-0 bg-black/30 z-100 transition-opacity duration-300"
                 onClick={handleReportClose}
               />
-              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[101] animate-[slideUp_0.3s_ease-out]">
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-101 animate-[slideUp_0.3s_ease-out]">
                 <BookReport
                   bookId={Number(bookId)}
                   onClose={handleReportClose}

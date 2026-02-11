@@ -19,7 +19,7 @@ export const Kakao = ({ onClick, disabled = false }: KakaoProps) => {
         disabled && "opacity-50 cursor-not-allowed"
       )}
     >
-      <div className="flex items-center justify-center w-[18px] h-[18px]">
+      <div className="flex items-center justify-center w-4.5 h-4.5">
         <KakaoIcon />
       </div>
 
