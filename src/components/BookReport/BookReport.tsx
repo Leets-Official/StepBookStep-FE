@@ -95,7 +95,6 @@ export const BookReport: React.FC<BookReportProps> = ({
         data: requestData,
       });
 
-      console.log("독서 기록 생성 성공!", response);
 
       if (onSave) {
         onSave({

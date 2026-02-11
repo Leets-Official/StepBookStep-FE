@@ -31,7 +31,6 @@ export const kakaoLoginCallback = async (
   token: string,
   fcmToken: string = "",
 ): Promise<LoginResponse> => {
-  console.log("백엔드 카카오 로그인 API 호출");
 
   const { data } = await apiClient.post<LoginResponse>("/auth/login/kakao", {
     socialToken: token,
@@ -50,7 +49,6 @@ export const kakaoLoginCallback = async (
 export const saveTokens = (accessToken: string, refreshToken: string) => {
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
-  console.log("토큰 저장 완료");
 };
 
 export const getAccessToken = () => localStorage.getItem("accessToken");
