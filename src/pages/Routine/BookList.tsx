@@ -10,6 +10,7 @@ import EmptyView from "@/components/EmptyView/EmptyView";
 import { GlassesOnBooksGif } from "@/assets/icons";
 import { useRoutines } from "@/hooks/useReadings";
 import { useUserStore } from "@/stores/useUserStore";
+import { SkeletonBookList } from "@/components/skeleton";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
@@ -60,11 +61,10 @@ export default function RoutinePage() {
             <>
               <h2 className={S.sectionTitle}>지금 읽고 있어요</h2>
 
-              {/* 3. 로딩 및 에러 상태 처리 */}
               {isLoading && (
                 <div className="flex flex-col gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-full h-24 bg-gray-100 rounded-lg animate-pulse" />
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <SkeletonBookList key={i} />
                   ))}
                 </div>
               )}

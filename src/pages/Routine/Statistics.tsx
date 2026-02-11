@@ -8,6 +8,7 @@ import { ChevronLeftIcon, ChevronRightIcon, GlassesOnBooksGif } from "@/assets/i
 import type { MonthlyDataItem, CategoryItem } from "@/api/types";
 import EmptyView from "@/components/EmptyView/EmptyView";
 import { useUserStore } from "@/stores/useUserStore";
+import { SkeletonBase } from "@/components/skeleton";
 
 const GENRE_COLORS: Record<string, string> = {
   "중국소설": "#D2D5FE",
@@ -55,8 +56,30 @@ export default function Statistics() {
 
   if (isLoading) {
     return (
-      <div className={S.centerBox}>
-        <div className={S.loadingText}>로딩 중...</div>
+      <div className="flex flex-col gap-8 pb-8 w-full px-5 pt-4">
+        <div className="space-y-3">
+           <SkeletonBase className="w-32 h-6" /> 
+           <SkeletonBase className="w-full h-45 rounded-2xl" /> 
+        </div>
+
+        <div className="space-y-3">
+           <SkeletonBase className="w-24 h-6" /> 
+           <div className="flex justify-center my-2">
+             <SkeletonBase className="w-20 h-6" /> 
+           </div>
+           <SkeletonBase className="w-full h-37.5 rounded-xl" />
+        </div>
+
+        <div className="space-y-8">
+           <div className="space-y-3">
+             <SkeletonBase className="w-32 h-6" />
+             <SkeletonBase className="w-full h-25 rounded-2xl" />
+           </div>
+           <div className="space-y-3">
+             <SkeletonBase className="w-32 h-6" />
+             <SkeletonBase className="w-full h-25 rounded-2xl" />
+           </div>
+        </div>
       </div>
     );
   }
