@@ -43,7 +43,7 @@ export default function SetProfile() {
       setChecking(true);
       const res = await checkNickname(nickname);
 
-      if (!res.isAvailable) {
+      if (!res.available) {
         setError("이미 사용 중인 닉네임이에요.");
         setAvailable(false);
         return;
