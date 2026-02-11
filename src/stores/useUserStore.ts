@@ -5,13 +5,15 @@ interface UserState {
   nickname: string | null;
   email?: string | null;
   level: number;
-  genres: string[];
+  genreIds: number[];
+  categoryIds: number[];
 
   setUserInfo: (payload: {
     nickname?: string | null;
     email?: string | null;
     level?: number;
-    genres?: string[];
+    genreIds?: number[];
+    categoryIds?: number[];
   }) => void;
 
   resetUserInfo: () => void;
@@ -23,21 +25,24 @@ export const useUserStore = create(
       nickname: null,
       email: null,
       level: 0,
-      genres: [],
+      genreIds: [],
+      categoryIds: [],
 
       setUserInfo: (payload) =>
         set((state) => ({
           nickname: payload.nickname ?? state.nickname,
           email: payload.email ?? state.email,
           level: payload.level ?? state.level,
-          genres: payload.genres ?? state.genres,
+          genreIds: payload.genreIds ?? state.genreIds,
+          categoryIds: payload.categoryIds ?? state.categoryIds,
         })),
 
       resetUserInfo: () => ({
         nickname: null,
         email: null,
         level: 0,
-        genres: [],
+        genreIds: [],
+        categoryIds: [],
       }),
     }),
     {
