@@ -70,7 +70,7 @@ export default function LoginPage() {
       level: 1,
     });
 
-    if (signupType) {
+    if (signupType !== "EXISTING") {
       navigate("/onboarding/set-profile", { replace: true });
     } else {
       navigate("/home", { replace: true });
