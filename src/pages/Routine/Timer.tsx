@@ -43,7 +43,6 @@ export default function TimerPage() {
   };
 
   const handleReportSave = (data: BookReportData) => {
-    console.log("저장된 독서 기록:", data);
     setIsReportOpen(false);
     navigate("/routine/booklist", { 
       state: { 

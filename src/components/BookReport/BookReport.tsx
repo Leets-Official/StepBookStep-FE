@@ -105,8 +105,6 @@ export const BookReport: React.FC<BookReportProps> = ({
         data: requestData,
       });
 
-      console.log("독서 기록 생성 성공!", response);
-
       if (onSave) {
         onSave({
           status,
@@ -119,7 +117,6 @@ export const BookReport: React.FC<BookReportProps> = ({
       }
       onClose?.();
     } catch (error) {
-      console.error("독서 기록 생성 실패:", error);
       alert("독서 기록 저장에 실패했습니다.");
     }
   };
