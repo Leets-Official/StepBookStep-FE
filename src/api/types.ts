@@ -148,7 +148,6 @@ export interface ReadingLog {
   durationSeconds?: number;
   recordDate: string;
   createdAt: string;
-  // 필요 시 추가 필드 정의
 }
 
 // ============================================
