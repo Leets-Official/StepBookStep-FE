@@ -7,6 +7,7 @@ import type {
   CreateReadingLogRequest,
   CreateReadingLogResponse,
   UpdateGoalRequest,
+  CreateGoalRequest,
   ReadingDetailData,
 } from "./types";
 
@@ -48,10 +49,19 @@ export const createReadingLog = async (
 };
 
 /**
- * 독서 목표 생성/수정/삭제
+ * 독서 목표 생성
+ * POST /api/v1/books/{bookId}/goals
+ */
+export const createBookGoal = async (bookId: number, data: CreateGoalRequest): Promise<Goal> => {
+  const response = await apiClient.post<ApiResponse<Goal>>(`/books/${bookId}/goals`, data);
+
+  return response.data.data;
+};
+
+/**
+ * 독서 목표 수정
  * PATCH /api/v1/books/{bookId}/goals
  */
-
 export const updateBookGoal = async (bookId: number, data: UpdateGoalRequest): Promise<Goal> => {
   const response = await apiClient.patch<ApiResponse<Goal>>(`/books/${bookId}/goals`, data);
 
@@ -59,7 +69,15 @@ export const updateBookGoal = async (bookId: number, data: UpdateGoalRequest): P
 };
 
 /**
- * [NEW] 독서 기록 상세 조회
+ * 독서 목표 삭제
+ * DELETE /api/v1/books/{bookId}/goals
+ */
+export const deleteBookGoal = async (bookId: number): Promise<void> => {
+  await apiClient.delete<ApiResponse<void>>(`/books/${bookId}/goals`);
+};
+
+/**
+ * 독서 기록 상세 조회
  * GET /api/v1/books/{bookId}/reading-detail
  */
 
