@@ -18,7 +18,6 @@ declare global {
 export const initKakao = () => {
   if (window.Kakao && !window.Kakao.isInitialized()) {
     window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
-    console.log("카카오 SDK 초기화 완료");
   }
 };
 
@@ -31,6 +30,5 @@ export const loginWithKakao = () => {
 
 export const logoutKakao = () => {
   window.Kakao?.Auth.logout(() => {
-    console.log("카카오 로그아웃 완료");
   });
 };
