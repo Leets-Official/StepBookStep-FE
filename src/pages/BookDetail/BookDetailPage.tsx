@@ -11,5 +11,16 @@ export default function BookDetailPage() {
   const readingStatus: ReadingStatus =
     statusParam === "reading" || statusParam === "completed" ? statusParam : "before";
 
-  return <BookDetail entrySource={fromParam || "home"} readingStatus={readingStatus} />;
+  // entrySource 우선순위: from 파라미터 > status 파라미터 > 기본값(home)
+  let entrySource: EntrySource = "home";
+  if (fromParam) {
+    entrySource = fromParam;
+  } else if (searchParams.get("entrySource")) {
+    entrySource = searchParams.get("entrySource") as EntrySource;
+  } else if (statusParam === "reading" || statusParam === "completed") {
+    // 마이페이지 등에서 읽는중/완독 탭에서 진입 시 mypage로
+    entrySource = "mypage";
+  }
+
+  return <BookDetail entrySource={entrySource} readingStatus={readingStatus} />;
 }

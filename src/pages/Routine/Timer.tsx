@@ -5,7 +5,6 @@ import AppBar from "@/components/AppBar/AppBar";
 import Button from "@/components/Button/Button";
 import { PlayIcon, PauseIcon } from '@/assets/icons';
 import { BookReport } from "@/components/BookReport/BookReport";
-import type { BookReportData } from "@/components/BookReport/BookReport.types";
 import { useParams } from "react-router-dom";
 import { useBookDetail, useRoutines } from "@/hooks/useReadings";
 
@@ -42,7 +41,7 @@ export default function TimerPage() {
     setIsReportOpen(false);
   };
 
-  const handleReportSave = (data: BookReportData) => {
+  const handleReportSave = () => {
     setIsReportOpen(false);
     navigate("/routine/booklist", { 
       state: { 
