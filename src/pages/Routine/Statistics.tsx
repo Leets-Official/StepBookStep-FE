@@ -7,6 +7,7 @@ import * as S from "./Statistics.styles";
 import { ChevronLeftIcon, ChevronRightIcon, GlassesOnBooksGif } from "@/assets/icons";
 import type { MonthlyDataItem, CategoryItem } from "@/api/types";
 import EmptyView from "@/components/EmptyView/EmptyView";
+import { useUserStore } from "@/stores/useUserStore";
 
 const GENRE_COLORS: Record<string, string> = {
   "중국소설": "#D2D5FE",
@@ -50,6 +51,8 @@ export default function Statistics() {
 
   const { data: statsData, isLoading, error } = useStatistics(selectedYear);
 
+  const { nickname } = useUserStore();
+
   if (isLoading) {
     return (
       <div className={S.centerBox}>
@@ -67,12 +70,15 @@ export default function Statistics() {
   }
 
   if (!statsData || statsData.bookSummary.finishedBookCount === 0) {
+
+    const displayName = nickname || "회원";
+
     return (
       <div className={S.centerBox}>
         <EmptyView
           icon={GlassesOnBooksGif}
           title="아직 도서가 없어요."
-          description="좋아하실 도서를 고르러 가볼까요?(멘트?)"
+          description={`${displayName}좋아하실 도서를 고르러 가볼까요?`}
           actionButton={{
             label: "독서 시작하기",
             onClick: () => navigate("/search"), 

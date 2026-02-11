@@ -9,6 +9,7 @@ import Statistics from "./Statistics";
 import EmptyView from "@/components/EmptyView/EmptyView";
 import { GlassesOnBooksGif } from "@/assets/icons";
 import { useRoutines } from "@/hooks/useReadings";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function RoutinePage() {
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ export default function RoutinePage() {
   );
   const [navTab, setNavTab] = useState<"home" | "search" | "routine" | "mypage">("routine");
   const { data: routines, isLoading, isError, refetch } = useRoutines();
+
+  const { nickname } = useUserStore();
+  const displayName = nickname || "회원";
 
   return (
     <div className={S.pageWrapper}>
@@ -106,7 +110,7 @@ export default function RoutinePage() {
                     <EmptyView
                       icon={GlassesOnBooksGif}
                       title="아직 도서가 없어요."
-                      description={<>00님이 즐겨하는 도서를 고르려 가능해요?(멘토?)</>}
+                      description={`${displayName}님이 좋아하실 도서를 고르러 가볼까요?`}
                       actionButton={{
                         label: "도서 탐색하기",
                         onClick: () => navigate("/search"),
