@@ -1,5 +1,5 @@
 /* 전체 프레임 */
-export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center items-center";
+export const pageWrapper = "min-h-screen bg-gray-200 flex justify-center items-center";
 
 export const appFrame = "relative w-full max-w-[375px] h-[812px] flex flex-col bg-gray-50";
 

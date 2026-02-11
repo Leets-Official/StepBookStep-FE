@@ -4,7 +4,7 @@ export const wrapper = `
   items-center 
   w-full 
   h-screen 
-  bg-[#B7B7B7]
+  bg-gray-200
 
 `;
 

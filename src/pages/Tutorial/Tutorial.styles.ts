@@ -1,4 +1,4 @@
-export const pageWrapper = "min-h-screen bg-[#B7B7B7] flex justify-center overflow-hidden";
+export const pageWrapper = "min-h-screen bg-gray-200 flex justify-center overflow-hidden";
 
 export const appFrame =
   "w-[375px] h-[812px] flex flex-col bg-gray-50 relative self-center overflow-hidden";
