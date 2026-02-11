@@ -82,7 +82,7 @@ export function ReadingStateDetail({ bookId }: ReadingStateDetailProps) {
       </div>
 
       {readingLogs && readingLogs.length > 0 && (
-        <div className="mt-4 flex flex-col  bg-gray-50">
+        <div className="mt-4 flex flex-col rounded-sm bg-gray-50">
           {readingLogs.map((log) => {
              // 해당 기록의 퍼센트 계산 (전체 페이지 대비)
              const logPercent = totalPages > 0 ? Math.floor((log.pagesRead / totalPages) * 100) : 0;
@@ -90,7 +90,7 @@ export function ReadingStateDetail({ bookId }: ReadingStateDetailProps) {
              return (
               <div 
                 key={log.logId} 
-                className="flex justify-between items-center px-4 py-3 rounded-lg text-sm text-gray-600"
+                className="flex justify-between items-center px-4 py-3 text-sm text-gray-600"
               >
                 <span className="text-gray-700">{log.recordDate.replace(/-/g, '. ')}</span>
                 
