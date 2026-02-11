@@ -264,7 +264,6 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               />
             </div>
           )}
-          <div className={S.tagRow}>
           {isBefore && (
             <section className="px-5">
               <h2 className={S.sectionTitle}>책 소개</h2>
@@ -277,7 +276,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
               )}
             </section>
           )}
-
+          <div className={S.tagRow}>
           {!isBefore && resolvedActiveTab === "record" && (
             <ReadingStateDetail bookId={Number(bookId)} />
           )}
