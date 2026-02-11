@@ -1,5 +1,5 @@
 export const pageWrapper =
-  "flex justify-center items-center w-full h-screen bg-[#B7B7B7] overflow-hidden";
+  "flex justify-center items-center w-full h-screen bg-gray-200 overflow-hidden";
 
 export const appFrame =
   "w-full max-w-[375px] h-full max-h-[812px] bg-gray-50 flex flex-col relative overflow-hidden";
