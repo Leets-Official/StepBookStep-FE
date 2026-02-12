@@ -1,6 +1,7 @@
+// EmptyView.tsx
 import { styles } from "./EmptyView.styles";
 import type { EmptyViewProps } from "./EmptyView.types";
-import Button from "@/components/Button/Button"; 
+import Button from "@/components/Button/Button";
 
 const EmptyView = ({
   icon: Icon,
@@ -24,7 +25,9 @@ const EmptyView = ({
             onClick={actionButton.onClick}
             variant="ghost"
             size="small"
-            className="rounded-full border border-lime-600/25 text-gray-700 px-6 py-2.5 bg-white font-medium"
+            // styles.button을 사용하여 통일감을 주고,
+            // 배경 투명화 및 패딩(상하 6px, 좌우 12px)을 적용했습니다.
+            className={styles.button}
           />
         </div>
       )}
