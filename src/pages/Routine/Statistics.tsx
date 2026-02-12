@@ -68,7 +68,7 @@ export default function Statistics() {
         <EmptyView
           icon={GlassesOnBooksGif}
           title="아직 도서가 없어요."
-          description={`${displayName}좋아하실 도서를 고르러 가볼까요?`}
+          description={`${displayName}님이 좋아하실 도서를 고르러 가볼까요?`}
           actionButton={{
             label: "독서 시작하기",
             onClick: () => navigate("/search"), 
