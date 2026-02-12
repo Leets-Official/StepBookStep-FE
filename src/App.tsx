@@ -82,24 +82,7 @@ function App() {
 }
 
 function RootRedirect() {
-  const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
-  const accessToken = localStorage.getItem("accessToken");
-  const isNewUser = localStorage.getItem("signupType") != "EXISTING";
-
-  if (!hasSeenTutorial) {
-    return <Navigate to="/tutorial" replace />;
-  }
-
-  if (!accessToken) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (isNewUser) {
-    return <Navigate to="/onboarding/set-profile" replace />;
-  }
-
-  // 둘 다 통과하면 홈으로!
-  return <Navigate to="/home" replace />;
+  return <Navigate to="/login" replace />;
 }
 
 export default App;

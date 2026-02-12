@@ -149,7 +149,7 @@ export default function RoutineResultPage() {
             label="시작하기"
             fullWidth
             onClick={() => {
-              navigate("/home");
+              navigate("/tutorial", { replace: true });
             }}
           />
         </div>

@@ -11,11 +11,7 @@ import * as S from "@/pages/Tutorial/Tutorial.styles";
 const Tutorial: React.FC = () => {
   const navigate = useNavigate();
   const handleSkip = () => {
-    // 1. 다음에 앱 켰을 때 안 뜨도록 기록 남기
-    localStorage.setItem("hasSeenTutorial", "true"); 
-    
-    // 2. 로그인 페이지로 이동 (우리가 정한 흐름!)
-    navigate("/login", { replace: true }); 
+    navigate("/home", { replace: true });
   };
 
   return (
