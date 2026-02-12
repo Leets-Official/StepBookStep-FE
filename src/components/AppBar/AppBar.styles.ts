@@ -13,7 +13,7 @@ export const appBarStyles = {
 
   title: "text-black font-semibold text-md",
 
-  icon: "w-6 h-6 cursor-pointer text-gray-500",
+  icon: "block w-full h-full",
 
   logoImage: "w-32 h-5",
 

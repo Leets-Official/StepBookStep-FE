@@ -1,5 +1,5 @@
 // 전체 컨테이너
-export const container = "flex flex-col w-full max-w-[400px] p-6 bg-white";
+export const container = "flex flex-col w-full max-w-[400px] rounded-lg p-6 bg-white";
 
 // 상단 헤더 영역 (태그와 제목)
 export const header = "flex font-semibold items-center gap-2";

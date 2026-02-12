@@ -5,7 +5,7 @@ import Toggle from "@/components/Toggle/Toggle";
 import type { ToggleValue } from "@/components/Toggle/Toggle";
 import Button from "@/components/Button/Button";
 import { XIcon } from "@/assets/icons";
-import { useUpdateBookGoal } from "@/hooks/useReadings";
+import { useUpdateBookGoal, useCreateBookGoal } from "@/hooks/useReadings";
 import type { Goal, GoalPeriod, GoalMetric } from "@/api/types";
 
 import {
@@ -92,6 +92,7 @@ export default function GoalModal({
   }, [existingGoal]);
 
   const updateGoalMutation = useUpdateBookGoal();
+  const createGoalMutation = useCreateBookGoal();
 
   const periodText = (() => {
     switch (period) {
@@ -117,14 +118,23 @@ export default function GoalModal({
         ? hour * 60 + minute // 분 단위로 변환
         : page;
 
-      await updateGoalMutation.mutateAsync({
-        bookId,
-        data: {
-          period: periodFromSegment(period),
-          metric: metricFromToggle(type),
-          targetAmount,
-        },
-      });
+      const requestData = {
+        period: periodFromSegment(period),
+        metric: metricFromToggle(type),
+        targetAmount,
+      };
+
+      if (existingGoal) {
+        await updateGoalMutation.mutateAsync({
+          bookId,
+          data: requestData,
+        });
+      } else {
+        await createGoalMutation.mutateAsync({
+          bookId,
+          data: requestData,
+        });
+      }
 
       onSave(); 
       onClose(); 
@@ -132,6 +142,8 @@ export default function GoalModal({
       console.error("목표 저장 실패:", error);
     }
   };
+
+  const isPending = updateGoalMutation.isPending || createGoalMutation.isPending;
 
   return (
     <div className={overlay}>
@@ -174,11 +186,11 @@ export default function GoalModal({
 
         <div className={footer}>
           <Button 
-            label={updateGoalMutation.isPending ? "저장 중..." : "저장하기"} 
+            label={isPending ? "저장 중..." : "저장하기"} 
             fullWidth 
             size="large" 
             onClick={handleSave}
-            disabled={updateGoalMutation.isPending}
+            disabled={isPending}
           />
         </div>
       </div>

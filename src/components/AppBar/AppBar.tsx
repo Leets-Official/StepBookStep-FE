@@ -102,17 +102,24 @@ const AppBar = ({
             {/* 우측 아이콘: mode === none 이면 숨김 */}
             {mode !== "none" && (
               <>
-                <button type="button" onClick={onBookmarkClick}>
-                  {isBookmarked ? (
-                    <BookmarkFilledIcon className={appBarStyles.icon} />
-                  ) : (
-                    <BookmarkEmptyIcon className={appBarStyles.icon} />
-                  )}
+                <button
+                  type="button"
+                  onClick={onBookmarkClick}
+                  className="w-8 h-8 flex items-center justify-center"
+                >
+                  <span className="w-6 h-6 flex items-center justify-center">
+                    {isBookmarked ? (
+                      <BookmarkFilledIcon className="w-full h-full text-gray-500" />
+                    ) : (
+                      <BookmarkEmptyIcon className="w-full h-full text-gray-500" />
+                    )}
+                  </span>
                 </button>
 
-                <div className="relative" ref={penRef}>
+                <div className="relative flex items-center">
                   <button
                     type="button"
+                    className="w-8 h-8 flex items-center justify-center"
                     onClick={() => {
                       if (showPenDropdown) {
                         setIsPenMenuOpen((prev) => !prev);
@@ -121,7 +128,9 @@ const AppBar = ({
                       }
                     }}
                   >
-                    <PenIcon className={appBarStyles.icon} />
+                    <span className="w-6 h-6 flex items-center justify-center">
+                      <PenIcon className="w-full h-full text-gray-500" />
+                    </span>
                   </button>
 
                   {showPenDropdown && isPenMenuOpen && (

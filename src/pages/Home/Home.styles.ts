@@ -29,7 +29,7 @@ export const arrowLeft = `${arrowBase} left-2`;
 
 export const arrowRight = `${arrowBase} right-2`;
 
-export const recommendSection = "px-5 mb-3";
+export const recommendSection = "px-5 mb-3 mt-7.5";
 
 export const recommendTitle = "text-lg font-semibold text-black mb-3";
 
@@ -49,7 +49,7 @@ export const statsCard =
 
 export const statsSection = "flex-1 flex items-center justify-center";
 
-export const statsHeader = "mt-10 mx-5 flex items-center justify-between mb-3 gap-42";
+export const statsHeader = "w-full mt-10 px-5 flex items-center justify-between mb-3";
 
 export const statsTitle = "text-lg font-semibold text-gray-900";
 

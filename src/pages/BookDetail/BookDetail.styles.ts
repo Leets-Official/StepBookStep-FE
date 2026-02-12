@@ -64,7 +64,7 @@ export const card = "bg-white rounded-xl shadow-sm p-4 mb-4";
 export const bottomAction = "px-5 pb-2.5 bottom-0 bg-gray-050";
 
 /* 태그 배지 */
-export const tagBadge = "text-gray-400 border-gray-300 bg-white whitespace-nowrap flex-shrink-0 font-medium";
+export const tagBadge = "text-gray-400 border-gray-300 space-nowrap flex-shrink-0 font-medium";
 
 /* 모달 오버레이 */
 export const overlay = "fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm";

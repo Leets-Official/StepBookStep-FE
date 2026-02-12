@@ -53,9 +53,12 @@ export function BookList({
             <div className={S.tagWrap}>
               {tags
                 .filter((t) => !!t && t.trim().length > 0)
-                .map((tag) => (
-                  <Badge key={tag} label={tag} className={S.tagBadge} />
-                ))}
+                .map((tag) => {
+                  const displayLabel = /^~?\d+(~\d+)?$/.test(tag) ? `${tag}쪽` : tag;
+                  return(
+                    <Badge key={tag} label={displayLabel} className={S.tagBadge} />
+                  );
+                })}
             </div>
           )}
 

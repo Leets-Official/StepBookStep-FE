@@ -97,7 +97,7 @@ export interface Goal {
   achievedAmount: number;
   createdAt: string;
   updatedAt: string;
-  active: boolean;
+  isActive: boolean;
 }
 
 // ============================================
@@ -153,11 +153,16 @@ export interface ReadingLog {
 // ============================================
 // 독서 목표 생성/수정 타입
 // ============================================
+export interface CreateGoalRequest {
+  period: GoalPeriod;
+  metric: GoalMetric;
+  targetAmount: number;
+}
+
 export interface UpdateGoalRequest {
   period?: GoalPeriod;
   metric?: GoalMetric;
   targetAmount?: number;
-  delete?: boolean;
 }
 
 // ============================================
@@ -262,7 +267,7 @@ export interface ReadingDetailGoal {
   period: "DAILY" | "WEEKLY" | "MONTHLY";
   metric: "TIME" | "PAGE";
   targetAmount: number;
-  active: boolean;
+  isActive: boolean;
 }
 
 export interface ReadingDetailData {

@@ -10,8 +10,18 @@
 @font-face {
     font-family: Pretendard;
     font-display: swap;
+    font-weight: 100 900;
     src: local("Pretendard"),
     url("/fonts/PretendardVariable.ttf") format('truetype');
+}
+
+body {
+    /* 사파리/크롬(Mac)에서 글자를 얇고 선명하게 만듦 */
+    -webkit-font-smoothing: antialiased; 
+    /* 파이어폭스(Mac)에서 글자를 얇고 선명하게 만듦 */
+    -moz-osx-font-smoothing: grayscale;
+    /* 렌더링 품질 최적화 */
+    text-rendering: optimizeLegibility;
 }
 
 * {

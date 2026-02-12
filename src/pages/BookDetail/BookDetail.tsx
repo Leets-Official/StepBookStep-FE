@@ -242,9 +242,13 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </p>
           </section>
           <div className={S.tagRow}>
-            {(bookInfo?.tags || []).map((tag, idx) => (
-              <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
-            ))}
+            {(bookInfo?.tags || []).map((tag, idx) => {
+              const displayLabel = /^~?\d+(~\d+)?$/.test(tag) ? `${tag}쪽` : tag;
+              return(
+                <Badge key={`${tag}-${idx}`} label={displayLabel} type="tag" className={S.tagBadge} />
+              );
+            })}
+              
           </div>
           <div className={S.divider} />
           {!isBefore && (
@@ -271,7 +275,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 <h2 className={S.sectionTitle}>책 소개</h2>
                 {bookInfo?.description ? (
                   <FullView collapsedHeight={134}>
-                    <p className={S.description}>{bookInfo.description}</p>
+                    <p className={S.description} 
+                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
+                    />
                   </FullView>
                 ) : (
                   <div className="flex justify-center w-full py-10">
@@ -280,16 +286,19 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 )}
               </section>
             )}
-
+            <div className={S.tagRow}>
             {!isBefore && resolvedActiveTab === "record" && (
               <ReadingStateDetail bookId={Number(bookId)} />
             )}
+            </div>
             {!isBefore && resolvedActiveTab === "info" && (
               <section className="px-5 w-full">
                 <h2 className={S.sectionTitle}>책 소개</h2>
                 {bookInfo?.description ? (
                   <FullView collapsedHeight={72}>
-                    <p className={S.description}>{bookInfo.description}</p>
+                    <p className={S.description}
+                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
+                    />
                   </FullView>
                 ) : (
                   <div className="flex justify-center w-full py-10">
