@@ -243,7 +243,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           </section>
           <div className={S.tagRow}>
             {(bookInfo?.tags || []).map((tag, idx) => {
-              const displayLabel = /^~?\d+$/.test(tag) ? `${tag}쪽` : tag;
+              const displayLabel = /^~?\d+(~\d+)?$/.test(tag) ? `${tag}쪽` : tag;
               return(
                 <Badge key={`${tag}-${idx}`} label={displayLabel} type="tag" className={S.tagBadge} />
               );
