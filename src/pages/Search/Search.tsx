@@ -160,11 +160,24 @@ const Search = () => {
               {filters.level && (
                 <Chip label={`Lv.${filters.level}`} onDelete={() => handleDeleteChip("level")} />
               )}
+              
               {filters.volume && (
-                <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
+                <Chip
+                  label={
+                    filters.volume === "~200"
+                      ? "0~200쪽"
+                      : filters.volume === "651~"
+                        ? "651쪽~"
+                        : `200~${filters.volume}쪽` // 250, 350 등의 값일 때 범위로 표시
+                  }
+                  onDelete={() => handleDeleteChip("volume")}
+                />
               )}
               {filters.country && filters.country.length > 0 && (
-                <Chip label={filters.country.join(", ")} onDelete={() => handleDeleteChip("country")} />
+                <Chip
+                  label={filters.country.join(", ")}
+                  onDelete={() => handleDeleteChip("country")}
+                />
               )}
               {filters.genre && filters.genre.length > 0 && (
                 <Chip label={filters.genre.join(", ")} onDelete={() => handleDeleteChip("genre")} />
