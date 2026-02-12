@@ -242,9 +242,13 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
             </p>
           </section>
           <div className={S.tagRow}>
-            {(bookInfo?.tags || []).map((tag, idx) => (
-              <Badge key={`${tag}-${idx}`} label={tag} type="tag" className={S.tagBadge} />
-            ))}
+            {(bookInfo?.tags || []).map((tag, idx) => {
+              const displayLabel = /^~?\d+$/.test(tag) ? `${tag}쪽` : tag;
+              return(
+                <Badge key={`${tag}-${idx}`} label={displayLabel} type="tag" className={S.tagBadge} />
+              );
+            })}
+              
           </div>
           <div className={S.divider} />
           {!isBefore && (
