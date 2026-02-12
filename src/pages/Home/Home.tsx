@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AppBar from "@/components/AppBar/AppBar";
@@ -39,7 +39,12 @@ export default function Home() {
   const [data, setData] = useState<HomeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const hasRequestedRef = useRef(false);
+
   useEffect(() => {
+    if (hasRequestedRef.current) return;
+    hasRequestedRef.current = true;
+
     getHome()
       .then(setData)
       .finally(() => setIsLoading(false));
