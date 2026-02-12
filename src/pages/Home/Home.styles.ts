@@ -29,7 +29,7 @@ export const arrowLeft = `${arrowBase} left-2`;
 
 export const arrowRight = `${arrowBase} right-2`;
 
-export const recommendSection = "px-5 mb-3";
+export const recommendSection = "px-5 mb-3 mt-7.5";
 
 export const recommendTitle = "text-lg font-semibold text-black mb-3";
 
