@@ -76,10 +76,12 @@ export const preferenceGenreChip = `
   border border-lime-600
   text-sm text-gray-700 leading-5
   transition-all
+  hover:bg-lime-400/30 hover:border-lime-600
 `;
 
 export const preferenceGenreChipActive = `
   bg-lime-400/60
   border-lime-600
   text-purple-800
+  hover:bg-lime-400/30 hover:border-lime-600
 `;

@@ -27,7 +27,6 @@ type GenreItem = {
 };
 
 const GENRES: readonly GenreItem[] = [
-  // 국가별 (categoryIds)
   { id: 50993, label: "한국소설", type: "CATEGORY" },
   { id: 50919, label: "영미소설", type: "CATEGORY" },
   { id: 50998, label: "일본소설", type: "CATEGORY" },
@@ -35,7 +34,6 @@ const GENRES: readonly GenreItem[] = [
   { id: 50921, label: "프랑스소설", type: "CATEGORY" },
   { id: 50922, label: "독일소설", type: "CATEGORY" },
 
-  // 장르별 (genreIds)
   { id: 50928, label: "판타지/환상문학", type: "GENRE" },
   { id: 50930, label: "과학소설(SF)", type: "GENRE" },
   { id: 50926, label: "추리/미스터리", type: "GENRE" },
@@ -55,13 +53,13 @@ export default function OnboardingGenre() {
   const navigate = useNavigate();
   const { setGenres, setCategories } = useOnboardingStore();
   const setUserInfo = useUserStore((state) => state.setUserInfo);
+  const [isUnknownSelected, setIsUnknownSelected] = useState(false);
 
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  const isUnknownSelected = selectedGenres.length === 0 && selectedCategories.length === 0;
-
   const toggleItem = (item: GenreItem) => {
+    setIsUnknownSelected(false);
     const isGenre = item.type === "GENRE";
     const selected = isGenre ? selectedGenres : selectedCategories;
     const setter = isGenre ? setSelectedGenres : setSelectedCategories;
@@ -80,6 +78,7 @@ export default function OnboardingGenre() {
   const selectUnknown = () => {
     setSelectedGenres([]);
     setSelectedCategories([]);
+    setIsUnknownSelected(true);
   };
 
   return (
@@ -121,10 +120,8 @@ export default function OnboardingGenre() {
             <Button
               label={UNKNOWN_LABEL}
               size="small"
-              variant={isUnknownSelected ? "ghost" : "secondaryOutline"}
-              disabled={
-                !isUnknownSelected && (selectedGenres.length > 0 || selectedCategories.length > 0)
-              }
+              variant="secondaryOutline"
+              disabled={selectedGenres.length > 0 || selectedCategories.length > 0}
               onClick={selectUnknown}
               className={cn(
                 "rounded-full",

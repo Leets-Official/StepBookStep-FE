@@ -47,12 +47,12 @@ export default function PreferenceEditPage() {
   const storedCategoryIds = useUserStore((state) => state.categoryIds);
   const nickname = useUserStore((state) => state.nickname);
   const setUserInfo = useUserStore((state) => state.setUserInfo);
+  const [isUnknownSelected, setIsUnknownSelected] = useState(false);
 
   const [level, setLevel] = useState<(typeof LEVELS)[number] | null>(null);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  /* ================= 초기 세팅 ================= */
   useEffect(() => {
     if (storedLevel) {
       const lv = storedLevel === 1 ? "Lv.1" : storedLevel === 2 ? "Lv.2" : "Lv.3";
@@ -64,9 +64,9 @@ export default function PreferenceEditPage() {
   }, [storedLevel, storedGenreIds, storedCategoryIds]);
 
   const totalSelected = selectedGenres.length + selectedCategories.length;
-  const isUnknownSelected = totalSelected === 0;
 
   const toggleItem = (item: GenreItem) => {
+    setIsUnknownSelected(false);
     const isGenre = item.type === "GENRE";
     const selected = isGenre ? selectedGenres : selectedCategories;
     const setter = isGenre ? setSelectedGenres : setSelectedCategories;
@@ -84,6 +84,7 @@ export default function PreferenceEditPage() {
   const selectUnknown = () => {
     setSelectedGenres([]);
     setSelectedCategories([]);
+    setIsUnknownSelected(true);
   };
 
   const initialLevel = storedLevel === 1 ? "Lv.1" : storedLevel === 2 ? "Lv.2" : "Lv.3";
@@ -179,7 +180,7 @@ export default function PreferenceEditPage() {
               <Button
                 label={UNKNOWN}
                 size="small"
-                variant={isUnknownSelected ? "ghost" : "secondaryOutline"}
+                variant="secondaryOutline"
                 disabled={!isUnknownSelected && totalSelected > 0}
                 onClick={selectUnknown}
                 className={cn(
