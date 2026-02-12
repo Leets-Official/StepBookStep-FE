@@ -41,6 +41,7 @@ const Search = () => {
   }, [filters]);
 
   const isSimpleSearch = !!searchText && !hasActiveFilters;
+  // API expects origin and genre as comma-separated strings (multi-select)
   const apiParams: FilterBooksParams = useMemo(() => {
     return {
       keyword: searchText || undefined,

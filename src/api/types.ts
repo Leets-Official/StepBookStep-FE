@@ -70,8 +70,8 @@ export interface SearchBooksParams {
 export interface FilterBooksParams {
   level?: number;
   pageRange?: string;
-  origin?: string;
-  genre?: string;
+  origin?: string | string[];
+  genre?: string | string[];
   keyword?: string;
   cursor?: number;
 }

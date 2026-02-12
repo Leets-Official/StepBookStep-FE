@@ -71,6 +71,9 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
       isSelected = selectedValue === label || (typeof label === "string" && label === `Lv.${selectedValue}`);
     }
 
+    // 난이도(Lv.1, Lv.2, Lv.3) 버튼에만 width 적용
+    const isLevelChip = label.startsWith("Lv.");
+
     return (
       <Button
         key={label}
@@ -96,6 +99,7 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
             ? "bg-lime-400 border-lime-600 text-purple-800"
             : "bg-gray-50 border-lime-600/25 text-gray-700 hover:bg-gray-100"
         }`}
+        style={isLevelChip ? { width: "106.33px" } : undefined}
       />
     );
   };
