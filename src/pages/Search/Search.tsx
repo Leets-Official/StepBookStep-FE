@@ -23,6 +23,8 @@ const Search = () => {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { nickname, level: userLevel } = useUserStore();
+
+  // 변경: country와 genre를 빈 배열로 초기화
   const [filters, setFilters] = useState<SearchFilterState>({
     keyword: "",
     level: null,
@@ -30,24 +32,28 @@ const Search = () => {
     country: [],
     genre: [],
   });
-  // 필터가 하나라도 적용되었는지 확인
+
+  // 변경: 배열 길이를 체크하여 필터 활성화 여부 확인
   const hasActiveFilters = useMemo(() => {
     return !!(
       filters.level ||
       filters.volume ||
-      (filters.country && filters.country.length > 0) ||
-      (filters.genre && filters.genre.length > 0)
+      filters.country.length > 0 ||
+      filters.genre.length > 0
     );
   }, [filters]);
 
   const isSimpleSearch = !!searchText && !hasActiveFilters;
+
+  // 변경: API 파라미터 매핑 (origins, genres 배열 전달)
   const apiParams: FilterBooksParams = useMemo(() => {
     return {
       keyword: searchText || undefined,
       level: filters.level || undefined,
       pageRange: filters.volume || undefined,
-      origin: filters.country && filters.country.length > 0 ? filters.country.join(",") : undefined,
-      genre: filters.genre && filters.genre.length > 0 ? filters.genre.join(",") : undefined,
+      // 배열이 비어있으면 undefined, 있으면 배열 그대로 전달
+      origins: filters.country.length > 0 ? filters.country : undefined,
+      genres: filters.genre.length > 0 ? filters.genre : undefined,
     };
   }, [searchText, filters]);
 
@@ -57,6 +63,7 @@ const Search = () => {
     searchText,
     isSimpleSearch,
   );
+
   const {
     data: filterSearchData,
     fetchNextPage: fetchFilterNext,
@@ -64,6 +71,7 @@ const Search = () => {
     isFetchingNextPage: isFilterFetching,
     isLoading: isFilterLoading,
   } = useSearchBooksInfinite(apiParams);
+
   const displayBooks = useMemo(() => {
     if (!isSearchMode) {
       return recommendedData || [];
@@ -100,18 +108,27 @@ const Search = () => {
   }, [canFetchNext, isFetchingNext, fetchFilterNext]);
 
   const handleFocus = () => setIsSearchMode(true);
+
   const handleBackClick = () => {
     setIsSearchMode(false);
     setSearchText("");
     setFilters({ keyword: "", level: null, volume: null, country: [], genre: [] });
   };
+
   const handleApplyFilter = (newFilters: SearchFilterState) => {
     setFilters(newFilters);
     setIsFilterOpen(false);
   };
+
+  // 변경: 배열 타입 필터 삭제 시 빈 배열로 초기화
   const handleDeleteChip = (key: keyof SearchFilterState) => {
-    setFilters((prev) => ({ ...prev, [key]: null }));
+    if (key === "country" || key === "genre") {
+      setFilters((prev) => ({ ...prev, [key]: [] }));
+    } else {
+      setFilters((prev) => ({ ...prev, [key]: null }));
+    }
   };
+
   const handleBookClick = (bookId: number) => {
     navigate(`/books/${bookId}?status=before`);
   };
@@ -162,10 +179,14 @@ const Search = () => {
               {filters.volume && (
                 <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
               )}
-              {filters.country && filters.country.length > 0 && (
-                <Chip label={filters.country.join(", ")} onDelete={() => handleDeleteChip("country")} />
+              {/* 변경: 배열을 join하여 표시 */}
+              {filters.country.length > 0 && (
+                <Chip
+                  label={filters.country.join(", ")}
+                  onDelete={() => handleDeleteChip("country")}
+                />
               )}
-              {filters.genre && filters.genre.length > 0 && (
+              {filters.genre.length > 0 && (
                 <Chip label={filters.genre.join(", ")} onDelete={() => handleDeleteChip("genre")} />
               )}
             </div>
