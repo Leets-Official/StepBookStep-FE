@@ -13,6 +13,7 @@ export interface LoginResponse {
   code: string;
   message: string;
   data: {
+    userId: number;
     accessToken: string;
     refreshToken: string;
     nickname: string;
@@ -31,7 +32,6 @@ export const kakaoLoginCallback = async (
   token: string,
   fcmToken: string = "",
 ): Promise<LoginResponse> => {
-
   const { data } = await apiClient.post<LoginResponse>("/auth/login/kakao", {
     socialToken: token,
     fcmToken,

@@ -15,7 +15,7 @@ export default function Setting() {
   const location = useLocation();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
-  const { resetUserInfo, email } = useUserStore();
+  const { resetUserInfo, email, userId } = useUserStore();
 
   const from = location.state?.from ?? "/home";
 
@@ -98,7 +98,7 @@ export default function Setting() {
         onCancel={() => setIsWithdrawOpen(false)}
         onConfirm={async () => {
           try {
-            await deleteMyProfile(0);
+            await deleteMyProfile(userId);
             resetUserInfo();
             navigate("/login");
           } catch (e) {

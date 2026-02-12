@@ -46,6 +46,7 @@ export default function PreferenceEditPage() {
   const storedGenreIds = useUserStore((state) => state.genreIds);
   const storedCategoryIds = useUserStore((state) => state.categoryIds);
   const nickname = useUserStore((state) => state.nickname);
+  const userId = useUserStore((state) => state.userId);
   const setUserInfo = useUserStore((state) => state.setUserInfo);
   const [isUnknownSelected, setIsUnknownSelected] = useState(false);
 
@@ -106,7 +107,6 @@ export default function PreferenceEditPage() {
 
   const hasChanged = isLevelChanged || isGenresChanged;
 
-  /* ================= 저장 ================= */
   const handleSave = async () => {
     if (!hasChanged || !level) {
       navigate("/setting");
@@ -114,7 +114,7 @@ export default function PreferenceEditPage() {
     }
 
     try {
-      await patchPreferences(0, {
+      await patchPreferences(userId!, {
         level: Number(level.replace("Lv.", "")),
         categoryIds: selectedCategories,
         genreIds: selectedGenres,

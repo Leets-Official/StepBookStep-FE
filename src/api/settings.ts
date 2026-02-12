@@ -2,12 +2,12 @@ import apiClient from "@/api/clients";
 
 export interface UpdatePreferencesRequest {
   level: number;
-  categoryIds: number[];
-  genreIds: number[];
+  categoryIds: number[] | null;
+  genreIds: number[] | null;
 }
 
-export const patchPreferences = (userId: number, body: UpdatePreferencesRequest) => {
-  return apiClient.patch("/my/profile/preferences", body, {
+export const patchPreferences = (userId: number, request: UpdatePreferencesRequest) => {
+  return apiClient.patch("/my/profile/preferences", request, {
     params: { userId },
   });
 };
