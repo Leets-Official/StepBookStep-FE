@@ -315,7 +315,7 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
           message={toastMessage}
           isVisible={showToast}
           onClose={() => setShowToast(false)}
-          className="bottom-20 top-auto"
+          className="bottom-24 top-auto"
           action={toastAction}
         />
         {isReportOpen && (

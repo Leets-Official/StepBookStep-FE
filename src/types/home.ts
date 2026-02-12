@@ -6,7 +6,7 @@ export interface HomeResponse {
     favoriteCategory: string;
   };
   genreBooks: {
-    type: "category" | "genre";
+    type: string;
     id: number;
     name: string;
     books: HomeBook[];

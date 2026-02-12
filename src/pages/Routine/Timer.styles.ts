@@ -4,7 +4,7 @@ export const appFrame = "w-full max-w-[375px] h-[812px] bg-gray-50 flex flex-col
 export const headerGroup = "w-full z-50 bg-white flex-shrink-0";
 export const statusBar = "h-[44px] w-full bg-white flex-shrink-0";
 
-export const content = "flex-1 px-5 pt-4 flex flex-col items-center overflow-y-auto";
+export const content = "flex-1 px-5 pt-4 flex flex-col items-center overflow-hidden";
 
 export const timerCircleContainer = "relative w-[335px] h-[335px] flex items-center justify-center mb-8 flex-shrink-0";
 export const svgContainer = "absolute inset-0 -rotate-90";

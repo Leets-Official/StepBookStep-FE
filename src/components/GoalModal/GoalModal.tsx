@@ -21,13 +21,13 @@ import {
 } from "./GoalModal.styles";
 
 interface GoalModalProps {
-  bookId: number; // ⭐ 추가
+  bookId: number; 
   maxPages: number;
   title: string;
   onClose: () => void;
   onSave: () => void;
   count?: number;
-  existingGoal?: Goal | null; // ⭐ 추가 (수정 모드)
+  existingGoal?: Goal | null; 
 }
 
 export default function GoalModal({ 

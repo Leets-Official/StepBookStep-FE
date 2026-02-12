@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeftIcon } from "@/assets/icons";
 import { Button } from "@/components/Button/Button";
@@ -65,13 +65,17 @@ export default function RoutineResultPage() {
   const { setUserInfo } = useUserStore();
 
   const [state, setState] = useState<RoutineResult | null>(null);
+  const hasRequestedRef = useRef(false);
 
   useEffect(() => {
+    if (hasRequestedRef.current) return;
+    hasRequestedRef.current = true;
+
     const fetchResult = async () => {
       const { readingFrequency, readingDuration, readingBurden } = payload.level;
 
       if (readingFrequency === null || readingDuration === null || readingBurden === null) {
-        throw new Error("온보딩 레벨 답변이 누락되었습니다.");
+        return;
       }
 
       try {
@@ -82,13 +86,15 @@ export default function RoutineResultPage() {
             readingDuration: READING_DURATION_MAP[readingDuration],
             difficultyPreference: READING_BURDEN_MAP[readingBurden],
           },
-          categoryIds: [],
-          genreIds: [],
+          categoryIds: payload.categories,
+          genreIds: payload.genres,
         });
 
         setUserInfo({
           nickname: payload.nickname,
           level: res.level,
+          genreIds: payload.genres,
+          categoryIds: payload.categories,
         });
 
         const routineType = PERIOD_TO_ROUTINE_TYPE[res.routineTokens.period];
@@ -107,7 +113,7 @@ export default function RoutineResultPage() {
     };
 
     fetchResult();
-  }, [payload]);
+  }, []);
 
   if (!state) return null;
 
