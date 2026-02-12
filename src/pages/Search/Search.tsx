@@ -27,16 +27,16 @@ const Search = () => {
     keyword: "",
     level: null,
     volume: null,
-    country: null,
-    genre: null,
+    country: [],
+    genre: [],
   });
   // 필터가 하나라도 적용되었는지 확인
   const hasActiveFilters = useMemo(() => {
     return !!(
       filters.level ||
       filters.volume ||
-      filters.country ||
-      (filters.genre && filters.genre !== "장르")
+      (filters.country && filters.country.length > 0) ||
+      (filters.genre && filters.genre.length > 0)
     );
   }, [filters]);
 
@@ -46,9 +46,8 @@ const Search = () => {
       keyword: searchText || undefined,
       level: filters.level || undefined,
       pageRange: filters.volume || undefined,
-
-      origin: filters.country || undefined,
-      genre: filters.genre !== "장르" ? filters.genre || undefined : undefined,
+      origin: filters.country && filters.country.length > 0 ? filters.country.join(",") : undefined,
+      genre: filters.genre && filters.genre.length > 0 ? filters.genre.join(",") : undefined,
     };
   }, [searchText, filters]);
 
@@ -104,7 +103,7 @@ const Search = () => {
   const handleBackClick = () => {
     setIsSearchMode(false);
     setSearchText("");
-    setFilters({ keyword: "", level: null, volume: null, country: null, genre: null });
+    setFilters({ keyword: "", level: null, volume: null, country: [], genre: [] });
   };
   const handleApplyFilter = (newFilters: SearchFilterState) => {
     setFilters(newFilters);
