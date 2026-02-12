@@ -72,7 +72,6 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/routine/timer/:bookId" element={<TimerPage />} />
           <Route path="/routine/booklist" element={<BookList />} />
-          <Route path="/tutorial" element={<Tutorial />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/setting/nickname" element={<ChangeNickname />} />
           <Route path="/setting/preference-edit" element={<PreferenceEditPage />} />
@@ -87,16 +86,16 @@ function RootRedirect() {
   const accessToken = localStorage.getItem("accessToken");
   const isNewUser = localStorage.getItem("signupType") != "EXISTING";
 
+  if (!hasSeenTutorial) {
+    return <Navigate to="/tutorial" replace />;
+  }
+
   if (!accessToken) {
     return <Navigate to="/login" replace />;
   }
 
   if (isNewUser) {
     return <Navigate to="/onboarding/set-profile" replace />;
-  }
-
-  if (!hasSeenTutorial) {
-    return <Navigate to="/tutorial" replace />;
   }
 
   // 둘 다 통과하면 홈으로!
