@@ -27,10 +27,8 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
 
   // 사용자가 슬라이더를 건드렸는지 확인 - 기존 필터가 없었다면 false
   const [isVolumeTouched, setIsVolumeTouched] = useState(initialIndex !== -1);
-
-  const [country, setCountry] = useState<string[]>(currentFilters.country ? (Array.isArray(currentFilters.country) ? currentFilters.country : [currentFilters.country]) : []);
-  const [genre, setGenre] = useState<string[]>(currentFilters.genre ? (Array.isArray(currentFilters.genre) ? currentFilters.genre : [currentFilters.genre]) : []);
-
+  const [country, setCountry] = useState<string | null>(currentFilters.country);
+  const [genre, setGenre] = useState<string | null>(currentFilters.genre);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isCountryOpen, setIsCountryOpen] = useState(true);
   const [isGenreOpen, setIsGenreOpen] = useState(true);
@@ -47,8 +45,8 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
       keyword: currentFilters.keyword,
       level,
       volume: finalVolume,
-      country: country.length > 0 ? country : null,
-      genre: genre.length > 0 ? genre : null,
+      country,
+      genre,
     });
   };
 
@@ -60,16 +58,13 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
   // 단일 선택(난이도)과 복수 선택(국가/장르) 분리
   const renderChip = (
     label: string,
-    selectedValue: string | number | string[] | null,
+    selectedValue: string | number | null,
     onSelect: (val: any) => void,
-    multiSelect: boolean = false
+  
   ) => {
-    let isSelected = false;
-    if (multiSelect && Array.isArray(selectedValue)) {
-      isSelected = selectedValue.includes(label);
-    } else {
-      isSelected = selectedValue === label || (typeof label === "string" && label === `Lv.${selectedValue}`);
-    }
+    const isSelected =
+      selectedValue === label || (typeof label === "string" && label === `Lv.${selectedValue}`);
+  
 
     // 난이도(Lv.1, Lv.2, Lv.3) 버튼에만 width 적용
     const isLevelChip = label.startsWith("Lv.");
@@ -81,13 +76,8 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
         size="small"
         variant="ghost"
         onClick={() => {
-          if (multiSelect && Array.isArray(selectedValue)) {
-            if (selectedValue.includes(label)) {
-              onSelect(selectedValue.filter((v: string) => v !== label));
-            } else {
-              onSelect([...selectedValue, label]);
-            }
-          } else if (label.startsWith("Lv.")) {
+          if (label.startsWith("Lv.")) {
+       
             const numLevel = parseInt(label.replace("Lv.", ""));
             onSelect(selectedValue === numLevel ? null : numLevel);
           } else {
@@ -193,7 +183,7 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
           </div>
           {isCountryOpen && (
             <div className={S.chipWrapper}>
-              {countries.map((c) => renderChip(c, country, setCountry, true))}
+              {countries.map((c) => renderChip(c, country, setCountry))}
             </div>
           )}
         </section>
@@ -208,7 +198,9 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
             )}
           </div>
           {isGenreOpen && (
-            <div className={S.chipWrapper}>{genres.map((g) => renderChip(g, genre, setGenre, true))}</div>
+            <div className={S.chipWrapper}>
+              {genres.map((g) => renderChip(g, genre, setGenre))}
+            </div>
           )}
         </section>
       </div>

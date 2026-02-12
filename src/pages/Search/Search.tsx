@@ -27,28 +27,33 @@ const Search = () => {
     keyword: "",
     level: null,
     volume: null,
-    country: [],
-    genre: [],
+    country: null,
+    genre: null,
   });
   // 필터가 하나라도 적용되었는지 확인
   const hasActiveFilters = useMemo(() => {
     return !!(
       filters.level ||
       filters.volume ||
-      (filters.country && filters.country.length > 0) ||
-      (filters.genre && filters.genre.length > 0)
+      filters.country ||
+      (filters.genre && filters.genre !== "장르")
     );
   }, [filters]);
 
   const isSimpleSearch = !!searchText && !hasActiveFilters;
-  // API expects origin and genre as comma-separated strings (multi-select)
   const apiParams: FilterBooksParams = useMemo(() => {
     return {
       keyword: searchText || undefined,
       level: filters.level || undefined,
       pageRange: filters.volume || undefined,
-      origin: filters.country && filters.country.length > 0 ? filters.country.join(",") : undefined,
-      genre: filters.genre && filters.genre.length > 0 ? filters.genre.join(",") : undefined,
+
+      // 변경 1: filters.country (단일 문자열) -> origins (배열)
+      // 값이 있을 때만 배열로 감싸서 전달
+      origins: filters.country ? [filters.country] : undefined,
+
+      // 변경 2: filters.genre (단일 문자열) -> genres (배열)
+      // "장르"라는 기본값이 아닐 때만 배열로 전달
+      genres: filters.genre && filters.genre !== "장르" ? [filters.genre] : undefined,
     };
   }, [searchText, filters]);
 
@@ -104,7 +109,7 @@ const Search = () => {
   const handleBackClick = () => {
     setIsSearchMode(false);
     setSearchText("");
-    setFilters({ keyword: "", level: null, volume: null, country: [], genre: [] });
+    setFilters({ keyword: "", level: null, volume: null, country: null, genre: null });
   };
   const handleApplyFilter = (newFilters: SearchFilterState) => {
     setFilters(newFilters);
@@ -160,27 +165,14 @@ const Search = () => {
               {filters.level && (
                 <Chip label={`Lv.${filters.level}`} onDelete={() => handleDeleteChip("level")} />
               )}
-              
               {filters.volume && (
-                <Chip
-                  label={
-                    filters.volume === "~200"
-                      ? "0~200쪽"
-                      : filters.volume === "651~"
-                        ? "651쪽~"
-                        : `200~${filters.volume}쪽` // 250, 350 등의 값일 때 범위로 표시
-                  }
-                  onDelete={() => handleDeleteChip("volume")}
-                />
+                <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
               )}
-              {filters.country && filters.country.length > 0 && (
-                <Chip
-                  label={filters.country.join(", ")}
-                  onDelete={() => handleDeleteChip("country")}
-                />
+              {filters.country && (
+                <Chip label={filters.country} onDelete={() => handleDeleteChip("country")} />
               )}
-              {filters.genre && filters.genre.length > 0 && (
-                <Chip label={filters.genre.join(", ")} onDelete={() => handleDeleteChip("genre")} />
+              {filters.genre && filters.genre !== "장르" && (
+                <Chip label={filters.genre} onDelete={() => handleDeleteChip("genre")} />
               )}
             </div>
           </div>

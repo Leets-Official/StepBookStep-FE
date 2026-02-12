@@ -70,8 +70,10 @@ export interface SearchBooksParams {
 export interface FilterBooksParams {
   level?: number;
   pageRange?: string;
-  origin?: string | string[];
-  genre?: string | string[];
+  // 변경: origin -> origins (API 명세에 맞춤, 배열 권장)
+  origins?: string[];
+  // 변경: genre -> genres (API 명세에 맞춤, 배열 권장)
+  genres?: string[];
   keyword?: string;
   cursor?: number;
 }
@@ -257,8 +259,8 @@ export const mapGoalPeriodToKorean = (period: GoalPeriod): string => {
 // ============================================
 export interface ReadingDetailLog {
   logId: number;
-  recordDate: string;      // 기록 날짜 (YYYY-MM-DD)
-  pagesRead: number;       // 해당 기록의 읽은 쪽수 (증분)
+  recordDate: string; // 기록 날짜 (YYYY-MM-DD)
+  pagesRead: number; // 해당 기록의 읽은 쪽수 (증분)
   durationSeconds: number; // 해당 기록의 읽은 시간 (초)
 }
 
@@ -273,11 +275,11 @@ export interface ReadingDetailGoal {
 export interface ReadingDetailData {
   bookStatus: "READING" | "FINISHED" | "STOPPED";
   goal: ReadingDetailGoal;
-  currentPage: number;     // 현재 누적 페이지
-  totalPages: number;      // 전체 페이지
+  currentPage: number; // 현재 누적 페이지
+  totalPages: number; // 전체 페이지
   progressPercent: number; // 현재 퍼센트
   startDate: string;
-  endDate: string | null;  // null일 수도 있음
+  endDate: string | null; // null일 수도 있음
   rating: number;
   readingLogs: ReadingDetailLog[]; // 하단 리스트용 데이터
 }
