@@ -10,9 +10,7 @@ import { patchNickname } from "@/api/settings";
 import { useUserStore } from "@/stores/useUserStore";
 
 export default function ChangeNickname() {
-  const nickname = useUserStore((state) => state.nickname);
-  const setUserInfo = useUserStore((state) => state.setUserInfo);
-
+  const { setUserInfo, nickname, userId } = useUserStore();
   const [newNickname, setNewNickname] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -22,7 +20,7 @@ export default function ChangeNickname() {
     if (isDisabled) return;
 
     try {
-      await patchNickname(0, newNickname);
+      await patchNickname(userId, newNickname);
       setUserInfo({
         nickname: newNickname,
       });

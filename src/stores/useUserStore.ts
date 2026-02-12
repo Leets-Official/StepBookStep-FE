@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface UserState {
+  userId: number;
   nickname: string | null;
   email?: string | null;
   level: number;
@@ -9,6 +10,7 @@ interface UserState {
   categoryIds: number[];
 
   setUserInfo: (payload: {
+    userId?: number;
     nickname?: string | null;
     email?: string | null;
     level?: number;
@@ -22,6 +24,7 @@ interface UserState {
 export const useUserStore = create(
   persist<UserState>(
     (set) => ({
+      userId: 0,
       nickname: null,
       email: null,
       level: 0,
@@ -30,6 +33,7 @@ export const useUserStore = create(
 
       setUserInfo: (payload) =>
         set((state) => ({
+          userId: payload.userId ?? state.userId,
           nickname: payload.nickname ?? state.nickname,
           email: payload.email ?? state.email,
           level: payload.level ?? state.level,
@@ -38,6 +42,7 @@ export const useUserStore = create(
         })),
 
       resetUserInfo: () => ({
+        userId: 0,
         nickname: null,
         email: null,
         level: 0,

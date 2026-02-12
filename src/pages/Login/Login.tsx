@@ -60,11 +60,12 @@ export default function LoginPage() {
   const handleBackendLogin = async (kakaoAccessToken: string) => {
     const res = await kakaoLoginCallback(kakaoAccessToken);
 
-    const { accessToken, refreshToken, nickname, signupType, email } = res.data;
+    const { accessToken, refreshToken, nickname, signupType, email, userId } = res.data;
 
     saveTokens(accessToken, refreshToken);
 
     setUserInfo({
+      userId,
       nickname,
       email,
       level: 1,
