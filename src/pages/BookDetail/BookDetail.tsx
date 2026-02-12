@@ -271,7 +271,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 <h2 className={S.sectionTitle}>책 소개</h2>
                 {bookInfo?.description ? (
                   <FullView collapsedHeight={134}>
-                    <p className={S.description}>{bookInfo.description}</p>
+                    <p className={S.description} 
+                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
+                    />
                   </FullView>
                 ) : (
                   <div className="flex justify-center w-full py-10">
@@ -290,7 +292,9 @@ export function BookDetail({ entrySource, readingStatus }: BookDetailProps) {
                 <h2 className={S.sectionTitle}>책 소개</h2>
                 {bookInfo?.description ? (
                   <FullView collapsedHeight={72}>
-                    <p className={S.description}>{bookInfo.description}</p>
+                    <p className={S.description}
+                    dangerouslySetInnerHTML={{ __html: bookInfo.description }}
+                    />
                   </FullView>
                 ) : (
                   <div className="flex justify-center w-full py-10">
