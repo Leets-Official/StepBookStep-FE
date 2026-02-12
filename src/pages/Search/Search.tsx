@@ -162,11 +162,11 @@ const Search = () => {
               {filters.volume && (
                 <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
               )}
-              {filters.country && (
-                <Chip label={filters.country} onDelete={() => handleDeleteChip("country")} />
+              {filters.country && filters.country.length > 0 && (
+                <Chip label={filters.country.join(", ")} onDelete={() => handleDeleteChip("country")} />
               )}
-              {filters.genre && filters.genre !== "장르" && (
-                <Chip label={filters.genre} onDelete={() => handleDeleteChip("genre")} />
+              {filters.genre && filters.genre.length > 0 && (
+                <Chip label={filters.genre.join(", ")} onDelete={() => handleDeleteChip("genre")} />
               )}
             </div>
           </div>
