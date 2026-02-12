@@ -177,7 +177,18 @@ const Search = () => {
                 <Chip label={`Lv.${filters.level}`} onDelete={() => handleDeleteChip("level")} />
               )}
               {filters.volume && (
-                <Chip label={filters.volume} onDelete={() => handleDeleteChip("volume")} />
+                <Chip
+                  label={(() => {
+                    // 숫자만 추출 (문자열에 '쪽'이나 '이상'이 포함되어 있어도 숫자로 변환)
+                    const vol = parseInt(String(filters.volume).replace(/[^0-9]/g, ""), 10);
+
+                    if (isNaN(vol)) return filters.volume; // 숫자가 아니면 그대로 표시
+                    if (vol === 200) return "~200쪽";
+                    if (vol === 651) return "651쪽~";
+                    return `200~${vol}쪽`;
+                  })()}
+                  onDelete={() => handleDeleteChip("volume")}
+                />
               )}
               {/* 변경: 배열을 join하여 표시 */}
               {filters.country.length > 0 && (
