@@ -34,9 +34,12 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
 
   const levels = ["Lv.1", "Lv.2", "Lv.3"];
   const countries = ["한국소설", "영미소설", "중국소설", "일본소설", "프랑스소설", "독일소설"];
-  const genres = ["로맨스", "역사소설", "무협소설", "판타지", "추리/미스테리", "희곡"];
+  const genreRows = [
+    ["로맨스", "역사소설", "무협소설"],
+    ["판타지/환상문학", "추리/미스테리", "희곡"],
+    ["라이트노벨", "과학소설(SF)", "액션/스릴러", "호러/공포소설"]
+  ];
 
-  // 추가: 복수 선택 토글 헬퍼 함수
   const toggleSelection = (
     item: string,
     currentList: string[],
@@ -66,7 +69,7 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
     setIsVolumeTouched(true);
   };
 
-  // 변경: 칩 렌더링 함수 (다중 선택 로직 적용)
+
   const renderChip = (label: string, type: "level" | "country" | "genre") => {
     let isSelected = false;
 
@@ -212,7 +215,13 @@ const SearchFilter = ({ onClose, onApply, currentFilters }: SearchFilterProps) =
             )}
           </div>
           {isGenreOpen && (
-            <div className={S.chipWrapper}>{genres.map((g) => renderChip(g, "genre"))}</div>
+            <div className="flex flex-col gap-2">
+              {genreRows.map((row, i) => (
+                <div key={i} className="flex flex-wrap gap-2">
+                  {row.map((g) => renderChip(g, "genre"))}
+                </div>
+              ))}
+            </div>
           )}
         </section>
       </div>
